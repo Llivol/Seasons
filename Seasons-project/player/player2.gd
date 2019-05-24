@@ -1,21 +1,6 @@
 extends KinematicBody2D
 
-# This demo shows how to build a kinematic controller.
-
-# Member variables
-const GRAVITY = 500.0 # pixels/second/second
-
-# Angle in degrees towards either side that the player can consider "floor"
-const FLOOR_ANGLE_TOLERANCE = 40
-const WALK_FORCE = 600
-const WALK_MIN_SPEED = 10
-const WALK_MAX_SPEED = 200
-const STOP_FORCE = 1300
-const JUMP_SPEED = 200
-const JUMP_MAX_AIRBORNE_TIME = 0.2
-
-const SLIDE_STOP_VELOCITY = 1.0 # one pixel/second
-const SLIDE_STOP_MIN_TRAVEL = 1.0 # one pixel
+onready var player_constants = get_node("/root/PlayerConstants")
 
 var velocity = Vector2()
 var on_air_time = 100
@@ -26,7 +11,7 @@ var prev_jump_pressed = false
 
 func _physics_process(delta):
 	# Create forces
-	var force = Vector2(0, GRAVITY)
+	var force = Vector2(0, player_constants.GRAVITY)
 
 	var walk_left = Input.is_action_pressed("move_left_p2")
 	var walk_right = Input.is_action_pressed("move_right_p2")
@@ -35,41 +20,41 @@ func _physics_process(delta):
 	var stop = true
 
 	if walk_left:
-		if velocity.x <= WALK_MIN_SPEED and velocity.x > -WALK_MAX_SPEED:
-			force.x -= WALK_FORCE
+		if velocity.x <= player_constants.WALK_MIN_SPEED and velocity.x > -player_constants.WALK_MAX_SPEED:
+			force.x -= player_constants.WALK_FORCE
 			stop = false
 	elif walk_right:
-		if velocity.x >= -WALK_MIN_SPEED and velocity.x < WALK_MAX_SPEED:
-			force.x += WALK_FORCE
+		if velocity.x >= -player_constants.WALK_MIN_SPEED and velocity.x < player_constants.WALK_MAX_SPEED:
+			force.x += player_constants.WALK_FORCE
 			stop = false
-
+	
 	if stop:
 		var vsign = sign(velocity.x)
 		var vlen = abs(velocity.x)
-
-		vlen -= STOP_FORCE * delta
+		
+		vlen -= player_constants.STOP_FORCE * delta
 		if vlen < 0:
 			vlen = 0
-
+		
 		velocity.x = vlen * vsign
-
+	
 	# Integrate forces to velocity
-	velocity += force * delta
+	velocity += force * delta	
 	# Integrate velocity into motion and move
 	velocity = move_and_slide(velocity, Vector2(0, -1))
-
+	
 	if is_on_floor():
 		on_air_time = 0
-
+		
 	if jumping and velocity.y > 0:
 		# If falling, no longer jumping
 		jumping = false
-
-	if on_air_time < JUMP_MAX_AIRBORNE_TIME and jump and not prev_jump_pressed and not jumping:
+	
+	if on_air_time < player_constants.JUMP_MAX_AIRBORNE_TIME and jump and not prev_jump_pressed and not jumping:
 		# Jump must also be allowed to happen if the character left the floor a little bit ago.
 		# Makes controls more snappy.
-		velocity.y = -JUMP_SPEED
+		velocity.y = -player_constants.JUMP_SPEED
 		jumping = true
-
+	
 	on_air_time += delta
 	prev_jump_pressed = jump

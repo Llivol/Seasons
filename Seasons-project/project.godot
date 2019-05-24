@@ -19,6 +19,16 @@ config/name="Seasons"
 run/main_scene="res://levels/Demo.tscn"
 config/icon="res://icon.png"
 
+[autoload]
+
+PlayerConstants="*res://player/PlayerConstants.gd"
+
+[display]
+
+window/size/width=512
+window/size/height=512
+window/size/borderless=true
+
 [input]
 
 move_left_p1={
