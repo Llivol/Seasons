@@ -14,3 +14,11 @@ const JUMP_MAX_AIRBORNE_TIME = 0.01
 
 const SLIDE_STOP_VELOCITY = 0.0 # one pixel/second
 const SLIDE_STOP_MIN_TRAVEL = 0.0 # one pixel
+
+enum PlayerStates {
+	idle,		#0
+	walk,		#1
+	jump,		#2
+	hover		#3
+	falling		#4
+}
