@@ -71,6 +71,8 @@ func get_prev_jump_pressed():
 
 
 func walk(walk_left, walk_right, delta):
+	if _state == 3:
+		return
 	if walk_left:
 		if self._velocity.x <= WALK_MIN_SPEED and self._velocity.x > -WALK_MAX_SPEED:
 			self._force.x -= WALK_FORCE
@@ -95,6 +97,8 @@ func walk(walk_left, walk_right, delta):
 
 
 func jump(jump, delta):
+	if _state == 3:
+		return
 	if self._state == 2 and self._velocity.y > 0:
 		# If falling, no longer jumping
 		self._state = 4

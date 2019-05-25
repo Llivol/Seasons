@@ -20,8 +20,8 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	l_player1.set_text(str("Player 1: (", _round_to_dec(player1.global_position.x, 0), ", ", _round_to_dec(player1.global_position.y, 0), ")"))
-	l_player2.set_text(str("Player 2: (", _round_to_dec(player2.global_position.x, 0), ", ", _round_to_dec(player2.global_position.y, 0), ")"))
+	l_player1.set_text(str("Player 1: (", _round_to_dec(player1.global_position.x, 0), ", ", _round_to_dec(player1.global_position.y, 0), "), ", player1.player.get_state()))
+	l_player2.set_text(str("Player 2: (", _round_to_dec(player2.global_position.x, 0), ", ", _round_to_dec(player2.global_position.y, 0), "), ", player2.player.get_state()))
 	l_distance.set_text(str("Distance: ", _round_to_dec(_get_distance(), 0)))
 	pass
 
