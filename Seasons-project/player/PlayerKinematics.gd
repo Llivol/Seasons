@@ -16,11 +16,11 @@ const SLIDE_STOP_VELOCITY = 0.0 # one pixel/second
 const SLIDE_STOP_MIN_TRAVEL = 0.0 # one pixel
 
 enum PlayerStates {
-	idle,		#0
+	idle,		#0 	
 	walk,		#1
 	jump,		#2
 	hover		#3
-	falling		#4
+	fall		#4
 }
 
 var _state
@@ -31,16 +31,30 @@ var _on_air_time = 100
 var _prev_jump_pressed = false
 
 func _init():
-	self._state = 0
+	self._state = PlayerStates.idle
 	self._velocity = Vector2()
 	self._force = Vector2()
 
 
 func set_state(state):
-	self._state = state
+	self._state = PlayerStates.values()[0]
 
 func get_state():
 	return self._state
+
+func get_state_string():
+	
+	match self._state:
+		0: 
+			return "idle"
+		1: 
+			return "walk"
+		2: 
+			return "jump"
+		3: 
+			return "hover"
+		4: 
+			return "fall"  
 
 func set_velocity(velocity):
 	self._velocity = velocity
@@ -71,18 +85,18 @@ func get_prev_jump_pressed():
 
 
 func walk(walk_left, walk_right, delta):
-	if _state == 3:
+	if _state == PlayerStates.hover:
 		return
 	if walk_left:
 		if self._velocity.x <= WALK_MIN_SPEED and self._velocity.x > -WALK_MAX_SPEED:
 			self._force.x -= WALK_FORCE
-			self._state = 1
+			self._state = PlayerStates.walk
 	elif walk_right:
 		if self._velocity.x >= -WALK_MIN_SPEED and self._velocity.x < WALK_MAX_SPEED:
 			self._force.x += WALK_FORCE
-			self._state = 1
+			self._state = PlayerStates.walk
 	
-	if self._state == 0:
+	if self._state == PlayerStates.idle:
 		var vsign = sign(self._velocity.x)
 		var vlen = abs(self._velocity.x)
 		
@@ -97,17 +111,17 @@ func walk(walk_left, walk_right, delta):
 
 
 func jump(jump, delta):
-	if _state == 3:
+	if _state == PlayerStates.hover:
 		return
-	if self._state == 2 and self._velocity.y > 0:
+	if self._state == PlayerStates.jump and self._velocity.y > 0:
 		# If falling, no longer jumping
-		self._state = 4
+		self._state = PlayerStates.fall
 	
 	if self._on_air_time < JUMP_MAX_AIRBORNE_TIME and jump and not self._prev_jump_pressed and self._state != 2:
 		# Jump must also be allowed to happen if the character left the floor a little bit ago.
 		# Makes controls more snappy.
 		self._velocity.y = -JUMP_SPEED
-		self._state = 2
+		self._state = PlayerStates.jump
 	
 	self._on_air_time += delta
 	self._prev_jump_pressed = jump
