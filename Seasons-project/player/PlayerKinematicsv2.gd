@@ -36,7 +36,8 @@ enum PlayerStates {
 var _state
 var _velocity
 var _force
-var _direction
+
+var _direction_to_twin
 
 var _prev_jump_pressed = false
 var _on_air_time = 100
@@ -47,7 +48,7 @@ func _init():
 	self._state = PlayerStates.idle
 	self._velocity = Vector2()
 	self._force = Vector2()
-	self._direction = Vector2()
+	self._direction_to_twin = Vector2()
 
 
 func set_state(state):
@@ -103,11 +104,11 @@ func set_force_gravity():
 func get_force():
 	return self._force
 
-func set_direction(direction):
-	self._direction = direction
+func set_direction_to_twin(direction):
+	self._direction_to_twin = direction
 
-func get_direction():
-	return self._direction
+func get_direction_to_twin():
+	return self._direction_to_twin
 
 func set_prev_jump_pressed(prev_jump_pressed):
 	self._prev_jump_pressed = prev_jump_pressed
@@ -135,7 +136,9 @@ func get_on_rope_max_distance():
 
 
 func find_state():
-	if self._on_floor:
+	if self._on_rope_max_distance:
+		self._state = PlayerStates.hover
+	elif self._on_floor:
 		if self._velocity.x == 0:
 				self._state = PlayerStates.idle
 		else:
@@ -163,7 +166,7 @@ func process_kinematics(move_left, move_right, jump, delta):
 			_walk(move_left, move_right, delta)
 			_fall(delta)
 		PlayerStates.hover:
-			_hover()
+			_hover(delta)
 		_:
 			print("Unknown state")
 
@@ -210,5 +213,26 @@ func _fall(delta):
 	self._on_air_time += delta
 	self._prev_jump_pressed = true
 
-func _hover():
+
+func _hover(delta):
+	var angle_between_rope_and_normal = acos(_direction_to_twin.dot(Vector2.DOWN))
+	
+	var fg = GRAVITY
+	var fp = fg * sin(angle_between_rope_and_normal)
+	var aa = fp
+	var a = aa / _direction_to_twin.length()
+	var linear_acceleration = Vector2()
+	linear_acceleration.x = aa * cos(angle_between_rope_and_normal)
+	linear_acceleration.y = aa * sin(angle_between_rope_and_normal)
+	self._force = linear_acceleration
+	self._velocity = self._force * delta
+	"""
+	var F = Vector2()
+	F.x = - self._force.length() * sin(angle_between_rope_and_normal) * cos(angle_between_rope_and_normal)
+	F.y = - self._force.length() * sin(angle_between_rope_and_normal) * sin(angle_between_rope_and_normal)
+
+	self._force = F * _direction_to_twin.length()
+
+	self._velocity = self._force * delta
+	"""
 	pass

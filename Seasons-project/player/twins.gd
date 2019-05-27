@@ -16,12 +16,16 @@ func _ready():
 func _process(delta):
 	_update_distance()
 	if _distance >= ROPE_MAX_DISTANCE:
-		_player_right.kinematics.set_direction(Vector2(0,1))
-
+		#_player_right.kinematics.set_direction(Vector2(0,1))
+		pass
+		
 func _get_distance():
 	return self._distance
 
 func _update_distance():
 	self._distance = _player_left.global_position.distance_to(_player_right.global_position)
 	#self._player_left.kinematics.set_on_rope_max_distance(_distance >= ROPE_MAX_DISTANCE)
-	#self._player_right.kinematics.set_on_rope_max_distance(_distance >= ROPE_MAX_DISTANCE)
+	self._player_right.kinematics.set_on_rope_max_distance(_distance >= ROPE_MAX_DISTANCE)
+	#self._player_left.kinematics.set_direction_to_twin(self._player_right.global_position - self._player_left.global_position)
+	self._player_right.kinematics.set_direction_to_twin((self._player_left.global_position - self._player_right.global_position).normalized())
+	#print(self._player_right.kinematics.get_direction_to_twin())
