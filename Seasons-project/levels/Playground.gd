@@ -12,8 +12,8 @@ var distance = Vector2()
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	player_left = $PlayerLeft
-	player_right = $PlayerRight
+	player_left = $Twins/PlayerLeft
+	player_right = $Twins/PlayerRight
 	l_player_left = $LPlayerLeft
 	l_player_right = $LPlayerRight
 	l_distance = $LDistance
@@ -22,8 +22,8 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	distance = Vector2(abs(player_left.global_position.x - player_right.global_position.x), abs(player_left.global_position.y - player_right.global_position.y))
-	l_player_left.set_text(str("Player Left: (", _round_to_dec(player_left.global_position.x, 0), ", ", _round_to_dec(player_left.global_position.y, 0), "), ", player_left.kinematics.get_state_string()))
-	l_player_right.set_text(str("Player Right: (", _round_to_dec(player_right.global_position.x, 0), ", ", _round_to_dec(player_right.global_position.y, 0), "), ", player_right.kinematics.get_state_string()))
+	l_player_left.set_text(str("Player Left: pos", player_left.global_position.round(), ", vel", player_left.kinematics.get_velocity().round(), "; status: ", player_left.kinematics.get_state_string()))
+	l_player_right.set_text(str("Player Right: pos", player_right.global_position.round(), ", vel", player_right.kinematics.get_velocity().round(), "; status: ", player_right.kinematics.get_state_string()))
 	l_distance.set_text(str("Distance: ", _round_to_dec(_get_distance(), 0), " (", _round_to_dec(distance.x, 0), ", ", _round_to_dec(distance.y, 0), ")"))
 	pass
 
