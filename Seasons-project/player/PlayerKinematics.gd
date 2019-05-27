@@ -18,9 +18,18 @@ const SLIDE_STOP_MIN_TRAVEL = 0.0 # one pixel
 enum PlayerStates {
 	idle,		#0 	
 	walk,		#1
-	jump,		#2
-	hover		#3
+	run			#2
+	jump,		#3
 	fall		#4
+	hang		#5
+	hover		#6
+	crouch		#7
+	sneak		#8
+	pull		#9
+	climb		#10
+	attack		#11
+	hurt		#12
+	die			#13
 }
 
 var _state
@@ -29,6 +38,7 @@ var _force
 
 var _on_air_time = 100
 var _prev_jump_pressed = false
+var _on_floor = false
 
 func _init():
 	self._state = PlayerStates.idle
@@ -37,7 +47,7 @@ func _init():
 
 
 func set_state(state):
-	self._state = PlayerStates.values()[0]
+	self._state = PlayerStates.values()[state]
 
 func get_state():
 	return self._state
@@ -50,11 +60,29 @@ func get_state_string():
 		1: 
 			return "walk"
 		2: 
-			return "jump"
+			return "run"
 		3: 
-			return "hover"
+			return "jump"
 		4: 
-			return "fall"  
+			return "fall"
+		5:
+			return "hang"
+		6: 
+			return "hover"
+		7:
+			return "crouch"
+		8:
+			return "sneak"
+		9:
+			return "pull"
+		10:
+			return "climb"
+		11:
+			return "attack"
+		12:
+			return "hurt"
+		13: 
+			return "die"
 
 func set_velocity(velocity):
 	self._velocity = velocity
@@ -83,10 +111,14 @@ func set_prev_jump_pressed(prev_jump_pressed):
 func get_prev_jump_pressed():
 	return self._prev_jump_pressed
 
+func set_on_floor(on_floor):
+	self._on_floor = on_floor
+
+func is_on_floor():
+	return self._on_floor
+
 
 func walk(walk_left, walk_right, delta):
-	if _state == PlayerStates.hover:
-		return
 	if walk_left:
 		if self._velocity.x <= WALK_MIN_SPEED and self._velocity.x > -WALK_MAX_SPEED:
 			self._force.x -= WALK_FORCE
@@ -111,9 +143,7 @@ func walk(walk_left, walk_right, delta):
 
 
 func jump(jump, delta):
-	if _state == PlayerStates.hover:
-		return
-	if self._state == PlayerStates.jump and self._velocity.y > 0:
+	if self._state == PlayerStates.jump or self._state == PlayerStates.fall and self._velocity.y > 0:
 		# If falling, no longer jumping
 		self._state = PlayerStates.fall
 	
@@ -125,3 +155,15 @@ func jump(jump, delta):
 	
 	self._on_air_time += delta
 	self._prev_jump_pressed = jump
+
+
+func find_state():
+	if self._on_floor:
+		if self._velocity.x == 0:
+				self._state = PlayerStates.idle
+		else:
+			self._state = PlayerStates.walk
+	elif self._velocity.y > 0:
+		self._state = PlayerStates.fall
+	else: 
+		self._state = PlayerStates.jump
