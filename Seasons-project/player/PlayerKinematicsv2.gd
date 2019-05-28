@@ -166,7 +166,8 @@ func process_kinematics(move_left, move_right, jump, delta):
 			_walk(move_left, move_right, delta)
 			_fall(delta)
 		PlayerStates.hover:
-			_hover(delta)
+			#_hover(delta)
+			pass
 		_:
 			print("Unknown state")
 
