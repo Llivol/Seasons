@@ -22,8 +22,8 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	distance = Vector2(abs(player_left.global_position.x - player_right.global_position.x), abs(player_left.global_position.y - player_right.global_position.y))
-	l_player_left.set_text(str("Player Left: pos", player_left.global_position.round(), ", vel", player_left.kinematics.get_velocity().round(), "; status: ", player_left.kinematics.get_state_string()))
-	l_player_right.set_text(str("Player Right: pos", player_right.global_position.round(), ", vel", player_right.kinematics.get_velocity().round(), "; status: ", player_right.kinematics.get_state_string()))
+	l_player_left.set_text(str("Player Left: pos", player_left.global_position.round(), ", vel", player_left.get_velocity().round(), ", force", player_left.get_force().round(), "; status: ", player_left.get_state()))
+	l_player_right.set_text(str("Player Right: pos", player_right.global_position.round(), ", vel", player_right.get_velocity().round(), ", vel", player_right.get_force().round(), "; status: ", player_right.get_state()))
 	l_distance.set_text(str("Distance: ", _round_to_dec(_get_distance(), 0), " (", _round_to_dec(distance.x, 0), ", ", _round_to_dec(distance.y, 0), ")"))
 	pass
 
