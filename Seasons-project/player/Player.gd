@@ -132,53 +132,55 @@ func process_kinematics(move_left, move_right, jump, delta):
 	self._velocity = move_and_slide(self._velocity, Vector2.UP)
 
 func omg_what_a_tension():
+	var velocity_length = self._velocity.length()
 	var velocity_x_origin = self._velocity.x
 	var velocity_y_origin = self._velocity.y
 	
-	# 1: Obtenir la velocitat en eixos de tensió/tangencial
+	self._velocity.y *= 10
+	
+	# 1: Desc. velocity en tangent i tension
+	var angle_between_rope_and_velocity = self._direction_to_twin.angle_to(self._velocity)
 	var angle_between_rope_and_floor = self._direction_to_twin.angle()
 	
-	var v_tangent_lenght = abs(self._velocity.length() * sin(angle_between_rope_and_floor))
-	var v_tension_lenght = abs(self._velocity.length() * cos(angle_between_rope_and_floor))
+	var v_tangent_lenght = self._velocity.length() * sin(angle_between_rope_and_velocity)
+	var v_tension_lenght = self._velocity.length() * cos(angle_between_rope_and_velocity)
 	
-	if v_tension_lenght < 0.1:
+	if abs(v_tension_lenght) < 0.1:
 		v_tension_lenght = 0
-	if v_tangent_lenght < 0.1:
+	if abs(v_tangent_lenght) < 0.1:
 		v_tangent_lenght = 0
 	
+	# 2: Desc tension y tangent en .x i .y
 	var v_tension = Vector2()
 	var v_tangent = Vector2()
 	
-	#V_TENSION.X ES SEMPRE NEGATIVA
-	
+		# Oju que l'angle es invertit, diria. Potser hem de posar algo en negatiu
 	v_tension.x = v_tension_lenght * cos(angle_between_rope_and_floor)
 	v_tension.y = v_tension_lenght * sin(angle_between_rope_and_floor)
 	
-	v_tangent.x = v_tangent_lenght * sin(angle_between_rope_and_floor)
+	v_tangent.x = v_tangent_lenght * -sin(angle_between_rope_and_floor)
 	v_tangent.y = v_tangent_lenght * cos(angle_between_rope_and_floor)
 	
-	var angle_to_guapo = get_angle_in_first_quadrant(v_tangent.angle_to(self._direction_to_twin))
-	
-	print(str("tension: ", v_tension))
-	print(str("tangent: ", v_tangent))
-	print(str("angle: ", angle_to_guapo))
+	# 3: Comprovem angles
+	var angle_tension = v_tension.angle()
+	var angle_rope = self._direction_to_twin.angle()
 	
 	var angle = v_tension.angle_to(self._direction_to_twin)
+	var angle_diff = abs(angle_tension - angle_rope)
 	
-	# 2: Comprovar angle amb la corda
-	if v_tangent.angle_to(self._direction_to_twin) < 0.1 and v_tangent.angle_to(self._direction_to_twin) > -0.1:
+	if abs(angle_tension - angle_rope) > 0.1 :
 		v_tension = Vector2.ZERO
 	
-	# 3: Tornar a eixos cartesians
+	# 4: Reconstruim V
 	self._velocity.x = v_tension.x + v_tangent.x
 	self._velocity.y = v_tension.y + v_tangent.y
 	
-	if self._velocity.x < 0.1:
+	if abs(self._velocity.x) < 0.1:
 		self._velocity.x = 0
-	if self._velocity.y < 0.1:
+	if abs(self._velocity.y) < 0.1:
 		self._velocity.y = 0
 	
-	print ("break")
+	print ("tension")
 
 func get_angle_in_first_quadrant(angle):
 	while angle > PI/2:
