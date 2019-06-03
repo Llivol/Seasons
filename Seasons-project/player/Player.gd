@@ -1,15 +1,15 @@
 extends KinematicBody2D
 
 
-const GRAVITY = 2250 # pixels/second/second
+const GRAVITY = 2250*2 # pixels/second/second
 
 const FLOOR_ANGLE_TOLERANCE = 40
-const WALK_FORCE = 1000
-const WALK_MIN_SPEED = 10
-const WALK_MAX_SPEED = 250
-const STOP_FORCE = 5000
-const JUMP_SPEED = 500
-const JUMP_FORCE = 32000
+const WALK_FORCE = 1000*2
+const WALK_MIN_SPEED = 10*2
+const WALK_MAX_SPEED = 250*2
+const STOP_FORCE = 5000*2
+const JUMP_SPEED = 500*2
+const JUMP_FORCE = 32000*2
 const JUMP_MAX_AIRBORNE_TIME = 0.01
 const TANGENT_ACCELERATION = 1.2
 const CLIMB_SPEED  = 200
@@ -203,6 +203,7 @@ func climb():
 	
 	self._velocity.x = v_tension.x * abs(cos(self._direction_to_twin.angle()))
 	self._velocity.y = v_tension.y * -sin(self._direction_to_twin.angle())
+
 
 func hang():
 	self._velocity.x = 0
