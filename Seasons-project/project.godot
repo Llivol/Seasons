@@ -21,7 +21,7 @@ config/icon="res://icon.png"
 
 [autoload]
 
-PlayerConstants="*res://player/PlayerConstants.gd"
+Global="*res://Global.gd"
 
 [display]
 

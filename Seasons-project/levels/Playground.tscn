@@ -421,6 +421,7 @@ points = PoolVector2Array( 0, 0, 32, 0, 32, 16, 0, 16 )
 script = ExtResource( 1 )
 
 [node name="TileMap" type="TileMap" parent="."]
+z_index = -2
 tile_set = SubResource( 42 )
 cell_size = Vector2( 32, 32 )
 format = 1
@@ -431,6 +432,9 @@ position = Vector2( 368, 176 )
 
 [node name="PlayerRight" parent="Twins" index="1"]
 position = Vector2( 72, 0 )
+
+[node name="Rope" parent="Twins" index="2"]
+texture_mode = 1074790400
 
 [node name="LPlayerLeft" type="Label" parent="."]
 margin_left = 48.0

@@ -1,6 +1,7 @@
 extends Node
 
-const ROPE_MAX_DISTANCE = 64
+const COLOR_RED = Color("#b13e53")
+const COLOR_ORANGE = Color("#ef7d57")
 
 # Declare member variables here. Examples:
 # var a = 2

@@ -1,5 +1,21 @@
 extends KinematicBody2D
 
+onready var _transitions := {
+	IDLE: [WALK, JUMP, FALL, HOVER, PULL, CLIMB, ATTACK, HURT, DIE],
+	WALK: [IDLE, STOP, JUMP, FALL, HOVER, CLIMB, ATTACK, HURT, DIE],
+	STOP: [IDLE, WALK],
+	JUMP: [FALL, HANG, HOVER, HURT, DIE],
+	FALL: [IDLE, HANG, HOVER, HURT, DIE],
+	HANG: [IDLE, FALL, HOVER],
+	HOVER: [IDLE, WALK, JUMP, FALL, HANG, ],
+	CROUCH: [],
+	SNEAK: [],
+	PULL: [IDLE],
+	CLIMB: [IDLE, FALL],
+	ATTACK: [IDLE, HOVER],
+	HURT: [IDLE],
+	DIE: [IDLE],
+}
 
 const GRAVITY = 2250*2 # pixels/second/second
 
@@ -91,6 +107,54 @@ func get_state():
 	return _state
 
 
+func set_state():
+	if _was_on_floor:
+		if _input_action:
+			change_state(ATTACK)
+		
+		elif _input_up and is_below_twin():
+			change_state(CLIMB)
+		
+		elif _on_rope_max_distance:
+			change_state(HOVER)
+		
+		elif _input_left or _input_right:
+			change_state(WALK)
+		
+		else:
+			change_state(IDLE)
+	else:
+		if _input_action:
+			change_state(HANG)
+		
+		elif _input_up and is_below_twin():
+			change_state(CLIMB)
+		
+		elif _on_rope_max_distance:
+			change_state(HOVER)
+		
+		elif _input_JUMP:
+			change_state(JUMP)
+		
+		else: 
+			change_state(FALL)
+
+
+func change_state(target_state: int) -> void:
+	if not target_state in _transitions[_state]:
+		return
+	_state = target_state
+	enter_state()
+
+
+func enter_state() -> void:
+	match _state:
+		IDLE:
+			_velocity.x = 0.0
+		_:
+			return
+
+
 func get_force():
 	return _force
 
@@ -116,39 +180,6 @@ func set_inputs(name):
 	_input_action = Input.is_action_pressed(str(name, "_action"))
 
 
-func find_state():
-	if _was_on_floor:
-		if _input_action:
-			_state = ATTACK
-		
-		elif _input_up and is_below_twin():
-			_state = CLIMB
-		
-		elif _on_rope_max_distance:
-			_state = HOVER
-		
-		elif _input_left or _input_right:
-			_state = WALK
-		
-		else:
-			_state = IDLE
-	else:
-		if _input_action:
-			_state = HANG
-		
-		elif _input_up and is_below_twin():
-			_state = CLIMB
-		
-		elif _on_rope_max_distance:
-			_state = HOVER
-		
-		elif _input_JUMP:
-			_state = JUMP
-		
-		else: 
-			_state = FALL
-
-
 func process_kinematics(delta):
 	check_on_floor()
 	
@@ -158,7 +189,7 @@ func process_kinematics(delta):
 	
 	_velocity += _force * delta
 	
-	find_state()
+	set_state()
 	
 	match _state:
 		HANG:
@@ -238,7 +269,8 @@ func swing():
 	if abs(angle_tension - angle_rope) > 0.1 :
 		v_tension = Vector2.ZERO
 	
-	v_tangent *= TANGENT_ACCELERATION * sin(angle_tension)
+	v_tangent.x -= sin(angle_tension)+0.5
+	v_tangent.y -= sin(angle_tension)+0.5
 	
 	# 4: Reconstruim V
 	_velocity.x = v_tension.x + v_tangent.x
@@ -263,18 +295,16 @@ func get_angle_in_first_quadrant(angle):
 
 
 func linear_velocity_x(delta):
-	_state = STOP
 	
 	if _input_left:
 		if _velocity.x <= WALK_MIN_SPEED and _velocity.x > -WALK_MAX_SPEED:
 			_force.x -= WALK_FORCE
-			_state = WALK
+			
 	elif _input_right:
 		if _velocity.x >= -WALK_MIN_SPEED and _velocity.x < WALK_MAX_SPEED:
 			_force.x += WALK_FORCE
-			_state = WALK
 	
-	if _state == STOP: 
+	elif _state != HOVER or is_on_floor(): 
 		var vsign = sign(_velocity.x)
 		var vlen = abs(_velocity.x)
 
