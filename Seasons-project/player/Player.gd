@@ -266,7 +266,7 @@ func swing():
 	var angle = v_tension.angle_to(_direction_to_twin)
 	var angle_diff = abs(angle_tension - angle_rope)
 	
-	if abs(angle_tension - angle_rope) > 0.1 :
+	if abs(angle_tension - angle_rope) > 0.1:
 		var parent = get_parent()
 		var distance_diff = parent.get_distance() - parent.ROPE_MAX_DISTANCE #if (parent.get_distance() > parent.ROPE_MAX_DISTANCE) else 0
 		
