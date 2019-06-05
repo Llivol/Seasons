@@ -7,11 +7,11 @@ onready var _transitions := {
 	JUMP: [FALL, HANG, HOVER, HURT, DIE],
 	FALL: [IDLE, HANG, HOVER, HURT, DIE],
 	HANG: [IDLE, FALL, HOVER],
-	HOVER: [IDLE, WALK, JUMP, FALL, HANG, ],
+	HOVER: [IDLE, WALK, JUMP, FALL, HANG, CLIMB],
 	CROUCH: [],
 	SNEAK: [],
 	PULL: [IDLE],
-	CLIMB: [IDLE, FALL],
+	CLIMB: [IDLE, FALL, HOVER, HANG],
 	ATTACK: [IDLE, HOVER],
 	HURT: [IDLE],
 	DIE: [IDLE],
@@ -267,7 +267,10 @@ func swing():
 	var angle_diff = abs(angle_tension - angle_rope)
 	
 	if abs(angle_tension - angle_rope) > 0.1 :
-		v_tension = Vector2.ZERO
+		var parent = get_parent()
+		var distance_diff = parent.get_distance() - parent.ROPE_MAX_DISTANCE #if (parent.get_distance() > parent.ROPE_MAX_DISTANCE) else 0
+		
+		v_tension = _direction_to_twin * distance_diff * 10 #if (distance_diff == 0) else Vector2.ZERO
 	
 	v_tangent.x -= sin(angle_tension)+0.5
 	v_tangent.y -= sin(angle_tension)+0.5

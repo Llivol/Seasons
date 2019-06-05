@@ -1,4 +1,4 @@
-extends Node2D
+	extends Node2D
 
 const ROPE_MAX_DISTANCE = 128
 const ROPE_MIN_DISTANCE = 33
@@ -24,7 +24,7 @@ func _process(delta):
 		_rope.default_color = Global.COLOR_ORANGE
 
 
-func _get_distance():
+func get_distance():
 	return _distance
 
 
