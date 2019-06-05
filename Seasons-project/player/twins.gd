@@ -5,7 +5,7 @@ const ROPE_MIN_DISTANCE = 32
 
 var _player_left
 var _player_right
-var _distance
+var _distance := 0.0
 
 
 func _ready():

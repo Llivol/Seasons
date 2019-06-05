@@ -18,21 +18,21 @@ const SLIDE_STOP_VELOCITY = 0.0 # one pixel/second
 const SLIDE_STOP_MIN_TRAVEL = 0.0 # one pixel
 
 
-enum PlayerStates {
-	idle,		#0 	
-	walk,		#1
-	stop		#2
-	jump		#3
-	fall		#4
-	hang		#5
-	hover		#6
-	crouch		#7
-	sneak		#8
-	pull		#9
-	climb		#10
-	attack		#11
-	hurt		#12
-	die			#13
+enum {
+	IDLE,		#0 	
+	WALK,		#1
+	STOP		#2
+	JUMP		#3
+	FALL		#4
+	HANG		#5
+	HOVER		#6
+	CROUCH		#7
+	SNEAK		#8
+	PULL		#9
+	CLIMB		#10
+	ATTACK		#11
+	HURT		#12
+	DIE			#13
 }
 
 
@@ -40,7 +40,7 @@ var _input_left
 var _input_right
 var _input_up
 var _input_down
-var _input_jump
+var _input_JUMP
 var _input_action
 
 var _state
@@ -49,117 +49,104 @@ var _force
 
 var _direction_to_twin
 
-var _prev_jump_pressed = false
+var _prev_JUMP_pressed = false
 var _on_air_time = 100
 var _on_rope_max_distance = false
 var _on_rope_min_distance = false
 var _was_on_floor = false
 
+var states_strings := {
+	IDLE: "idle",
+	WALK: "walk",
+	STOP: "stop",
+	JUMP: "jump",
+	FALL: "fall",
+	HANG: "hang",
+	HOVER: "hover",
+	CROUCH: "crouch",
+	SNEAK: "sneak",
+	PULL: "pull",
+	CLIMB: "climb",
+	ATTACK: "attack",
+	HURT: "hurt",
+	DIE: "die",
+}
 
 func _init():
-	self._state = PlayerStates.idle
-	self._velocity = Vector2()
-	self._force = Vector2()
-	self._direction_to_twin = Vector2()
+	_state = IDLE
+	_velocity = Vector2()
+	_force = Vector2()
+	_direction_to_twin = Vector2()
 
 
 func set_force_gravity():
-	self._force = Vector2(0, GRAVITY)
+	_force = Vector2(0, GRAVITY)
 
 
 func get_velocity():
-	return self._velocity
-
-
-func get_force():
-	return self._force
-
-
-func set_direction_to_twin(direction_to_twin):
-	self._direction_to_twin = direction_to_twin
-
-
-func set_on_rope_max_distance(on_rope_max_distance):
-	self._on_rope_max_distance = on_rope_max_distance
-
-
-func set_on_rope_min_distance(on_rope_min_distance):
-	self._on_rope_min_distance = on_rope_min_distance
-
-
-func set_inputs(name):
-	self._input_left = Input.is_action_pressed(str(name, "_left"))
-	self._input_right = Input.is_action_pressed(str(name, "_right"))
-	self._input_up = Input.is_action_pressed(str(name, "_up"))
-	self._input_down = Input.is_action_pressed(str(name, "_down"))
-	self._input_jump = Input.is_action_pressed(str(name, "_jump"))
-	self._input_action = Input.is_action_pressed(str(name, "_action"))
+	return _velocity
 
 
 func get_state():
-	
-	match self._state:
-		0: 
-			return "idle"
-		1: 
-			return "walk"
-		2: 
-			return "stop"
-		3: 
-			return "jump"
-		4: 
-			return "fall"
-		5:
-			return "hang"
-		6: 
-			return "hover"
-		7:
-			return "crouch"
-		8:
-			return "sneak"
-		9:
-			return "pull"
-		10:
-			return "climb"
-		11:
-			return "attack"
-		12:
-			return "hurt"
-		13: 
-			return "die"
+	return _state
+
+
+func get_force():
+	return _force
+
+
+func set_direction_to_twin(direction_to_twin):
+	_direction_to_twin = direction_to_twin
+
+
+func set_on_rope_max_distance(on_rope_max_distance):
+	_on_rope_max_distance = on_rope_max_distance
+
+
+func set_on_rope_min_distance(on_rope_min_distance):
+	_on_rope_min_distance = on_rope_min_distance
+
+
+func set_inputs(name):
+	_input_left = Input.is_action_pressed(str(name, "_left"))
+	_input_right = Input.is_action_pressed(str(name, "_right"))
+	_input_up = Input.is_action_pressed(str(name, "_up"))
+	_input_down = Input.is_action_pressed(str(name, "_down"))
+	_input_JUMP = Input.is_action_pressed(str(name, "_jump"))
+	_input_action = Input.is_action_pressed(str(name, "_action"))
 
 
 func find_state():
-	if self._was_on_floor:
-		if self._input_action:
-			self._state = PlayerStates.attack
+	if _was_on_floor:
+		if _input_action:
+			_state = ATTACK
 		
-		elif self._input_up and is_below_twin():
-			self._state = PlayerStates.climb
+		elif _input_up and is_below_twin():
+			_state = CLIMB
 		
-		elif self._on_rope_max_distance:
-			self._state = PlayerStates.hover
+		elif _on_rope_max_distance:
+			_state = HOVER
 		
-		elif self._input_left or self._input_right:
-			self._state = PlayerStates.walk
+		elif _input_left or _input_right:
+			_state = WALK
 		
 		else:
-			self._state = PlayerStates.idle
+			_state = IDLE
 	else:
-		if self._input_action:
-			self._state = PlayerStates.hang
+		if _input_action:
+			_state = HANG
 		
-		elif self._input_up and is_below_twin():
-			self._state = PlayerStates.climb
+		elif _input_up and is_below_twin():
+			_state = CLIMB
 		
-		elif self._on_rope_max_distance:
-			self._state = PlayerStates.hover
+		elif _on_rope_max_distance:
+			_state = HOVER
 		
-		elif self._input_jump:
-			self._state = PlayerStates.jump
+		elif _input_JUMP:
+			_state = JUMP
 		
 		else: 
-			self._state = PlayerStates.fall
+			_state = FALL
 
 
 func process_kinematics(delta):
@@ -169,28 +156,28 @@ func process_kinematics(delta):
 	
 	linear_velocity_x(delta)
 	
-	self._velocity += self._force * delta
+	_velocity += _force * delta
 	
 	find_state()
 	
-	match self._state:
-		PlayerStates.hang:
+	match _state:
+		HANG:
 			hang()
-		PlayerStates.hover:
+		HOVER:
 			swing()
-		PlayerStates.pull:
+		PULL:
 			pull()
-		PlayerStates.climb:
+		CLIMB:
 			climb()
 	
-	self._velocity = move_and_slide(self._velocity, Vector2.UP)
+	_velocity = move_and_slide(_velocity, Vector2.UP)
 
 
 func check_on_floor():
-	self._was_on_floor = false
+	_was_on_floor = false
 	if is_on_floor():
-		self._on_air_time = 0
-		self._was_on_floor = true
+		_on_air_time = 0
+		_was_on_floor = true
 
 
 func pull():
@@ -198,31 +185,32 @@ func pull():
 
 
 func climb():
-	var v_tension = self._direction_to_twin.normalized() * CLIMB_SPEED
+	var v_tension = _direction_to_twin.normalized() * CLIMB_SPEED
 	
 	
-	self._velocity.x = v_tension.x * abs(cos(self._direction_to_twin.angle()))
-	self._velocity.y = v_tension.y * -sin(self._direction_to_twin.angle())
+	_velocity.x = v_tension.x * abs(cos(_direction_to_twin.angle()))
+	_velocity.y = v_tension.y * -sin(_direction_to_twin.angle())
 
 
 func hang():
-	self._velocity.x = 0
-	self._velocity.y = 0
+	_velocity.x = 0
+	_velocity.y = 0
 
 
+# TODO: Fix tangent acceleration
 func swing():
-	var velocity_length = self._velocity.length()
-	var velocity_x_origin = self._velocity.x
-	var velocity_y_origin = self._velocity.y
-	var velocity_x_final = self._velocity.x
-	var velocity_y_final = self._velocity.y
+	var velocity_length = _velocity.length()
+	var velocity_x_origin = _velocity.x
+	var velocity_y_origin = _velocity.y
+	var velocity_x_final = _velocity.x
+	var velocity_y_final = _velocity.y
 	
 	# 1: Desc. velocity en tangent i tension
-	var angle_between_rope_and_velocity = self._direction_to_twin.angle_to(self._velocity)
-	var angle_between_rope_and_floor = self._direction_to_twin.angle()
+	var angle_between_rope_and_velocity = _direction_to_twin.angle_to(_velocity)
+	var angle_between_rope_and_floor = _direction_to_twin.angle()
 	
-	var v_tangent_lenght = self._velocity.length() * sin(angle_between_rope_and_velocity)
-	var v_tension_lenght = self._velocity.length() * cos(angle_between_rope_and_velocity)
+	var v_tangent_lenght = _velocity.length() * sin(angle_between_rope_and_velocity)
+	var v_tension_lenght = _velocity.length() * cos(angle_between_rope_and_velocity)
 	
 	if abs(v_tension_lenght) < 0.1:
 		v_tension_lenght = 0
@@ -242,9 +230,9 @@ func swing():
 	
 	# 3: Comprovem angles
 	var angle_tension = v_tension.angle()
-	var angle_rope = self._direction_to_twin.angle()
+	var angle_rope = _direction_to_twin.angle()
 	
-	var angle = v_tension.angle_to(self._direction_to_twin)
+	var angle = v_tension.angle_to(_direction_to_twin)
 	var angle_diff = abs(angle_tension - angle_rope)
 	
 	if abs(angle_tension - angle_rope) > 0.1 :
@@ -253,16 +241,16 @@ func swing():
 	v_tangent *= TANGENT_ACCELERATION * sin(angle_tension)
 	
 	# 4: Reconstruim V
-	self._velocity.x = v_tension.x + v_tangent.x
-	self._velocity.y = v_tension.y + v_tangent.y
+	_velocity.x = v_tension.x + v_tangent.x
+	_velocity.y = v_tension.y + v_tangent.y
 	
-	if abs(self._velocity.x) < 0.1:
-		self._velocity.x = 0
-	if abs(self._velocity.y) < 0.1:
-		self._velocity.y = 0
+	if abs(_velocity.x) < 0.1:
+		_velocity.x = 0
+	if abs(_velocity.y) < 0.1:
+		_velocity.y = 0
 	
-	velocity_x_final = self._velocity.x
-	velocity_y_final = self._velocity.y
+	velocity_x_final = _velocity.x
+	velocity_y_final = _velocity.y
 
 
 func get_angle_in_first_quadrant(angle):
@@ -275,46 +263,46 @@ func get_angle_in_first_quadrant(angle):
 
 
 func linear_velocity_x(delta):
-	self._state = PlayerStates.stop
+	_state = STOP
 	
-	if self._input_left:
-		if self._velocity.x <= WALK_MIN_SPEED and self._velocity.x > -WALK_MAX_SPEED:
-			self._force.x -= WALK_FORCE
-			self._state = PlayerStates.walk
-	elif self._input_right:
-		if self._velocity.x >= -WALK_MIN_SPEED and self._velocity.x < WALK_MAX_SPEED:
-			self._force.x += WALK_FORCE
-			self._state = PlayerStates.walk
+	if _input_left:
+		if _velocity.x <= WALK_MIN_SPEED and _velocity.x > -WALK_MAX_SPEED:
+			_force.x -= WALK_FORCE
+			_state = WALK
+	elif _input_right:
+		if _velocity.x >= -WALK_MIN_SPEED and _velocity.x < WALK_MAX_SPEED:
+			_force.x += WALK_FORCE
+			_state = WALK
 	
-	if self._state == PlayerStates.stop: 
-		var vsign = sign(self._velocity.x)
-		var vlen = abs(self._velocity.x)
+	if _state == STOP: 
+		var vsign = sign(_velocity.x)
+		var vlen = abs(_velocity.x)
 
 		vlen -= STOP_FORCE * delta
 		if vlen < 0:
 			vlen = 0
 
-		self._velocity.x = vlen * vsign
+		_velocity.x = vlen * vsign
 
 
 func linear_velocity_y(delta):
 	set_force_gravity()
 		
-	if self._state == PlayerStates.fall:
+	if _state == FALL:
 		pass
 	
-	if self._on_air_time < JUMP_MAX_AIRBORNE_TIME and self._input_jump and not self._prev_jump_pressed and not self._state == PlayerStates.jump:
-		# self._input_jump must also be allowed to happen if the character left the floor a little bit ago.
+	if _on_air_time < JUMP_MAX_AIRBORNE_TIME and _input_JUMP and not _prev_JUMP_pressed and not _state == JUMP:
+		# _input_JUMP must also be allowed to happen if the character left the floor a little bit ago.
 		# Makes controls more snappy.
-		self._velocity.y = -JUMP_SPEED
+		_velocity.y = -JUMP_SPEED
 	
-	self._on_air_time += delta
-	self._prev_jump_pressed = self._input_jump
+	_on_air_time += delta
+	_prev_JUMP_pressed = _input_JUMP
 
 
 func is_above_twin():
-	return sin(self._direction_to_twin.angle()) > 0.1 and not self._on_rope_min_distance
+	return sin(_direction_to_twin.angle()) > 0.1 and not _on_rope_min_distance
 
 
 func is_below_twin():
-	return sin(self._direction_to_twin.angle()) < -0.1 and not self._on_rope_min_distance
+	return sin(_direction_to_twin.angle()) < -0.1 and not _on_rope_min_distance
