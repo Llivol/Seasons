@@ -1,5 +1,5 @@
 extends KinematicBody2D
-
+"""
 onready var _transitions := {
 	IDLE: [WALK, JUMP, FALL, HOVER, PULL, CLIMB, ATTACK, HURT, DIE],
 	WALK: [IDLE, STOP, JUMP, FALL, HOVER, CLIMB, ATTACK, HURT, DIE],
@@ -16,6 +16,24 @@ onready var _transitions := {
 	HURT: [IDLE],
 	DIE: [IDLE],
 }
+"""
+
+onready var _transitions := {
+	IDLE: [WALK, STOP, JUMP, FALL, HANG, HOVER, PULL, CLIMB, ATTACK, HURT, DIE],
+	WALK: [IDLE, STOP, JUMP, FALL, HANG, HOVER, PULL, CLIMB, ATTACK, HURT, DIE],
+	STOP: [IDLE, WALK, JUMP, FALL, HANG, HOVER, PULL, CLIMB, ATTACK, HURT, DIE],
+	JUMP: [IDLE, WALK, STOP, FALL, HANG, HOVER, PULL, CLIMB, ATTACK, HURT, DIE],
+	FALL: [IDLE, HANG, HOVER, HURT, DIE],
+	HANG: [IDLE, WALK, STOP, JUMP, FALL, HOVER, PULL, CLIMB, ATTACK, HURT, DIE],
+	HOVER: [IDLE, WALK, STOP, JUMP, FALL, HANG, PULL, CLIMB, ATTACK, HURT, DIE],
+	CROUCH: [],
+	SNEAK: [],
+	PULL: [IDLE, WALK, STOP, JUMP, FALL, HANG, HOVER, CLIMB, ATTACK, HURT, DIE],
+	CLIMB: [IDLE, WALK, STOP, JUMP, FALL, HANG, HOVER, PULL, ATTACK, HURT, DIE],
+	ATTACK: [IDLE, WALK, STOP, JUMP, FALL, HANG, HOVER, PULL, CLIMB, HURT, DIE],
+	HURT: [IDLE, WALK, STOP, JUMP, FALL, HANG, HOVER, PULL, CLIMB, ATTACK, DIE],
+	DIE: [IDLE, WALK, STOP, JUMP, FALL, HANG, HOVER, PULL, CLIMB, ATTACK, HURT],
+}
 
 const GRAVITY = 2250*2 # pixels/second/second
 
@@ -29,6 +47,7 @@ const JUMP_FORCE = 32000*2
 const JUMP_MAX_AIRBORNE_TIME = 0.01
 const TANGENT_ACCELERATION = 1.2
 const CLIMB_SPEED  = 200
+const RECOVER_FORCE = 50
 
 const SLIDE_STOP_VELOCITY = 0.0 # one pixel/second
 const SLIDE_STOP_MIN_TRAVEL = 0.0 # one pixel
@@ -268,7 +287,7 @@ func swing():
 		var parent = get_parent()
 		var distance_diff = parent.get_distance() - parent.ROPE_MAX_DISTANCE #if (parent.get_distance() > parent.ROPE_MAX_DISTANCE) else 0
 		
-		v_tension = _direction_to_twin * distance_diff * 10 #if (distance_diff == 0) else Vector2.ZERO
+		v_tension = _direction_to_twin * distance_diff * RECOVER_FORCE #if (distance_diff == 0) else Vector2.ZERO
 	
 	v_tangent.x -= sin(v_tension.angle()) + 0.5
 	v_tangent.y -= sin(v_tension.angle()) + 0.5
