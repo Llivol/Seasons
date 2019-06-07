@@ -192,6 +192,10 @@ func process_kinematics(delta):
 	set_state()
 	
 	match _state:
+		JUMP:
+			air()
+		FALL:
+			air()
 		HANG:
 			hang()
 		HOVER:
@@ -209,6 +213,11 @@ func check_on_floor():
 	if is_on_floor():
 		_on_air_time = 0
 		_was_on_floor = true
+
+
+func air():
+	#_velocity.x *= 0.8
+	pass
 
 
 func pull():
@@ -230,11 +239,6 @@ func hang():
 
 # TODO: Fix tangent acceleration
 func swing():
-	var velocity_length = _velocity.length()
-	var velocity_x_origin = _velocity.x
-	var velocity_y_origin = _velocity.y
-	var velocity_x_final = _velocity.x
-	var velocity_y_final = _velocity.y
 	
 	# 1: Desc. velocity en tangent i tension
 	var angle_between_rope_and_velocity = _direction_to_twin.angle_to(_velocity)
@@ -260,20 +264,14 @@ func swing():
 	v_tangent.y = v_tangent_lenght * cos(angle_between_rope_and_floor)
 	
 	# 3: Comprovem angles
-	var angle_tension = v_tension.angle()
-	var angle_rope = _direction_to_twin.angle()
-	
-	var angle = v_tension.angle_to(_direction_to_twin)
-	var angle_diff = abs(angle_tension - angle_rope)
-	
-	if abs(angle_tension - angle_rope) > 0.1:
+	if abs(v_tension.angle() - _direction_to_twin.angle()) > 0.1:
 		var parent = get_parent()
 		var distance_diff = parent.get_distance() - parent.ROPE_MAX_DISTANCE #if (parent.get_distance() > parent.ROPE_MAX_DISTANCE) else 0
 		
 		v_tension = _direction_to_twin * distance_diff * 10 #if (distance_diff == 0) else Vector2.ZERO
 	
-	v_tangent.x -= sin(angle_tension)+0.5
-	v_tangent.y -= sin(angle_tension)+0.5
+	v_tangent.x -= sin(v_tension.angle()) + 0.5
+	v_tangent.y -= sin(v_tension.angle()) + 0.5
 	
 	# 4: Reconstruim V
 	_velocity.x = v_tension.x + v_tangent.x
@@ -283,9 +281,6 @@ func swing():
 		_velocity.x = 0
 	if abs(_velocity.y) < 0.1:
 		_velocity.y = 0
-	
-	velocity_x_final = _velocity.x
-	velocity_y_final = _velocity.y
 
 
 func get_angle_in_first_quadrant(angle):

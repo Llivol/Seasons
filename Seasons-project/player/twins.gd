@@ -1,6 +1,6 @@
-	extends Node2D
+extends Node2D
 
-const ROPE_MAX_DISTANCE = 128
+const ROPE_MAX_DISTANCE = 252
 const ROPE_MIN_DISTANCE = 33
 
 var _player_left

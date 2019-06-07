@@ -3,11 +3,9 @@
 [ext_resource path="res://AI/LedgeDetector.gd" type="Script" id=1]
 
 [node name="LedgeDetector" type="Node2D"]
-editor/display_folded = true
 script = ExtResource( 1 )
 
 [node name="FloorDetector" type="RayCast2D" parent="."]
-editor/display_folded = true
 position = Vector2( 0.1, 0 )
 enabled = true
 cast_to = Vector2( 0, 16 )
@@ -19,6 +17,7 @@ width = 2.0
 texture_mode = -1035468800
 
 [node name="WallDetector" type="RayCast2D" parent="."]
+editor/display_folded = true
 enabled = true
 cast_to = Vector2( 2, 0 )
 

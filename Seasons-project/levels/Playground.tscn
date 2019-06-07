@@ -1,11 +1,12 @@
-[gd_scene load_steps=49 format=2]
+[gd_scene load_steps=50 format=2]
 
-[ext_resource path="res://levels/playground.gd" type="Script" id=1]
+[ext_resource path="res://levels/Playground.gd" type="Script" id=1]
 [ext_resource path="res://_src/ph_wallv2.png" type="Texture" id=2]
 [ext_resource path="res://_src/ph_bg.png" type="Texture" id=3]
 [ext_resource path="res://_src/ph_wall_single_way.png" type="Texture" id=4]
-[ext_resource path="res://player/twins.tscn" type="PackedScene" id=5]
-[ext_resource path="res://enemies/EnemyPatroller.tscn" type="PackedScene" id=6]
+[ext_resource path="res://player/Twins.tscn" type="PackedScene" id=5]
+[ext_resource path="res://enemies/LandPatroller.tscn" type="PackedScene" id=6]
+[ext_resource path="res://enemies/FlyPatroller.tscn" type="PackedScene" id=7]
 
 [sub_resource type="ConvexPolygonShape2D" id=1]
 points = PoolVector2Array( 0, 0, 32, 0, 32, 32, 0, 32 )
@@ -434,9 +435,6 @@ position = Vector2( 368, 176 )
 [node name="PlayerRight" parent="Twins" index="1"]
 position = Vector2( 72, 0 )
 
-[node name="Rope" parent="Twins" index="2"]
-texture_mode = -1035468800
-
 [node name="LPlayerLeft" type="Label" parent="."]
 margin_left = 48.0
 margin_top = 48.0
@@ -461,28 +459,10 @@ margin_bottom = 72.0
 custom_colors/font_color = Color( 0.101961, 0.109804, 0.172549, 1 )
 text = "Distance: "
 
-[node name="EnemyPatroller" parent="." instance=ExtResource( 6 )]
+[node name="LandPatroller" parent="." instance=ExtResource( 6 )]
 position = Vector2( 852.953, 85.6425 )
 
-[node name="EnemyPatroller2" parent="." instance=ExtResource( 6 )]
-position = Vector2( 86.759, 207.944 )
-
-[node name="EnemyPatroller3" parent="." instance=ExtResource( 6 )]
-position = Vector2( 47.3198, 478.017 )
-
-[node name="EnemyPatroller4" parent="." instance=ExtResource( 6 )]
-position = Vector2( 260.806, 550.894 )
-
-[node name="EnemyPatroller5" parent="." instance=ExtResource( 6 )]
-position = Vector2( 370.55, 532.889 )
-
-[node name="EnemyPatroller6" parent="." instance=ExtResource( 6 )]
-position = Vector2( 601.183, 723.226 )
-
-[node name="EnemyPatroller7" parent="." instance=ExtResource( 6 )]
-position = Vector2( 860.11, 447.152 )
-
-[node name="EnemyPatroller8" parent="." instance=ExtResource( 6 )]
-position = Vector2( 653.483, 260.244 )
+[node name="FlyPatroller" parent="." instance=ExtResource( 7 )]
+position = Vector2( 336, 368 )
 
 [editable path="Twins"]

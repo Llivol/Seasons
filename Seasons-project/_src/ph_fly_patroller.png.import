@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/ph_enemy_patroller.png-1da8229ab2fa6e6ba570f63ca7001dcd.stex"
+path="res://.import/ph_fly_patroller.png-031a92098fc589a8e2f370d83f8a912c.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://_src/ph_enemy_patroller.png"
-dest_files=[ "res://.import/ph_enemy_patroller.png-1da8229ab2fa6e6ba570f63ca7001dcd.stex" ]
+source_file="res://_src/ph_fly_patroller.png"
+dest_files=[ "res://.import/ph_fly_patroller.png-031a92098fc589a8e2f370d83f8a912c.stex" ]
 
 [params]
 
