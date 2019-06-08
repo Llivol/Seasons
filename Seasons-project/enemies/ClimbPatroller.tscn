@@ -1,18 +1,17 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://enemies/ClimbPatroller.gd" type="Script" id=1]
 [ext_resource path="res://_src/ph_climb_patroller.png" type="Texture" id=2]
-[ext_resource path="res://AI/Waypoints.gd" type="Script" id=3]
+[ext_resource path="res://enemies/AI/AttackArea.tscn" type="PackedScene" id=3]
+[ext_resource path="res://enemies/AI/Waypoints.gd" type="Script" id=4]
 
 [sub_resource type="ConvexPolygonShape2D" id=1]
-points = PoolVector2Array( 0, -8, 8, 0, 0, 8, -8, 0 )
+points = PoolVector2Array( 0, -10, 10, 0, 0, 10, -10, 0 )
 
 [node name="ClimbPatroller" type="Node2D"]
 
 [node name="Body" type="KinematicBody2D" parent="."]
-position = Vector2( 38.0728, 89.9273 )
 script = ExtResource( 1 )
-waypoints_path = NodePath("../Waypoints")
 
 [node name="Sprite" type="Sprite" parent="Body"]
 texture = ExtResource( 2 )
@@ -23,9 +22,13 @@ shape = SubResource( 1 )
 [node name="Timer" type="Timer" parent="Body"]
 wait_time = 0.2
 
+[node name="AttackArea" parent="Body" instance=ExtResource( 3 )]
+
 [node name="Waypoints" type="Node2D" parent="."]
-script = ExtResource( 3 )
+editor/display_folded = true
+script = ExtResource( 4 )
 line_width = 2.0
+_clockwise = false
 
 [node name="Start" type="Position2D" parent="Waypoints"]
 
@@ -38,3 +41,4 @@ position = Vector2( 0, 128 )
 [node name="3" type="Position2D" parent="Waypoints"]
 position = Vector2( -64, 64 )
 [connection signal="timeout" from="Body/Timer" to="Body" method="_on_Timer_timeout"]
+[connection signal="body_entered" from="Body/AttackArea" to="Body" method="_on_AttackArea_body_entered"]

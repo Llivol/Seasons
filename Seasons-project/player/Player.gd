@@ -1,4 +1,5 @@
 extends KinematicBody2D
+class_name Player
 """
 onready var _transitions := {
 	IDLE: [WALK, JUMP, FALL, HOVER, PULL, CLIMB, ATTACK, HURT, DIE],

@@ -1,6 +1,7 @@
 extends Node2D
 
 var _parent
+var _init
 var _floor_detector
 var _wall_detector
 
@@ -8,6 +9,15 @@ func _ready():
 	_parent = get_parent()
 	_floor_detector = $FloorDetector
 	_wall_detector = $WallDetector
+	_init = false
+
+func _process(delta):
+	if _init:
+		return
+	
+	if _parent.SIZE != null:
+		translate(Vector2(_parent.SIZE, 0))
+		_init = true
 
 
 func is_near_ledge() -> bool:

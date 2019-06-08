@@ -467,6 +467,12 @@ position = Vector2( 852.953, 85.6425 )
 position = Vector2( 336, 368 )
 
 [node name="ClimbPatroller" parent="." instance=ExtResource( 8 )]
-position = Vector2( 160, 672 )
+position = Vector2( 128, 640 )
+
+[node name="ClimbPatroller2" parent="." instance=ExtResource( 8 )]
+position = Vector2( 400, 208 )
+
+[node name="LandPatroller2" parent="." instance=ExtResource( 6 )]
+position = Vector2( 528, 224 )
 
 [editable path="Twins"]

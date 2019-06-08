@@ -6,6 +6,7 @@ export var editor_process: = true setget set_editor_process
 export var line_color: = Color(0.228943, 0.710254, 0.945312)
 export var line_width: = 10.0
 export var triangle_color: = Color(0.722656, 0.908997, 1)
+export var _clockwise = true setget set_clockwise, is_clockwise
 
 var _active_point_index: = 0
 
@@ -49,7 +50,13 @@ func get_current_point_position() -> Vector2:
 
 
 func get_next_point_position():
-	_active_point_index = (_active_point_index + 1) % get_child_count()
+	if _clockwise:
+		_active_point_index = (_active_point_index + 1) % get_child_count()
+	else:
+		_active_point_index = (_active_point_index - 1) % get_child_count()
+		if _active_point_index < 0:
+			_active_point_index = get_child_count() - 1
+	
 	return get_current_point_position()
 
 
@@ -69,3 +76,10 @@ func set_editor_process(value:bool) -> void:
 	if not Engine.editor_hint:
 		return
 	set_process(value)
+
+func set_clockwise(value: bool) -> void:
+	_clockwise = value
+
+
+func is_clockwise() -> bool:
+	return _clockwise

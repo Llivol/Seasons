@@ -1,5 +1,7 @@
 extends Node
 
+export var debug = false
+
 const COLOR_RED = Color("#b13e53")
 const COLOR_ORANGE = Color("#ef7d57")
 
@@ -11,14 +13,10 @@ const SPEED_SLOW = 50
 const SPEED_AVERAGE = 100
 const SPEED_FAST = 200
 
-# Declare member variables here. Examples:
-# var a = 2
-# var b = "text"
+const DAMAGE_LOW = 1
+const DAMAGE_AVERAGE = 2
+const DAMAGE_HIGH = 3
 
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	pass # Replace with function body.
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
+const AWARENESS_SMALL = 48
+const AWARENESS_AVERAGE = 64
+const AWARENESS_BIG = 128

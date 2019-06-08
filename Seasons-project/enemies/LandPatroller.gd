@@ -1,20 +1,12 @@
-extends KinematicBody2D
+extends Enemy
+class_name LandPatroller
 
 onready var ledge_detector = $LedgeDetector
 
-const MAX_SPEED = Global.SPEED_AVERAGE
-const SIZE = Global.SIZE_SMALL
-const ACCELERATION = 20
-const GRAVITY = 7000
-
-var _direction
-var _motion
-
 
 func _ready():
-	_direction = 1
-	_motion = Vector2()
-	ledge_detector.translate(Vector2(SIZE, 0))
+	set_stats(Global.SIZE_SMALL, Global.SPEED_AVERAGE, Global.DAMAGE_LOW)
+
 
 func _process(delta):
 	if ledge_detector.is_near_ledge() or ledge_detector.is_near_wall():
@@ -22,12 +14,9 @@ func _process(delta):
 
 
 func _physics_process(delta):
-	_motion.x = min(_motion.x + ACCELERATION, MAX_SPEED) if (_direction == 1) else max(_motion.x - ACCELERATION, -MAX_SPEED)
-	_motion.y = GRAVITY * delta
-	_motion = move_and_slide(_motion)
+	move(delta)
 
 
-func flip_direction():
-	_direction = 1 if (_direction == -1) else -1
-	_motion.x = 0
-	self.scale.x *= -1
+func _on_AttackArea_body_entered(body):
+	if body is Player:
+		attack(body)

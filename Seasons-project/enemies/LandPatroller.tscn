@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://enemies/LandPatroller.gd" type="Script" id=1]
 [ext_resource path="res://_src/ph_land_patroller.png" type="Texture" id=2]
-[ext_resource path="res://AI/LedgeDetector.tscn" type="PackedScene" id=3]
+[ext_resource path="res://enemies/AI/LedgeDetector.tscn" type="PackedScene" id=3]
+[ext_resource path="res://enemies/AI/AttackArea.tscn" type="PackedScene" id=4]
 
 [sub_resource type="CircleShape2D" id=1]
 radius = 8.0
@@ -17,3 +18,6 @@ shape = SubResource( 1 )
 texture = ExtResource( 2 )
 
 [node name="LedgeDetector" parent="." instance=ExtResource( 3 )]
+
+[node name="AttackArea" parent="." instance=ExtResource( 4 )]
+[connection signal="body_entered" from="AttackArea" to="." method="_on_AttackArea_body_entered"]

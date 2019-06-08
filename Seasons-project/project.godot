@@ -8,9 +8,38 @@
 
 config_version=4
 
-_global_script_classes=[  ]
+_global_script_classes=[ {
+"base": "Enemy",
+"class": "ClimbPatroller",
+"language": "GDScript",
+"path": "res://enemies/ClimbPatroller.gd"
+}, {
+"base": "KinematicBody2D",
+"class": "Enemy",
+"language": "GDScript",
+"path": "res://enemies/Enemy.gd"
+}, {
+"base": "Enemy",
+"class": "FlyPatroller",
+"language": "GDScript",
+"path": "res://enemies/FlyPatroller.gd"
+}, {
+"base": "Enemy",
+"class": "LandPatroller",
+"language": "GDScript",
+"path": "res://enemies/LandPatroller.gd"
+}, {
+"base": "KinematicBody2D",
+"class": "Player",
+"language": "GDScript",
+"path": "res://player/Player.gd"
+} ]
 _global_script_class_icons={
-
+"ClimbPatroller": "",
+"Enemy": "",
+"FlyPatroller": "",
+"LandPatroller": "",
+"Player": ""
 }
 
 [application]
