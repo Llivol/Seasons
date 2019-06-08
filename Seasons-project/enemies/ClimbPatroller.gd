@@ -1,6 +1,8 @@
 extends Enemy
 class_name ClimbPatroller
 
+export var default_color = Global.COLOR_YELLOW
+
 onready var wait_timer: Timer = $Timer
 onready var waypoints: = get_parent().get_node("Waypoints")
 
@@ -15,6 +17,18 @@ func _ready() -> void:
 
 func _physics_process(delta):
 	move(delta)
+
+
+func _draw():
+	var n = 4
+	var points_arc = PoolVector2Array()
+	points_arc.push_back(Vector2.ZERO)
+	var colors = PoolColorArray([default_color])
+	
+	for i in range(n + 1):
+		var angle_point = deg2rad(i * 360 / n - 90)
+		points_arc.push_back(Vector2(cos(angle_point), sin(angle_point)) * SIZE)
+	draw_polygon(points_arc, colors)
 
 
 """ Override """

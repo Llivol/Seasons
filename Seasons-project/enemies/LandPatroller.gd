@@ -1,6 +1,8 @@
 extends Enemy
 class_name LandPatroller
 
+export var default_color = Global.COLOR_YELLOW
+
 onready var ledge_detector = $LedgeDetector
 
 
@@ -11,6 +13,10 @@ func _ready():
 func _process(delta):
 	if ledge_detector.is_near_ledge() or ledge_detector.is_near_wall():
 		flip_direction()
+
+
+func _draw():
+	draw_circle(Vector2.ZERO, SIZE, default_color)
 
 
 func _physics_process(delta):

@@ -1,11 +1,11 @@
 [gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://enemies/AI/AwarenessArea.gd" type="Script" id=1]
+[ext_resource path="res://enemies/AI/FocusArea.gd" type="Script" id=1]
 
 [sub_resource type="CircleShape2D" id=1]
-radius = 18.0
+radius = 32.0
 
-[node name="AwarenessArea" type="Area2D"]
+[node name="FocusArea" type="Area2D"]
 z_index = -1
 script = ExtResource( 1 )
 

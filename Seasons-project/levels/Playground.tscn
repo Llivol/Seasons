@@ -1,4 +1,4 @@
-[gd_scene load_steps=51 format=2]
+[gd_scene load_steps=52 format=2]
 
 [ext_resource path="res://levels/Playground.gd" type="Script" id=1]
 [ext_resource path="res://_src/ph_wallv2.png" type="Texture" id=2]
@@ -8,6 +8,7 @@
 [ext_resource path="res://enemies/LandPatroller.tscn" type="PackedScene" id=6]
 [ext_resource path="res://enemies/FlyPatroller.tscn" type="PackedScene" id=7]
 [ext_resource path="res://enemies/ClimbPatroller.tscn" type="PackedScene" id=8]
+[ext_resource path="res://enemies/LandChaser.tscn" type="PackedScene" id=9]
 
 [sub_resource type="ConvexPolygonShape2D" id=1]
 points = PoolVector2Array( 0, 0, 32, 0, 32, 32, 0, 32 )
@@ -470,9 +471,12 @@ position = Vector2( 336, 368 )
 position = Vector2( 128, 640 )
 
 [node name="ClimbPatroller2" parent="." instance=ExtResource( 8 )]
-position = Vector2( 400, 208 )
+position = Vector2( 144, 144 )
 
 [node name="LandPatroller2" parent="." instance=ExtResource( 6 )]
 position = Vector2( 528, 224 )
+
+[node name="LandChaser" parent="." instance=ExtResource( 9 )]
+position = Vector2( 192, 480 )
 
 [editable path="Twins"]

@@ -19,10 +19,5 @@ func _draw():
 	if not Global.debug:
 		return
 	
-	"""
-	var light_green_a128 = Global.COLOR_LIGHT_GREEN
-	light_green_a128.a = 0.5
-	draw_circle(position, _parent.SIZE*2, light_green_a128)
-	"""
 	draw_circle(position, _parent.SIZE, Global.COLOR_GREEN)
 

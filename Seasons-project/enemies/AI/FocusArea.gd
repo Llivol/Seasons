@@ -12,13 +12,13 @@ func _process(delta):
 		return
 
 	if _parent.AWARENESS != null:
-		$Shape.shape.set_radius(_parent.AWARENESS)
+		$Shape.shape.set_radius(_parent.AWARENESS * 2)
 		_init = true
 
 func _draw():
 	if not Global.debug:
 		return
 
-	var light_green_a128 = Global.COLOR_LIGHT_GREEN
-	light_green_a128.a = 0.5
-	draw_circle(position, _parent.AWARENESS, light_green_a128)
+	var dark_green_a128 = Global.COLOR_DARK_GREEN
+	dark_green_a128.a = 0.5
+	draw_circle(position, _parent.AWARENESS * 2, dark_green_a128)
