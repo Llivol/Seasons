@@ -1,9 +1,12 @@
 extends Node
 
-export var debug = false
+export var debug = true
 
+const COLOR_BLUE = Color("#41a6f6")
 const COLOR_RED = Color("#b13e53")
 const COLOR_ORANGE = Color("#ef7d57")
+const COLOR_LIGHT_GREEN = Color("#a7f070")
+const COLOR_GREEN = Color("#38b764")
 
 const SIZE_SMALL = 8
 const SIZE_AVERAGE = 16

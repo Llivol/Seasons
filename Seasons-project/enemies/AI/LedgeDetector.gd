@@ -30,3 +30,10 @@ func is_near_wall() -> bool:
 
 func set_wall_detector_size(size):
 	_wall_detector.set_cast_to(Vector2(size, 0))
+
+
+func _draw():
+	if not Global.debug:
+		return
+	draw_line(_floor_detector.position, _floor_detector.get_cast_to(), Global.COLOR_BLUE, 2.0)
+	draw_line(_wall_detector.position, _wall_detector.get_cast_to(), Global.COLOR_RED, 2.0)

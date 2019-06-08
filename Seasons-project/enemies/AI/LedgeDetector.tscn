@@ -11,17 +11,6 @@ enabled = true
 cast_to = Vector2( 0, 16 )
 collide_with_areas = true
 
-[node name="Line2D" type="Line2D" parent="FloorDetector"]
-points = PoolVector2Array( 0, 0, 0, 16 )
-width = 2.0
-texture_mode = -1035468800
-
 [node name="WallDetector" type="RayCast2D" parent="."]
 enabled = true
 cast_to = Vector2( 2, 0 )
-
-[node name="Line2D" type="Line2D" parent="WallDetector"]
-points = PoolVector2Array( 0, 0, 2, 0 )
-width = 2.0
-default_color = Color( 0.4, 1, 0.619608, 1 )
-texture_mode = -1035468800
