@@ -60,6 +60,11 @@ func get_next_point_position():
 	return get_current_point_position()
 
 
+func translate_children(offset):
+	for child in get_children():
+		child.translate(offset)
+
+
 func draw_triangle(center:Vector2, angle:float, radius:float) -> void:
 	var points: = PoolVector2Array()
 	var colors: = PoolColorArray([triangle_color])

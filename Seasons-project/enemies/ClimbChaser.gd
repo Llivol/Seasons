@@ -8,15 +8,16 @@ onready var waypoints: = get_parent().get_node("Waypoints")
 
 var target_position: = Vector2()
 var just_collided: = false
+var on_awarness_position
 
 
 func _ready() -> void:
-	set_stats(Global.SIZE_SMALL, Global.SPEED_FAST, Global.DAMAGE_AVERAGE)
+	set_stats(Global.SIZE_SMALL, Global.SPEED_AVERAGE, Global.DAMAGE_AVERAGE, Global.AWARENESS_SMALL)
 	position = waypoints.get_start_position()
 	target_position = waypoints.get_next_point_position()
 
 func _physics_process(delta):
-	move(delta)
+	move(delta) if (not _target) else chase(delta, true)
 
 
 func _draw():
@@ -72,6 +73,25 @@ func check_collisions():
 func _on_Timer_timeout() -> void:
 	set_physics_process(true)
 
+
 func _on_AttackArea_body_entered(body):
 	if body is Player:
 		attack(body)
+
+
+func _on_AwarenessArea_body_entered(body):
+	if body is Player:
+		_target = body
+		_motion = Vector2.ZERO
+		flip_direction()
+		if not on_awarness_position: 
+			on_awarness_position = global_position
+
+
+func _on_FocusArea_body_exited(body):
+	if body is Player and body == _target:
+		_target = null
+		update_direction()
+		waypoints.translate_children(global_position - on_awarness_position)
+		on_awarness_position = null
+		target_position = waypoints.get_next_point_position()
