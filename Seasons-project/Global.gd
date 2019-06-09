@@ -2,7 +2,9 @@ extends Node
 
 export var debug = true
 
-const COLOR_BLUE = Color("#41a6f6")
+const COLOR_LIGHT_BLUE = Color("#41a6f6")
+const COLOR_BLUE = Color("#3b5dc9")
+const COLOR_DARK_BLUE = Color("#29366f")
 const COLOR_RED = Color("#b13e53")
 const COLOR_ORANGE = Color("#ef7d57")
 const COLOR_YELLOW = Color("#ffcd75")

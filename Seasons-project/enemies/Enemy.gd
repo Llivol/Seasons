@@ -31,13 +31,12 @@ func move(delta, flying = false):
 
 
 func chase(delta, flying = false): 
-	print("chase")
 	var direction_to_target = (_target.global_position - position).normalized() 
 	_motion.x = min(_motion.x + ACCELERATION, MAX_SPEED) if (direction_to_target.x > 0) else max(_motion.x - ACCELERATION, -MAX_SPEED)
-	if flying:
-		_motion.y = min(_motion.y + ACCELERATION, MAX_SPEED) if (direction_to_target.y > 0) else max(_motion.y - ACCELERATION, -MAX_SPEED) 
+	if not flying:
+		_motion.y = GRAVITY * delta
 	else:
-		_motion.y = 0
+		_motion.y = min(_motion.y + ACCELERATION, MAX_SPEED) if (direction_to_target.y > 0) else max(_motion.y - ACCELERATION, -MAX_SPEED) 
 	_motion = move_and_slide(_motion)
 
 
@@ -51,8 +50,6 @@ func flip_direction():
 		if _direction != 1 * sign(direction_to_target.x):
 			_direction = 1 * sign(direction_to_target.x)
 			self.scale.x *= -1
-	
-	#print(str("direction: ", _direction, " scale: ", self.scale.x))
 
 
 func update_direction():

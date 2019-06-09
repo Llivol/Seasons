@@ -1,5 +1,9 @@
 extends KinematicBody2D
 class_name Player
+
+export var default_color = Global.COLOR_BLUE
+export var default_color_dark = Global.COLOR_DARK_BLUE
+
 """
 onready var _transitions := {
 	IDLE: [WALK, JUMP, FALL, HOVER, PULL, CLIMB, ATTACK, HURT, DIE],
@@ -71,6 +75,9 @@ enum {
 	DIE			#13
 }
 
+var SIZE
+var MAX_HP
+var MAX_STAMINA
 
 var _input_left
 var _input_right
@@ -90,6 +97,8 @@ var _on_air_time = 100
 var _on_rope_max_distance = false
 var _on_rope_min_distance = false
 var _was_on_floor = false
+
+var _init = false
 
 var states_strings := {
 	IDLE: "idle",
@@ -113,6 +122,35 @@ func _init():
 	_velocity = Vector2()
 	_force = Vector2()
 	_direction_to_twin = Vector2()
+
+
+func _process(delta):
+	if _init:
+		return
+
+	if SIZE != null:
+		$Collision.shape.set_extents(Vector2(SIZE, SIZE))
+		_init = true
+		update()
+
+
+func _draw():
+	var shape: = $Collision
+	var extents: Vector2 = shape.shape.extents * 2.0
+	draw_rect(Rect2(shape.position - extents / 2.0, extents), default_color_dark)
+	extents *= 0.8
+	draw_rect(Rect2(shape.position - extents / 2.0, extents), default_color)
+
+
+func set_stats(size, max_hp = 6, max_stamina = 100):
+	SIZE = size
+	MAX_HP = max_hp
+	MAX_STAMINA = max_stamina
+
+
+func set_colors(default_color, default_color_dark):
+	self.default_color = default_color
+	self.default_color_dark = default_color_dark
 
 
 func set_force_gravity():
