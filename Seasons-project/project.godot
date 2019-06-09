@@ -20,6 +20,11 @@ _global_script_classes=[ {
 "path": "res://enemies/Enemy.gd"
 }, {
 "base": "Enemy",
+"class": "FlyChaser",
+"language": "GDScript",
+"path": "res://enemies/FlyChaser.gd"
+}, {
+"base": "Enemy",
 "class": "FlyPatroller",
 "language": "GDScript",
 "path": "res://enemies/FlyPatroller.gd"
@@ -42,6 +47,7 @@ _global_script_classes=[ {
 _global_script_class_icons={
 "ClimbPatroller": "",
 "Enemy": "",
+"FlyChaser": "",
 "FlyPatroller": "",
 "LandChaser": "",
 "LandPatroller": "",

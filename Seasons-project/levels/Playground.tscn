@@ -1,11 +1,15 @@
-[gd_scene load_steps=49 format=2]
+[gd_scene load_steps=53 format=2]
 
 [ext_resource path="res://levels/Playground.gd" type="Script" id=1]
 [ext_resource path="res://_src/ph_wallv2.png" type="Texture" id=2]
 [ext_resource path="res://_src/ph_bg.png" type="Texture" id=3]
 [ext_resource path="res://_src/ph_wall_single_way.png" type="Texture" id=4]
 [ext_resource path="res://player/Twins.tscn" type="PackedScene" id=5]
-[ext_resource path="res://enemies/LandChaser.tscn" type="PackedScene" id=6]
+[ext_resource path="res://enemies/FlyPatroller.tscn" type="PackedScene" id=6]
+[ext_resource path="res://enemies/FlyChaser.tscn" type="PackedScene" id=7]
+[ext_resource path="res://enemies/LandChaser.tscn" type="PackedScene" id=8]
+[ext_resource path="res://enemies/LandPatroller.tscn" type="PackedScene" id=9]
+[ext_resource path="res://enemies/ClimbPatroller.tscn" type="PackedScene" id=10]
 
 [sub_resource type="ConvexPolygonShape2D" id=1]
 points = PoolVector2Array( 0, 0, 32, 0, 32, 32, 0, 32 )
@@ -458,7 +462,20 @@ margin_bottom = 72.0
 custom_colors/font_color = Color( 0.101961, 0.109804, 0.172549, 1 )
 text = "Distance: "
 
-[node name="LandChaser" parent="." instance=ExtResource( 6 )]
-position = Vector2( 192, 480 )
+[node name="FlyPatroller" parent="." instance=ExtResource( 6 )]
+position = Vector2( 80, 208 )
+
+[node name="FlyChaser" parent="." instance=ExtResource( 7 )]
+position = Vector2( 144, 368 )
+fly_time = 6
+
+[node name="LandChaser" parent="." instance=ExtResource( 8 )]
+position = Vector2( 128, 544 )
+
+[node name="LandPatroller" parent="." instance=ExtResource( 9 )]
+position = Vector2( 816, 104 )
+
+[node name="ClimbPatroller" parent="." instance=ExtResource( 10 )]
+position = Vector2( 128, 640 )
 
 [editable path="Twins"]

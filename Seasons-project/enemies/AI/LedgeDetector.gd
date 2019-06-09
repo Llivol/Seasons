@@ -26,6 +26,10 @@ func is_near_ledge() -> bool:
 	return not _floor_detector.is_colliding()
 
 
+func is_near_floor() -> bool:
+	return _floor_detector.is_colliding()
+
+
 func is_near_wall() -> bool:
 	return _wall_detector.is_colliding()
 

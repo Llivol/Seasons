@@ -11,6 +11,6 @@ func _process(delta):
 	if _init:
 		return
 	
-	if _parent.FLY_TIME != null:
-		set_wait_time(_parent.FLY_TIME)
+	if _parent.fly_time != null:
+		set_wait_time(_parent.fly_time)
 		_init = true

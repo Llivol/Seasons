@@ -98,7 +98,7 @@ var _on_rope_max_distance = false
 var _on_rope_min_distance = false
 var _was_on_floor = false
 
-var _init = false
+var _started = false
 
 var states_strings := {
 	IDLE: "idle",
@@ -125,12 +125,12 @@ func _init():
 
 
 func _process(delta):
-	if _init:
+	if _started:
 		return
 
 	if SIZE != null:
 		$Collision.shape.set_extents(Vector2(SIZE, SIZE))
-		_init = true
+		_started = true
 		update()
 
 
