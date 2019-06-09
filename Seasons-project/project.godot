@@ -10,9 +10,14 @@ config_version=4
 
 _global_script_classes=[ {
 "base": "Enemy",
-"class": "ClimbPatroller",
+"class": "ClimbChaser",
 "language": "GDScript",
-"path": "res://enemies/ClimbPatroller.gd"
+"path": "res://enemies/ClimbChaser.gd"
+}, {
+"base": "CollisionShape2D",
+"class": "DynamicCollisionShape",
+"language": "GDScript",
+"path": "res://enemies/AI/DynamicCollisionShape.gd"
 }, {
 "base": "KinematicBody2D",
 "class": "Enemy",
@@ -45,7 +50,8 @@ _global_script_classes=[ {
 "path": "res://player/Player.gd"
 } ]
 _global_script_class_icons={
-"ClimbPatroller": "",
+"ClimbChaser": "",
+"DynamicCollisionShape": "",
 "Enemy": "",
 "FlyChaser": "",
 "FlyPatroller": "",

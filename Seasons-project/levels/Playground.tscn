@@ -1,4 +1,4 @@
-[gd_scene load_steps=53 format=2]
+[gd_scene load_steps=54 format=2]
 
 [ext_resource path="res://levels/Playground.gd" type="Script" id=1]
 [ext_resource path="res://_src/ph_wallv2.png" type="Texture" id=2]
@@ -10,6 +10,7 @@
 [ext_resource path="res://enemies/LandChaser.tscn" type="PackedScene" id=8]
 [ext_resource path="res://enemies/LandPatroller.tscn" type="PackedScene" id=9]
 [ext_resource path="res://enemies/ClimbPatroller.tscn" type="PackedScene" id=10]
+[ext_resource path="res://enemies/ClimbChaser.tscn" type="PackedScene" id=11]
 
 [sub_resource type="ConvexPolygonShape2D" id=1]
 points = PoolVector2Array( 0, 0, 32, 0, 32, 32, 0, 32 )
@@ -476,6 +477,9 @@ position = Vector2( 128, 544 )
 position = Vector2( 816, 104 )
 
 [node name="ClimbPatroller" parent="." instance=ExtResource( 10 )]
-position = Vector2( 128, 640 )
+position = Vector2( 224, 864 )
+
+[node name="ClimbChaser" parent="." instance=ExtResource( 11 )]
+position = Vector2( 672, 80 )
 
 [editable path="Twins"]

@@ -1,7 +1,7 @@
 extends Enemy
+class_name ClimbChaser
 
-
-export var default_color = Global.COLOR_YELLOW
+export var default_color = Global.COLOR_ORANGE
 
 onready var wait_timer: Timer = $Timer
 onready var waypoints: = get_parent().get_node("Waypoints")
@@ -11,7 +11,7 @@ var just_collided: = false
 
 
 func _ready() -> void:
-	set_stats(Global.SIZE_BIG, Global.SPEED_FAST, Global.DAMAGE_AVERAGE)
+	set_stats(Global.SIZE_SMALL, Global.SPEED_FAST, Global.DAMAGE_AVERAGE)
 	position = waypoints.get_start_position()
 	target_position = waypoints.get_next_point_position()
 
@@ -24,7 +24,7 @@ func _draw():
 	var points_arc = PoolVector2Array()
 	points_arc.push_back(Vector2.ZERO)
 	var colors = PoolColorArray([default_color])
-	
+
 	for i in range(n + 1):
 		var angle_point = deg2rad(i * 360 / n - 90)
 		points_arc.push_back(Vector2(cos(angle_point), sin(angle_point)) * SIZE)
@@ -36,9 +36,9 @@ func move(delta, flying=false):
 	var direction: = (target_position - position).normalized()
 	var velocity = min(abs(_motion.length()) +  ACCELERATION, MAX_SPEED)
 	var distance_to_target: = position.distance_to(target_position)
-	
+
 	_motion = direction * velocity
-	
+
 	if distance_to_target < 2 :
 		position = target_position
 		_motion = Vector2.ZERO
@@ -55,7 +55,7 @@ func flip_direction():
 	.flip_direction()
 	waypoints.set_clockwise(not waypoints.is_clockwise())
 	target_position = waypoints.get_next_point_position()
-	
+
 
 func check_collisions():
 	for i in get_slide_count():
@@ -65,7 +65,7 @@ func check_collisions():
 				flip_direction()
 				just_collided = true
 				return
-	
+
 	just_collided = false
 
 

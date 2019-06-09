@@ -1,7 +1,7 @@
 extends Player
 
 func _ready():
-	set_stats(Global.SIZE_AVERAGE)
+	set_stats(Global.SIZE_BIG)
 	set_colors(Global.COLOR_GREEN, Global.COLOR_DARK_GREEN)
 
 
