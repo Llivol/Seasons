@@ -12,7 +12,7 @@ func _process(delta):
 		return
 	
 	if _parent.SIZE != null:
-		$Shape.shape.set_radius(_parent.SIZE + 1)
+		$Shape.shape.set_radius(_parent.SIZE)
 		_init = true
 
 func _draw():

@@ -19,7 +19,7 @@ func _draw():
 
 
 func _physics_process(delta):
-	move(delta)
+	move(delta) if (not _target) else chase(delta)
 
 
 func _on_AttackArea_body_entered(body):
@@ -30,10 +30,10 @@ func _on_AwarenessArea_body_entered(body):
 	if body is Player:
 		_target = body
 		_motion = Vector2.ZERO
+		flip_direction()
 
 
 func _on_FocusArea_body_exited(body):
 	if body is Player and body == _target:
 		_target = null
-		if _direction != self.scale.x:
-			self.scale.x *= -1
+		update_direction()

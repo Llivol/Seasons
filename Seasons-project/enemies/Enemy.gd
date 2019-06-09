@@ -25,19 +25,19 @@ func set_stats(size, max_speed, damage, awareness = 0):
 	AWARENESS = awareness
 
 func move(delta, flying = false):
-	if _target == null:
-		_motion.x = min(_motion.x + ACCELERATION, MAX_SPEED) if (_direction == 1) else max(_motion.x - ACCELERATION, -MAX_SPEED)
-		_motion.y = GRAVITY * delta if (not flying) else 0
-	
+	_motion.x = min(_motion.x + ACCELERATION, MAX_SPEED) if (_direction == 1) else max(_motion.x - ACCELERATION, -MAX_SPEED)
+	_motion.y = GRAVITY * delta if (not flying) else 0
+	_motion = move_and_slide(_motion)
+
+
+func chase(delta, flying = false): 
+	print("chase")
+	var direction_to_target = (_target.global_position - position).normalized() 
+	_motion.x = min(_motion.x + ACCELERATION, MAX_SPEED) if (direction_to_target.x > 0) else max(_motion.x - ACCELERATION, -MAX_SPEED)
+	if flying:
+		_motion.y = min(_motion.y + ACCELERATION, MAX_SPEED) if (direction_to_target.y > 0) else max(_motion.y - ACCELERATION, -MAX_SPEED) 
 	else:
-		var direction_to_target = (_target.global_position - position).normalized() 
-		_motion.x = min(_motion.x + ACCELERATION, MAX_SPEED) if (direction_to_target.x > 0) else max(_motion.x - ACCELERATION, -MAX_SPEED)
-		
-		if flying:
-			_motion.y = min(_motion.y + ACCELERATION, MAX_SPEED) if (direction_to_target.y > 0) else max(_motion.y - ACCELERATION, -MAX_SPEED) 
-		else:
-			_motion.y = 0
-	
+		_motion.y = 0
 	_motion = move_and_slide(_motion)
 
 
@@ -46,13 +46,20 @@ func flip_direction():
 		_direction = 1 if (_direction == -1) else -1
 		_motion = Vector2.ZERO
 		self.scale.x *= -1
-		print("break")
 	else:
 		var direction_to_target = (_target.global_position - position).normalized()
-		_direction = 1 * sign(direction_to_target.x)
-		if _direction != self.scale.x:
+		if _direction != 1 * sign(direction_to_target.x):
+			_direction = 1 * sign(direction_to_target.x)
 			self.scale.x *= -1
+	
+	#print(str("direction: ", _direction, " scale: ", self.scale.x))
 
+
+func update_direction():
+	if _direction != sign(_motion.x):
+		_direction = sign(_motion.x)
+		self.scale.x *= -1
+	
 
 func attack(player):
 	flip_direction()

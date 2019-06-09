@@ -17,6 +17,8 @@ func _process(delta):
 	
 	if _parent.SIZE != null:
 		translate(Vector2(_parent.SIZE, 0))
+		_floor_detector.set_cast_to(Vector2(0, 8 + _parent.SIZE))
+		update()
 		_init = true
 
 
