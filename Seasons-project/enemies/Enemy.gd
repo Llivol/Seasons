@@ -3,6 +3,7 @@ class_name Enemy
 
 const GRAVITY = 7000
 const ACCELERATION = 20
+const CHASE_MULTIPLIER = 1.8
 
 #FINAL
 var MAX_SPEED
@@ -32,11 +33,11 @@ func move(delta, flying = false):
 
 func chase(delta, flying = false, at_max_floor_distance = false): 
 	var direction_to_target = (_target.global_position - position).normalized() 
-	_motion.x = min(_motion.x + ACCELERATION, MAX_SPEED) if (direction_to_target.x > 0) else max(_motion.x - ACCELERATION, -MAX_SPEED)
+	_motion.x = min(_motion.x + ACCELERATION, MAX_SPEED * CHASE_MULTIPLIER) if (direction_to_target.x > 0) else max(_motion.x - ACCELERATION, -MAX_SPEED * CHASE_MULTIPLIER)
 	if not flying:
 		_motion.y = GRAVITY * delta
 	else:
-		_motion.y = min(_motion.y + ACCELERATION, MAX_SPEED) if (direction_to_target.y > 0) else max(_motion.y - ACCELERATION, -MAX_SPEED) 
+		_motion.y = min(_motion.y + ACCELERATION, MAX_SPEED * CHASE_MULTIPLIER) if (direction_to_target.y > 0) else max(_motion.y - ACCELERATION, -MAX_SPEED * CHASE_MULTIPLIER) 
 		if at_max_floor_distance and _motion.y > 0:
 			_motion.y = 0
 	_motion = move_and_slide(_motion)
