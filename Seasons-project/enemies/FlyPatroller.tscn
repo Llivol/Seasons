@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://enemies/FlyPatroller.gd" type="Script" id=1]
 [ext_resource path="res://enemies/AI/DynamicCollisionShape.gd" type="Script" id=2]
@@ -6,6 +6,7 @@
 [ext_resource path="res://enemies/AI/LedgeDetector.tscn" type="PackedScene" id=4]
 [ext_resource path="res://enemies/AI/FlyTimer.gd" type="Script" id=5]
 [ext_resource path="res://enemies/AI/AttackArea.tscn" type="PackedScene" id=6]
+[ext_resource path="res://ui/HealthBar.tscn" type="PackedScene" id=7]
 
 [sub_resource type="CircleShape2D" id=1]
 
@@ -27,5 +28,8 @@ autostart = true
 script = ExtResource( 5 )
 
 [node name="AttackArea" parent="." instance=ExtResource( 6 )]
+
+[node name="HealthBar" parent="." instance=ExtResource( 7 )]
+[connection signal="health_changed" from="." to="HealthBar" method="_on_health_changed"]
 [connection signal="timeout" from="FlyTimer" to="." method="_on_FlyTimer_timeout"]
 [connection signal="body_entered" from="AttackArea" to="." method="_on_AttackArea_body_entered"]

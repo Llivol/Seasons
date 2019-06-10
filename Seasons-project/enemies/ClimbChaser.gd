@@ -12,7 +12,7 @@ var on_awarness_position
 
 
 func _ready() -> void:
-	set_stats(Global.SIZE_SMALL, Global.SPEED_AVERAGE, Global.DAMAGE_AVERAGE, Global.AWARENESS_SMALL)
+	set_stats(Global.HEALTH_AVERAGE, Global.SIZE_SMALL, Global.SPEED_AVERAGE, Global.DAMAGE_AVERAGE, Global.AWARENESS_SMALL)
 	position = waypoints.get_start_position()
 	target_position = waypoints.get_next_point_position()
 

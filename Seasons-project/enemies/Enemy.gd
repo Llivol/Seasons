@@ -1,9 +1,10 @@
-extends KinematicBody2D
+extends Character
 class_name Enemy
 
 const GRAVITY = 7000
 const ACCELERATION = 20
 const CHASE_MULTIPLIER = 1.5
+const KNOCKBACK_MULTIPLIER = 500
 
 #FINAL
 var MAX_SPEED
@@ -19,7 +20,9 @@ func _ready():
 	_direction = 1
 	_motion = Vector2()
 
-func set_stats(size, max_speed, damage, awareness = 0):
+func set_stats(max_health, size, max_speed, damage, awareness = 0):
+	MAX_HEALTH = max_health
+	_current_health = max_health
 	SIZE = size
 	MAX_SPEED = max_speed
 	DAMAGE = damage
@@ -62,6 +65,6 @@ func update_direction():
 	
 
 func attack(player):
-	print("enemies attack!")
+	player.apply_velocity((player.global_position - global_position).normalized() * KNOCKBACK_MULTIPLIER * DAMAGE)
 	player.take_damage(DAMAGE)
 	flip_direction()

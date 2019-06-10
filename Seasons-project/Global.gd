@@ -12,6 +12,10 @@ const COLOR_LIGHT_GREEN = Color("#a7f070")
 const COLOR_GREEN = Color("#38b764")
 const COLOR_DARK_GREEN = Color("#257179")
 
+const HEALTH_LOW = 1
+const HEALTH_AVERAGE = 2
+const HEALTH_HIGH = 4
+
 const SIZE_SMALL = 8
 const SIZE_AVERAGE = 16
 const SIZE_BIG = 32

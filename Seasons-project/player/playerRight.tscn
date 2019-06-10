@@ -2,7 +2,7 @@
 
 [ext_resource path="res://player/PlayerRight.gd" type="Script" id=1]
 [ext_resource path="res://_src/ph_player2.png" type="Texture" id=2]
-[ext_resource path="res://player/UI/HealthBar.tscn" type="PackedScene" id=3]
+[ext_resource path="res://UI/HealthBar.tscn" type="PackedScene" id=3]
 
 [sub_resource type="RectangleShape2D" id=1]
 
@@ -18,4 +18,4 @@ shape = SubResource( 1 )
 one_way_collision = true
 
 [node name="HealthBar" parent="." instance=ExtResource( 3 )]
-[connection signal="health_changed" from="." to="HealthBar" method="_on_Player_health_changed"]
+[connection signal="health_changed" from="." to="HealthBar" method="_on_health_changed"]

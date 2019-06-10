@@ -1,10 +1,11 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://enemies/ClimbPatroller.gd" type="Script" id=1]
 [ext_resource path="res://enemies/AI/DynamicCollisionShape.gd" type="Script" id=2]
 [ext_resource path="res://_src/ph_climb_patroller.png" type="Texture" id=3]
 [ext_resource path="res://enemies/AI/AttackArea.tscn" type="PackedScene" id=4]
-[ext_resource path="res://enemies/AI/Waypoints.gd" type="Script" id=5]
+[ext_resource path="res://ui/HealthBar.tscn" type="PackedScene" id=5]
+[ext_resource path="res://enemies/AI/Waypoints.gd" type="Script" id=6]
 
 [sub_resource type="CircleShape2D" id=1]
 
@@ -26,12 +27,11 @@ wait_time = 0.2
 
 [node name="AttackArea" parent="Body" instance=ExtResource( 4 )]
 
+[node name="HealthBar" parent="Body" instance=ExtResource( 5 )]
+
 [node name="Waypoints" type="Node2D" parent="."]
-script = ExtResource( 5 )
-editor_process = true
-line_color = Color( 0.228943, 0.710254, 0.945312, 1 )
+script = ExtResource( 6 )
 line_width = 2.0
-triangle_color = Color( 0.722656, 0.908997, 1, 1 )
 _clockwise = false
 
 [node name="Start" type="Position2D" parent="Waypoints"]
@@ -44,5 +44,6 @@ position = Vector2( 0, 128 )
 
 [node name="3" type="Position2D" parent="Waypoints"]
 position = Vector2( -64, 64 )
+[connection signal="health_changed" from="Body" to="Body/HealthBar" method="_on_health_changed"]
 [connection signal="timeout" from="Body/Timer" to="Body" method="_on_Timer_timeout"]
 [connection signal="body_entered" from="Body/AttackArea" to="Body" method="_on_AttackArea_body_entered"]

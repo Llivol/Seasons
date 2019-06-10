@@ -6,19 +6,22 @@ var _init
 func _ready():
 	_parent = get_parent()
 	_init = false
+	
+	if _parent is Enemy and not Global.debug:
+		_init = true
+		hide()
 
 func _process(delta):
 	if _init:
 		return
 
-	if _parent.max_health != null:
-		max_value = _parent.max_health
-		value = _parent.current_health 
-		margin_top = -1 * (_parent.SIZE + 8)
+	if _parent.MAX_HEALTH != null:
+		max_value = _parent.MAX_HEALTH
+		value = _parent.get_health() 
+		margin_top = -1 * (_parent.SIZE + 16)
 		_init = true
 
-func _on_Player_health_changed(new_value: int) -> void:
-	print("break")
+func _on_health_changed(new_value: int) -> void:
 	value = new_value
 	yield(animate_value(new_value), "completed")
 

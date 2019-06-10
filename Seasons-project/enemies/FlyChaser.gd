@@ -9,7 +9,7 @@ onready var fly_timer = $FlyTimer
 
 
 func _ready():
-	set_stats(Global.SIZE_AVERAGE, Global.AWARENESS_AVERAGE, Global.DAMAGE_AVERAGE, Global.AWARENESS_AVERAGE)
+	set_stats(Global.HEALTH_AVERAGE, Global.SIZE_AVERAGE, Global.AWARENESS_AVERAGE, Global.DAMAGE_AVERAGE, Global.AWARENESS_AVERAGE)
 
 
 func _process(delta):
@@ -60,3 +60,7 @@ func _on_FocusArea_body_exited(body):
 	if body is Player and body == _target:
 		_target = null
 		update_direction()
+
+
+func _on_health_changed(new_value):
+	pass # Replace with function body.

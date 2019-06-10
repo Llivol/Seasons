@@ -7,7 +7,7 @@ onready var ledge_detector = $LedgeDetector
 
 
 func _ready():
-	set_stats(Global.SIZE_SMALL, Global.SPEED_AVERAGE, Global.DAMAGE_LOW, Global.AWARENESS_SMALL)
+	set_stats(Global.HEALTH_AVERAGE, Global.SIZE_SMALL, Global.SPEED_AVERAGE, Global.DAMAGE_LOW, Global.AWARENESS_SMALL)
 
 
 func _process(delta):

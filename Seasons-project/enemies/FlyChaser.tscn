@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://enemies/FlyChaser.gd" type="Script" id=1]
 [ext_resource path="res://enemies/AI/DynamicCollisionShape.gd" type="Script" id=2]
@@ -8,6 +8,7 @@
 [ext_resource path="res://enemies/AI/AttackArea.tscn" type="PackedScene" id=6]
 [ext_resource path="res://enemies/AI/AwarenessArea.tscn" type="PackedScene" id=7]
 [ext_resource path="res://enemies/AI/FocusArea.tscn" type="PackedScene" id=8]
+[ext_resource path="res://ui/HealthBar.tscn" type="PackedScene" id=9]
 
 [sub_resource type="CircleShape2D" id=1]
 
@@ -33,6 +34,9 @@ script = ExtResource( 5 )
 [node name="AwarenessArea" parent="." instance=ExtResource( 7 )]
 
 [node name="FocusArea" parent="." instance=ExtResource( 8 )]
+
+[node name="HealthBar" parent="." instance=ExtResource( 9 )]
+[connection signal="health_changed" from="." to="." method="_on_health_changed"]
 [connection signal="timeout" from="FlyTimer" to="." method="_on_FlyTimer_timeout"]
 [connection signal="body_entered" from="AttackArea" to="." method="_on_AttackArea_body_entered"]
 [connection signal="body_entered" from="AwarenessArea" to="." method="_on_AwarenessArea_body_entered"]

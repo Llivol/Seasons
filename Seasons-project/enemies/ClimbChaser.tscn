@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://enemies/ClimbChaser.gd" type="Script" id=1]
 [ext_resource path="res://_src/ph_climb_patroller.png" type="Texture" id=2]
@@ -6,7 +6,8 @@
 [ext_resource path="res://enemies/AI/AttackArea.tscn" type="PackedScene" id=4]
 [ext_resource path="res://enemies/AI/AwarenessArea.tscn" type="PackedScene" id=5]
 [ext_resource path="res://enemies/AI/FocusArea.tscn" type="PackedScene" id=6]
-[ext_resource path="res://enemies/AI/Waypoints.gd" type="Script" id=7]
+[ext_resource path="res://ui/HealthBar.tscn" type="PackedScene" id=7]
+[ext_resource path="res://enemies/AI/Waypoints.gd" type="Script" id=8]
 
 [sub_resource type="CircleShape2D" id=1]
 
@@ -32,8 +33,10 @@ wait_time = 0.2
 
 [node name="FocusArea" parent="Body" instance=ExtResource( 6 )]
 
+[node name="HealthBar" parent="Body" instance=ExtResource( 7 )]
+
 [node name="Waypoints" type="Node2D" parent="."]
-script = ExtResource( 7 )
+script = ExtResource( 8 )
 line_width = 2.0
 _clockwise = false
 
@@ -47,6 +50,7 @@ position = Vector2( 0, 128 )
 
 [node name="3" type="Position2D" parent="Waypoints"]
 position = Vector2( -64, 64 )
+[connection signal="health_changed" from="Body" to="Body/HealthBar" method="_on_health_changed"]
 [connection signal="timeout" from="Body/Timer" to="Body" method="_on_Timer_timeout"]
 [connection signal="body_entered" from="Body/AttackArea" to="Body" method="_on_AttackArea_body_entered"]
 [connection signal="body_entered" from="Body/AwarenessArea" to="Body" method="_on_AwarenessArea_body_entered"]

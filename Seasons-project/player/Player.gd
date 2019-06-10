@@ -1,11 +1,8 @@
-extends KinematicBody2D
+extends Character
 class_name Player
-
-signal health_changed(new_value)
 
 export var default_color = Global.COLOR_BLUE
 export var default_color_dark = Global.COLOR_DARK_BLUE
-export var max_health = 6
 
 """
 onready var _transitions := {
@@ -79,7 +76,6 @@ enum {
 }
 
 var SIZE
-var MAX_HP
 var MAX_STAMINA
 
 var _input_left
@@ -91,7 +87,7 @@ var _input_action
 
 var _state
 var _velocity
-var _force
+var _force setget set_force, get_force
 
 var _direction_to_twin
 
@@ -102,8 +98,6 @@ var _on_rope_min_distance = false
 var _was_on_floor = false
 
 var _started = false
-
-var current_health = max_health setget set_health
 
 var states_strings := {
 	IDLE: "idle",
@@ -147,9 +141,10 @@ func _draw():
 	draw_rect(Rect2(shape.position - extents / 2.0, extents), default_color)
 
 
-func set_stats(size, max_hp = 6, max_stamina = 100):
+func set_stats(size, max_health = 6, max_stamina = 100):
 	SIZE = size
-	MAX_HP = max_hp
+	MAX_HEALTH = max_health
+	_current_health = max_health
 	MAX_STAMINA = max_stamina
 
 
@@ -164,6 +159,11 @@ func set_force_gravity():
 
 func get_velocity():
 	return _velocity
+
+
+func apply_velocity(velocity):
+	_velocity += velocity
+	move_and_slide(velocity)
 
 
 func get_state():
@@ -222,6 +222,14 @@ func get_force():
 	return _force
 
 
+func set_force(force):
+	_force = force
+
+
+func add_force(force):
+	_force += force
+
+
 func set_direction_to_twin(direction_to_twin):
 	_direction_to_twin = direction_to_twin
 
@@ -243,15 +251,9 @@ func set_inputs(name):
 	_input_action = Input.is_action_pressed(str(name, "_action"))
 
 
-func set_health(new_value):
-	current_health = max(0, new_value)
-	emit_signal("health_changed", current_health)
-
-
 func take_damage(value):
-	set_health(current_health - value)
-	print("player takes damage")
-	if current_health == 0:
+	set_health(_current_health - value)
+	if _current_health == 0:
 		change_state(DIE)
 
 
