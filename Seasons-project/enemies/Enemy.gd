@@ -62,4 +62,6 @@ func update_direction():
 	
 
 func attack(player):
+	print("enemies attack!")
+	player.take_damage(DAMAGE)
 	flip_direction()

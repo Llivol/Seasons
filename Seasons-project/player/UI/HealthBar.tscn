@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://_src/ph_hp_bar_under.png" type="Texture" id=1]
+[ext_resource path="res://_src/ph_hp_bar_over.png" type="Texture" id=2]
+[ext_resource path="res://player/UI/HealthBar.gd" type="Script" id=3]
+
+[node name="HealthBar" type="TextureProgress"]
+margin_left = -16.0
+margin_top = -24.0
+margin_right = 16.0
+margin_bottom = -16.0
+value = 50.0
+rounded = true
+texture_under = ExtResource( 1 )
+texture_progress = ExtResource( 2 )
+script = ExtResource( 3 )
+
+[node name="Tween" type="Tween" parent="."]

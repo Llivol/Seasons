@@ -1,8 +1,11 @@
 extends KinematicBody2D
 class_name Player
 
+signal health_changed(new_value)
+
 export var default_color = Global.COLOR_BLUE
 export var default_color_dark = Global.COLOR_DARK_BLUE
+export var max_health = 6
 
 """
 onready var _transitions := {
@@ -37,7 +40,7 @@ onready var _transitions := {
 	CLIMB: [IDLE, WALK, STOP, JUMP, FALL, HANG, HOVER, PULL, ATTACK, HURT, DIE],
 	ATTACK: [IDLE, WALK, STOP, JUMP, FALL, HANG, HOVER, PULL, CLIMB, HURT, DIE],
 	HURT: [IDLE, WALK, STOP, JUMP, FALL, HANG, HOVER, PULL, CLIMB, ATTACK, DIE],
-	DIE: [IDLE, WALK, STOP, JUMP, FALL, HANG, HOVER, PULL, CLIMB, ATTACK, HURT],
+	DIE: [],
 }
 
 const GRAVITY = 2250*2 # pixels/second/second
@@ -99,6 +102,8 @@ var _on_rope_min_distance = false
 var _was_on_floor = false
 
 var _started = false
+
+var current_health = max_health setget set_health
 
 var states_strings := {
 	IDLE: "idle",
@@ -236,6 +241,18 @@ func set_inputs(name):
 	_input_down = Input.is_action_pressed(str(name, "_down"))
 	_input_JUMP = Input.is_action_pressed(str(name, "_jump"))
 	_input_action = Input.is_action_pressed(str(name, "_action"))
+
+
+func set_health(new_value):
+	current_health = max(0, new_value)
+	emit_signal("health_changed", current_health)
+
+
+func take_damage(value):
+	set_health(current_health - value)
+	print("player takes damage")
+	if current_health == 0:
+		change_state(DIE)
 
 
 func process_kinematics(delta):
