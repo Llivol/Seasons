@@ -18,4 +18,5 @@ shape = SubResource( 1 )
 one_way_collision = true
 
 [node name="HealthBar" parent="." instance=ExtResource( 3 )]
+[connection signal="flip" from="." to="HealthBar" method="_on_flip"]
 [connection signal="health_changed" from="." to="HealthBar" method="_on_health_changed"]

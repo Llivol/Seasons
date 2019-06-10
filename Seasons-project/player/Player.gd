@@ -86,7 +86,6 @@ var _input_JUMP
 var _input_action
 
 var _state
-var _velocity
 var _force setget set_force, get_force
 
 var _direction_to_twin
@@ -139,6 +138,7 @@ func _draw():
 	draw_rect(Rect2(shape.position - extents / 2.0, extents), default_color_dark)
 	extents *= 0.8
 	draw_rect(Rect2(shape.position - extents / 2.0, extents), default_color)
+	draw_circle(shape.position + Vector2(SIZE/2, -SIZE/2), SIZE/8, default_color_dark)
 
 
 func set_stats(size, max_health = 6, max_stamina = 100):
@@ -368,16 +368,19 @@ func get_angle_in_first_quadrant(angle):
 		angle += PI/2
 	return angle
 
-
 func linear_velocity_x(delta):
 	
 	if _input_left:
 		if _velocity.x <= WALK_MIN_SPEED and _velocity.x > -WALK_MAX_SPEED:
 			_force.x -= WALK_FORCE
+			if _direction == 1:
+				flip_direction()
 			
 	elif _input_right:
 		if _velocity.x >= -WALK_MIN_SPEED and _velocity.x < WALK_MAX_SPEED:
 			_force.x += WALK_FORCE
+			if _direction == -1:
+				flip_direction()
 	
 	elif _state != HOVER or is_on_floor(): 
 		var vsign = sign(_velocity.x)

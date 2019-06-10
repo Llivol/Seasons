@@ -34,19 +34,19 @@ func _draw():
 """ Override """
 func move(delta, flying=false):
 	var direction: = (target_position - position).normalized()
-	var velocity = min(abs(_motion.length()) +  ACCELERATION, MAX_SPEED)
+	var velocity = min(abs(_velocity.length()) +  ACCELERATION, MAX_SPEED)
 	var distance_to_target: = position.distance_to(target_position)
 	
-	_motion = direction * velocity
+	_velocity = direction * velocity
 	
 	if distance_to_target < 2 :
 		position = target_position
-		_motion = Vector2.ZERO
+		_velocity = Vector2.ZERO
 		target_position = waypoints.get_next_point_position()
 		set_physics_process(false)
 		wait_timer.start()
 	else:
-		move_and_slide(_motion)
+		move_and_slide(_velocity)
 		check_collisions()
 
 

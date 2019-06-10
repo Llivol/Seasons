@@ -29,7 +29,7 @@ func _on_AttackArea_body_entered(body):
 func _on_AwarenessArea_body_entered(body):
 	if body is Player:
 		_target = body
-		_motion = Vector2.ZERO
+		_velocity = Vector2.ZERO
 		flip_direction()
 
 

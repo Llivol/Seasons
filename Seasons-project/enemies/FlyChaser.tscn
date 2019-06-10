@@ -36,6 +36,7 @@ script = ExtResource( 5 )
 [node name="FocusArea" parent="." instance=ExtResource( 8 )]
 
 [node name="HealthBar" parent="." instance=ExtResource( 9 )]
+[connection signal="flip" from="." to="HealthBar" method="_on_flip"]
 [connection signal="health_changed" from="." to="." method="_on_health_changed"]
 [connection signal="timeout" from="FlyTimer" to="." method="_on_FlyTimer_timeout"]
 [connection signal="body_entered" from="AttackArea" to="." method="_on_AttackArea_body_entered"]

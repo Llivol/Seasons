@@ -44,6 +44,7 @@ position = Vector2( 0, 128 )
 
 [node name="3" type="Position2D" parent="Waypoints"]
 position = Vector2( -64, 64 )
+[connection signal="flip" from="Body" to="Body/HealthBar" method="_on_flip"]
 [connection signal="health_changed" from="Body" to="Body/HealthBar" method="_on_health_changed"]
 [connection signal="timeout" from="Body/Timer" to="Body" method="_on_Timer_timeout"]
 [connection signal="body_entered" from="Body/AttackArea" to="Body" method="_on_AttackArea_body_entered"]

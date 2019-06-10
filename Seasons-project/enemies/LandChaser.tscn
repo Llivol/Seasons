@@ -31,6 +31,7 @@ texture = ExtResource( 3 )
 [node name="FocusArea" parent="." instance=ExtResource( 7 )]
 
 [node name="HealthBar" parent="." instance=ExtResource( 8 )]
+[connection signal="flip" from="." to="HealthBar" method="_on_flip"]
 [connection signal="health_changed" from="." to="HealthBar" method="_on_health_changed"]
 [connection signal="body_entered" from="AttackArea" to="." method="_on_AttackArea_body_entered"]
 [connection signal="body_entered" from="AwarenessArea" to="." method="_on_AwarenessArea_body_entered"]
