@@ -16,3 +16,4 @@ position = Vector2( 64, 0 )
 z_index = -1
 points = PoolVector2Array( 0, 0, 80, 0 )
 default_color = Color( 0.937255, 0.490196, 0.341176, 1 )
+texture_mode = -1035468800

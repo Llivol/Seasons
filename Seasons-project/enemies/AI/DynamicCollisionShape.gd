@@ -15,3 +15,11 @@ func _process(delta):
 	if _parent.SIZE != null:
 		self.shape.set_radius(_parent.SIZE)
 		_init = true
+
+func _draw():
+	if not Global.debug:
+		return
+	
+	var red_a128 = Global.COLOR_RED
+	red_a128.a = 0.5
+	draw_circle(position, _parent.SIZE, red_a128)

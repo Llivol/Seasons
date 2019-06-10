@@ -60,7 +60,3 @@ func _on_FocusArea_body_exited(body):
 	if body is Player and body == _target:
 		_target = null
 		update_direction()
-
-
-func _on_health_changed(new_value):
-	pass # Replace with function body.

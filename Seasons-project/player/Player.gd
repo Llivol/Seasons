@@ -4,6 +4,8 @@ class_name Player
 export var default_color = Global.COLOR_BLUE
 export var default_color_dark = Global.COLOR_DARK_BLUE
 
+onready var attack_range = $AttackRange
+
 """
 onready var _transitions := {
 	IDLE: [WALK, JUMP, FALL, HOVER, PULL, CLIMB, ATTACK, HURT, DIE],
@@ -141,11 +143,12 @@ func _draw():
 	draw_circle(shape.position + Vector2(SIZE/2, -SIZE/2), SIZE/8, default_color_dark)
 
 
-func set_stats(size, max_health = 6, max_stamina = 100):
+func set_stats(size, max_health = 6, max_stamina = 100, damage = 1):
 	SIZE = size
 	MAX_HEALTH = max_health
 	_current_health = max_health
 	MAX_STAMINA = max_stamina
+	DAMAGE = damage
 
 
 func set_colors(default_color, default_color_dark):
@@ -159,11 +162,6 @@ func set_force_gravity():
 
 func get_velocity():
 	return _velocity
-
-
-func apply_velocity(velocity):
-	_velocity += velocity
-	move_and_slide(velocity)
 
 
 func get_state():
@@ -214,6 +212,8 @@ func enter_state() -> void:
 	match _state:
 		IDLE:
 			_velocity.x = 0.0
+		ATTACK:
+			attack(attack_range.get_enemy_in_range())
 		_:
 			return
 
@@ -252,7 +252,7 @@ func set_inputs(name):
 
 
 func take_damage(value):
-	set_health(_current_health - value)
+	.take_damage(value)
 	if _current_health == 0:
 		change_state(DIE)
 
@@ -358,6 +358,11 @@ func swing():
 		_velocity.x = 0
 	if abs(_velocity.y) < 0.1:
 		_velocity.y = 0
+
+
+func attack(enemy):
+	if (enemy):
+		.attack(enemy)
 
 
 func get_angle_in_first_quadrant(angle):

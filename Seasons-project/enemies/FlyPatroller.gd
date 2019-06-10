@@ -9,12 +9,13 @@ onready var fly_timer = $FlyTimer
 
 
 func _ready():
-	set_stats(Global.HEALTH_AVERAGE, Global.SIZE_SMALL, Global.SPEED_SLOW, Global.DAMAGE_AVERAGE)
+	set_stats(Global.HEALTH_LOW, Global.SIZE_SMALL, Global.SPEED_SLOW, Global.DAMAGE_AVERAGE)
 
 
 func _process(delta):
 	if ledge_detector.is_near_wall():
 		flip_direction()
+
 
 func _draw():
 	var n = 3
@@ -45,4 +46,5 @@ func _on_FlyTimer_timeout():
 
 func _on_AttackArea_body_entered(body):
 	if body is Player:
+		print("Fly patroller atacando")
 		attack(body)

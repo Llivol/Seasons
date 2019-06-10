@@ -4,13 +4,11 @@ class_name Enemy
 const GRAVITY = 7000
 const ACCELERATION = 20
 const CHASE_MULTIPLIER = 1.5
-const KNOCKBACK_MULTIPLIER = 500
 
 #FINAL
 var MAX_SPEED
 var SIZE
 var AWARENESS
-var DAMAGE
 
 var _target
 
@@ -20,7 +18,7 @@ func _ready():
 
 func set_stats(max_health, size, max_speed, damage, awareness = 0):
 	MAX_HEALTH = max_health
-	_current_health = max_health - 1
+	_current_health = max_health
 	SIZE = size
 	MAX_SPEED = max_speed
 	DAMAGE = damage
@@ -62,6 +60,10 @@ func update_direction():
 	
 
 func attack(player):
-	player.apply_velocity((player.global_position - global_position).normalized() * KNOCKBACK_MULTIPLIER * DAMAGE)
-	player.take_damage(DAMAGE)
+	.attack(player)
 	flip_direction()
+
+
+func die():
+	.die()
+	queue_free()

@@ -20,16 +20,34 @@ func _process(delta):
 		return
 	
 	if _parent.SIZE != null:
-		translate(Vector2(_parent.SIZE, 0))
-		_up.set_cast_to(Vector2(_parent.SIZE, -_parent.SIZE))
-		_front.set_cast_to(Vector2(_parent.SIZE, 0))
-		_down.set_cast_to(Vector2(_parent.SIZE, _parent.SIZE))
+		translate(Vector2(_parent.SIZE + 1, 0))
+		_up.translate(Vector2(0, -_parent.SIZE / 2))
+		_up.set_cast_to(Vector2(_parent.SIZE*2, -_parent.SIZE / 2))
+		_front.set_cast_to(Vector2(_parent.SIZE*2, 0))
+		_down.translate(Vector2(0, _parent.SIZE / 2))
+		_down.set_cast_to(Vector2(_parent.SIZE*2, _parent.SIZE / 2))
 		update()
 		_init = true
 
-#TODO: Fer això bé
+
 func is_enemy_in_range():
-	return _up.is_colliding() or _front.is_colliding() or _down.is_colliding()
+	return _up.get_collider() is Enemy or _front.get_collider() is Enemy or _down.get_collider() is Enemy
+
+
+func get_enemy_in_range():
+	var algo_up = _up.get_collider()
+	var algo_front = _front.get_collider()
+	var algo_down = _down.get_collider()
+	print("break")
+	if _front.get_collider() is Enemy:
+		return _front.get_collider()
+	elif _up.get_collider() is Enemy:
+		return _up.get_collider()
+	elif _down.get_collider() is Enemy:
+		return _down.get_collider()
+	else:
+		return null
+
 
 func _draw():
 	if not Global.debug:

@@ -12,12 +12,12 @@ func _process(delta):
 		return
 	
 	if _parent.SIZE != null:
-		$Shape.shape.set_radius(_parent.SIZE + 4)
+		$Shape.shape.set_radius(_parent.SIZE * 1.5)
 		_init = true
 
 func _draw():
 	if not Global.debug:
 		return
 	
-	draw_circle(position, _parent.SIZE + 4, Global.COLOR_GREEN)
+	draw_circle(position, _parent.SIZE * 1.5, Global.COLOR_GREEN)
 
