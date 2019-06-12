@@ -1,9 +1,11 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://player/PlayerRight.gd" type="Script" id=1]
 [ext_resource path="res://_src/ph_player2.png" type="Texture" id=2]
 [ext_resource path="res://player/AttackRange.tscn" type="PackedScene" id=3]
 [ext_resource path="res://UI/HealthBar.tscn" type="PackedScene" id=4]
+[ext_resource path="res://player/AttackCooldown.gd" type="Script" id=5]
+[ext_resource path="res://player/InvulnerabilityWindow.gd" type="Script" id=6]
 
 [sub_resource type="RectangleShape2D" id=1]
 
@@ -21,5 +23,12 @@ one_way_collision = true
 [node name="AttackRange" parent="." instance=ExtResource( 3 )]
 
 [node name="HealthBar" parent="." instance=ExtResource( 4 )]
+
+[node name="AttackCooldown" type="Timer" parent="."]
+wait_time = 10.0
+script = ExtResource( 5 )
+
+[node name="InvulnerabilityWindow" type="Timer" parent="."]
+script = ExtResource( 6 )
 [connection signal="flip" from="." to="HealthBar" method="_on_flip"]
 [connection signal="health_changed" from="." to="HealthBar" method="_on_health_changed"]

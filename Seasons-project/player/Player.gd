@@ -81,6 +81,8 @@ enum {
 
 var SIZE
 var MAX_STAMINA
+var ATTACK_CD
+var INVULNERABILITY_TIME
 
 var _input_left
 var _input_right
@@ -99,9 +101,11 @@ var _prev_JUMP_pressed = false
 var _on_air_time = 100
 var _on_rope_max_distance = false
 var _on_rope_min_distance = false
-var _was_on_floor = false
 
 var _started = false
+
+var can_attack = true
+var is_invulnerable = false
 
 var states_strings := {
 	IDLE: "idle",
@@ -128,6 +132,10 @@ func _init():
 	_direction_to_twin = Vector2()
 
 
+func _ready():
+	$AttackCooldown.connect("timeout", self, "_on_AttackCooldown_timeout")
+	$InvulnerabilityWindow.connect("timeout", self, "_on_InvulnerabilityWindow_timeout")
+
 func _process(delta):
 	if _started:
 		return
@@ -147,12 +155,14 @@ func _draw():
 	draw_circle(shape.position + Vector2(SIZE/2, -SIZE/2), SIZE/8, default_color_dark)
 
 
-func set_stats(size, max_health = 6, max_stamina = 100, damage = 1):
+func set_stats(size, max_health = 6, max_stamina = 100, damage = 1, attack_cd = 0.5, invulnerability_time = 10):
 	SIZE = size
 	MAX_HEALTH = max_health
 	_current_health = max_health
 	MAX_STAMINA = max_stamina
 	DAMAGE = damage
+	ATTACK_CD = attack_cd
+	INVULNERABILITY_TIME = invulnerability_time
 
 
 func set_colors(default_color, default_color_dark):
@@ -171,39 +181,6 @@ func get_velocity():
 func get_state():
 	return _state
 
-"""
-func set_state():
-	if _was_on_floor:
-		if _input_action:
-			change_state(ATTACK)
-		
-		elif _input_up and is_below_twin():
-			change_state(CLIMB)
-		
-		elif _on_rope_max_distance:
-			change_state(HOVER)
-		
-		elif _input_left or _input_right:
-			change_state(WALK)
-		
-		else:
-			change_state(IDLE)
-	else:
-		if _input_action:
-			change_state(HANG)
-		
-		elif _input_up and is_below_twin():
-			change_state(CLIMB)
-		
-		elif _on_rope_max_distance:
-			change_state(HOVER)
-		
-		elif _input_JUMP:
-			change_state(JUMP)
-		
-		else: 
-			change_state(FALL)
-"""
 
 func set_state():
 	if _input_action:
@@ -218,7 +195,7 @@ func set_state():
 	elif _on_rope_max_distance:
 		change_state(HOVER)
 		
-	elif _was_on_floor: 
+	elif is_on_floor(): 
 		if _velocity.x:
 			change_state(WALK)
 		elif _input_JUMP:
@@ -228,13 +205,12 @@ func set_state():
 	else:
 			change_state(FALL)
 
+
 func change_state(target_state: int) -> void:
 	if not target_state in _transitions[_state]:
 		return
-	print(states_strings[_state])
 	_prev_state = _state
 	_state = target_state
-	#leave_state()
 	enter_state()
 
 
@@ -246,11 +222,16 @@ func enter_state() -> void:
 		ATTACK:
 			attack(attack_range.get_enemy_in_range())
 			change_state(_prev_state)
+		HURT:
+			$InvulnerabilityWindow.start()
+			is_invulnerable = true
+			change_state(_prev_state)
 		DIE:
 			set_health(MAX_HEALTH)
 			change_state(_prev_state)
 		_:
 			return
+
 
 func leave_state() -> void:
 	match _state:
@@ -293,14 +274,33 @@ func set_inputs(name):
 	_input_action = Input.is_action_pressed(str(name, "_action"))
 
 
+func get_input(name):
+	match name:
+		"left":
+			return _input_left
+		"right":
+			return _input_right
+		"up":
+			return _input_up
+		"down":
+			return _input_down
+		"jump":
+			return _input_JUMP
+		"action":
+			return _input_action
+
+
 func take_damage(value):
+	if is_invulnerable: 
+		return
 	.take_damage(value)
+	change_state(HURT)
 	if _current_health == 0:
 		change_state(DIE)
 
 
 func process_kinematics(delta):
-	#check_on_floor()
+	check_on_floor()
 	
 	linear_velocity_y(delta)
 	
@@ -325,20 +325,6 @@ func process_kinematics(delta):
 			climb()
 	
 	_velocity = move_and_slide(_velocity, Vector2.UP)
-	
-	set_on_floor(get_slide_count() > 0)
-
-func check_on_floor():
-	_was_on_floor = false
-	if is_on_floor():
-		_on_air_time = 0
-		_was_on_floor = true
-
-func set_on_floor(on_floor_collision):
-	if is_on_floor() or on_floor_collision:
-		_on_air_time = 0
-	
-	_was_on_floor = on_floor_collision or is_on_floor()
 
 
 func air():
@@ -363,7 +349,6 @@ func hang():
 	_velocity.y = 0
 
 
-# TODO: Fix tangent acceleration
 func swing():
 	
 	# 1: Desc. velocity en tangent i tension
@@ -407,8 +392,10 @@ func swing():
 
 
 func attack(enemy):
-	if (enemy):
+	if (enemy and can_attack):
 		.attack(enemy)
+		$AttackCooldown.start()
+		can_attack = false
 
 
 func get_angle_in_first_quadrant(angle):
@@ -420,15 +407,24 @@ func get_angle_in_first_quadrant(angle):
 	return angle
 
 
+func check_on_floor():
+	if is_on_floor():
+		_on_air_time = 0
+
+
 func linear_velocity_x(delta):
 	
 	if _input_left:
+		if _velocity.x > 1 and not _state == HOVER:
+			_velocity = Vector2.ZERO
 		if _velocity.x <= WALK_MIN_SPEED and _velocity.x > -WALK_MAX_SPEED:
 			_force.x -= WALK_FORCE
 			if _direction == 1:
 				flip_direction()
 			
-	elif _input_right:
+	elif _input_right :
+		if _velocity.x < 0 and not _state == HOVER:
+			_velocity = Vector2.ZERO
 		if _velocity.x >= -WALK_MIN_SPEED and _velocity.x < WALK_MAX_SPEED:
 			_force.x += WALK_FORCE
 			if _direction == -1:
@@ -438,7 +434,7 @@ func linear_velocity_x(delta):
 		var vsign = sign(_velocity.x)
 		var vlen = abs(_velocity.x)
 
-		vlen -= STOP_FORCE * delta if (not _state == HOVER) else STOP_HOVER_FORCE * delta 
+		vlen -= STOP_FORCE * delta if (not _state == HOVER or is_on_floor()) else STOP_HOVER_FORCE * delta 
 		if vlen < 0:
 			vlen = 0
 
@@ -465,4 +461,15 @@ func is_above_twin():
 
 
 func is_below_twin():
-	return sin(_direction_to_twin.angle()) < -0.1 and not _on_rope_min_distance
+	var parent = get_parent()
+	return sin(_direction_to_twin.angle()) < -0.1 and not _on_rope_min_distance and abs(parent.get_distance()) < (parent.ROPE_MAX_DISTANCE + parent.ERROR_MARGIN)
+	
+	
+func _on_AttackCooldown_timeout():
+	can_attack = true
+	$AttackCooldown.stop()
+
+
+func _on_InvulnerabilityWindow_timeout():
+	is_invulnerable = false
+	$InvulnerabilityWindow.stop()

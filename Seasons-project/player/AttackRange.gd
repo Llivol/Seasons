@@ -17,6 +17,10 @@ func _ready():
 
 func _process(delta):
 	if _init:
+		if _parent.is_on_floor() or (_parent.get_input("right") or _parent.get_input("left")):
+			show()
+		else:
+			hide()
 		return
 	
 	if _parent.SIZE != null:

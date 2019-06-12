@@ -60,7 +60,8 @@ func update_direction():
 	
 
 func attack(player):
-	.attack(player)
+	if not player.is_invulnerable:
+		.attack(player)
 	flip_direction()
 
 

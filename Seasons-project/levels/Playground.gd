@@ -1,8 +1,5 @@
 extends Node2D
 
-const ROPE_MAX_DISTANCE = 256
-
-# Declare member variables here. Examples:
 var player_left
 var player_right
 var l_player_left
@@ -10,16 +7,13 @@ var l_player_right
 var l_distance
 var distance = Vector2()
 
-# Called when the node enters the scene tree for the first time.
 func _ready():
 	player_left = $Twins/PlayerLeft
 	player_right = $Twins/PlayerRight
 	l_player_left = $LPlayerLeft
 	l_player_right = $LPlayerRight
 	l_distance = $LDistance
-	pass # Replace with function body.
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	distance = Vector2(abs(player_left.global_position.x - player_right.global_position.x), abs(player_left.global_position.y - player_right.global_position.y))
 	l_player_left.set_text(str("Player Left: pos", player_left.global_position.round(), ", vel", player_left.get_velocity().round(), ", force", player_left.get_force().round(), "; status: ", player_left.states_strings[player_left.get_state()]))
