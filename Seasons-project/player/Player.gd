@@ -1,62 +1,52 @@
 extends Character
 class_name Player
 
+signal stamina_changed(new_value)
+
 export var default_color = Global.COLOR_BLUE
 export var default_color_dark = Global.COLOR_DARK_BLUE
 
 onready var attack_range = $AttackRange
 
-"""
 onready var _transitions := {
-	IDLE: [WALK, JUMP, FALL, HOVER, PULL, CLIMB, ATTACK, HURT, DIE],
-	WALK: [IDLE, STOP, JUMP, FALL, HOVER, CLIMB, ATTACK, HURT, DIE],
-	STOP: [IDLE, WALK],
-	JUMP: [FALL, HANG, HOVER, HURT, DIE],
-	FALL: [IDLE, HANG, HOVER, HURT, DIE],
-	HANG: [IDLE, FALL, HOVER],
-	HOVER: [IDLE, WALK, JUMP, FALL, HANG, CLIMB],
+	IDLE: [WALK, STOP, JUMP, FALL, HANG, HOVER, PULL, CLIMB, ATTACK, HURT, DIE, EXHAUSTED, RECOVERING],
+	WALK: [IDLE, STOP, JUMP, FALL, HOVER, ATTACK, HURT, DIE, EXHAUSTED],
+	STOP: [IDLE, WALK, JUMP, FALL, HANG, HOVER, PULL, CLIMB, ATTACK, HURT, DIE, EXHAUSTED],
+	JUMP: [IDLE, FALL, HANG, HOVER, ATTACK, HURT, DIE, EXHAUSTED],
+	FALL: [IDLE, WALK, HANG, HOVER, ATTACK, HURT, DIE, EXHAUSTED],
+	HANG: [FALL, CLIMB, HOVER, HURT, DIE, EXHAUSTED],
+	HOVER: [IDLE, WALK, STOP, JUMP, FALL, HANG, PULL, CLIMB, ATTACK, HURT, DIE, EXHAUSTED],
 	CROUCH: [],
 	SNEAK: [],
-	PULL: [IDLE],
-	CLIMB: [IDLE, FALL, HOVER, HANG],
-	ATTACK: [IDLE, HOVER],
-	HURT: [IDLE],
-	DIE: [IDLE],
-}
-"""
-
-onready var _transitions := {
-	IDLE: [WALK, STOP, JUMP, FALL, HANG, HOVER, PULL, CLIMB, ATTACK, HURT, DIE],
-	WALK: [IDLE, STOP, JUMP, FALL, HOVER, ATTACK, HURT, DIE],
-	STOP: [IDLE, WALK, JUMP, FALL, HANG, HOVER, PULL, CLIMB, ATTACK, HURT, DIE],
-	JUMP: [IDLE, FALL, HANG, HOVER, ATTACK, HURT, DIE],
-	FALL: [IDLE, WALK, HANG, HOVER, ATTACK, HURT, DIE],
-	HANG: [FALL, CLIMB, HOVER, HURT, DIE],
-	HOVER: [IDLE, WALK, STOP, JUMP, FALL, HANG, PULL, CLIMB, ATTACK, HURT, DIE],
-	CROUCH: [],
-	SNEAK: [],
-	PULL: [IDLE, HOVER, HURT, DIE],
-	CLIMB: [IDLE, FALL, HANG, HOVER, HURT, DIE],
-	ATTACK: [IDLE, WALK, STOP, JUMP, FALL, HOVER, HURT, DIE],
-	HURT: [IDLE, WALK, STOP, JUMP, FALL, HANG, HOVER, PULL, CLIMB, ATTACK, DIE],
-	DIE: [IDLE, WALK, JUMP, FALL, HANG, HOVER, PULL, CLIMB, ATTACK, HURT, DIE],
+	PULL: [IDLE, HOVER, HURT, DIE, EXHAUSTED],
+	CLIMB: [IDLE, FALL, HANG, HOVER, HURT, DIE, EXHAUSTED],
+	ATTACK: [IDLE, WALK, STOP, JUMP, FALL, HOVER, HURT, DIE, EXHAUSTED],
+	HURT: [IDLE, WALK, STOP, JUMP, FALL, HANG, HOVER, PULL, CLIMB, ATTACK, DIE, EXHAUSTED],
+	DIE: [IDLE, WALK, JUMP, FALL, HANG, HOVER, PULL, CLIMB, ATTACK, HURT, DIE, EXHAUSTED],
+	EXHAUSTED: [HOVER, RECOVERING], #[IDLE, WALK, STOP, FALL, HOVER],
+	RECOVERING: [WALK, JUMP, HANG, PULL, CLIMB, ATTACK, HURT, DIE],
 }
 
-const GRAVITY = 2250*2 # pixels/second/second
+const GRAVITY = 4500
 
 const FLOOR_ANGLE_TOLERANCE = 40
-const WALK_FORCE = 1000*2
-const WALK_MIN_SPEED = 10*2
-const WALK_MAX_SPEED = 250*2
-const STOP_FORCE = 5000*2
+const WALK_FORCE = 2000
+const WALK_MIN_SPEED = 20
+const WALK_MAX_SPEED = 500
+const STOP_FORCE = 10000
 const STOP_HOVER_FORCE = 200
-const JUMP_SPEED = 500*2
-const JUMP_FORCE = 32000*2
+const JUMP_SPEED = 1000
+const JUMP_FORCE = 64000
 const JUMP_MAX_AIRBORNE_TIME = 0.01
 const TANGENT_ACCELERATION = 1.2
 const CLIMB_SPEED  = 200
 const RECOVER_FORCE = 50
 const AIR_FRICCTION = 0.001
+const STAMINA_UNIT = 10
+const IDLE_TIME_TO_RECOVER_STAMINA = 2
+const EXHAUSTED_TIME_TO_RECOVER_STAMINA = 5
+const RECOVER_SPEED_FROM_IDLE = 5
+const RECOVER_SPEED_FROM_EXHAUSTED = 2
 
 const SLIDE_STOP_VELOCITY = 0.0 # one pixel/second
 const SLIDE_STOP_MIN_TRAVEL = 0.0 # one pixel
@@ -77,6 +67,8 @@ enum {
 	ATTACK		#11
 	HURT		#12
 	DIE			#13
+	EXHAUSTED	#14
+	RECOVERING	#15
 }
 
 var SIZE
@@ -94,6 +86,7 @@ var _input_action
 var _state
 var _prev_state
 var _force setget set_force, get_force
+var _current_stamina setget set_stamina, get_stamina
 
 var _direction_to_twin
 
@@ -101,11 +94,13 @@ var _prev_JUMP_pressed = false
 var _on_air_time = 100
 var _on_rope_max_distance = false
 var _on_rope_min_distance = false
+var _recover_speed
 
 var _started = false
 
 var can_attack = true
 var is_invulnerable = false
+var is_recovering = false
 
 var states_strings := {
 	IDLE: "idle",
@@ -122,6 +117,8 @@ var states_strings := {
 	ATTACK: "attack",
 	HURT: "hurt",
 	DIE: "die",
+	EXHAUSTED: "exhausted",
+	RECOVERING: "recovering",
 }
 
 func _init():
@@ -135,6 +132,7 @@ func _init():
 func _ready():
 	$AttackCooldown.connect("timeout", self, "_on_AttackCooldown_timeout")
 	$InvulnerabilityWindow.connect("timeout", self, "_on_InvulnerabilityWindow_timeout")
+	$RecoverStamina.connect("timeout", self, "_on_RecoverStamina_timeout")
 
 func _process(delta):
 	if _started:
@@ -160,6 +158,7 @@ func set_stats(size, max_health = 6, max_stamina = 100, damage = 1, attack_cd = 
 	MAX_HEALTH = max_health
 	_current_health = max_health
 	MAX_STAMINA = max_stamina
+	_current_stamina = max_stamina
 	DAMAGE = damage
 	ATTACK_CD = attack_cd
 	INVULNERABILITY_TIME = invulnerability_time
@@ -194,6 +193,9 @@ func set_state():
 			
 	elif _on_rope_max_distance:
 		change_state(HOVER)
+	
+	elif _current_stamina <= 0:
+		change_state(EXHAUSTED)
 		
 	elif is_on_floor(): 
 		if _velocity.x:
@@ -206,19 +208,32 @@ func set_state():
 			change_state(FALL)
 
 
+func set_stamina(value):
+	var new_value = min (value, 100)
+	_current_stamina = max(0, new_value)
+	emit_signal("stamina_changed", _current_stamina)
+	if _current_stamina == 0:
+		change_state(EXHAUSTED)
+
+
+func get_stamina():
+	return _current_stamina
+
+
 func change_state(target_state: int) -> void:
 	if not target_state in _transitions[_state]:
 		return
 	_prev_state = _state
 	_state = target_state
+	leave_state()
 	enter_state()
 
 
 func enter_state() -> void:
 	match _state:
 		IDLE:
-			return
-			_velocity.x = 0.0
+			$RecoverStamina.set_wait_time(IDLE_TIME_TO_RECOVER_STAMINA)
+			$RecoverStamina.start()
 		ATTACK:
 			attack(attack_range.get_enemy_in_range())
 			change_state(_prev_state)
@@ -229,14 +244,19 @@ func enter_state() -> void:
 		DIE:
 			set_health(MAX_HEALTH)
 			change_state(_prev_state)
+		EXHAUSTED:
+			_recover_speed = RECOVER_SPEED_FROM_IDLE if (_prev_state == IDLE) else RECOVER_SPEED_FROM_EXHAUSTED
+			$RecoverStamina.set_wait_time(EXHAUSTED_TIME_TO_RECOVER_STAMINA)
+			$RecoverStamina.start()
 		_:
 			return
 
 
 func leave_state() -> void:
 	match _state:
-		CLIMB:
-			_velocity = Vector2.ZERO
+		IDLE:
+			$RecoverStamina.stop()
+			is_recovering = false
 		_:
 			return
 
@@ -299,6 +319,14 @@ func take_damage(value):
 		change_state(DIE)
 
 
+func consume_stamina(value):
+	set_stamina(_current_stamina - value)
+
+
+func recover_stamina(value):
+	set_stamina(_current_stamina + value)
+
+
 func process_kinematics(delta):
 	check_on_floor()
 	
@@ -312,24 +340,37 @@ func process_kinematics(delta):
 	
 	match _state:
 		JUMP:
-			air()
+			jump()
+			air(delta)
+			consume_stamina(STAMINA_UNIT * 3)
 		FALL:
-			air()
+			air(delta)
 		HANG:
 			hang()
+			consume_stamina(STAMINA_UNIT * delta)
 		HOVER:
 			swing()
 		PULL:
 			pull()
 		CLIMB:
 			climb()
+			consume_stamina(STAMINA_UNIT / 2 * delta)
+		EXHAUSTED:
+			_velocity.x *= 0.5
+		RECOVERING:
+			recover_stamina(STAMINA_UNIT * 5 * delta)
 	
 	_velocity = move_and_slide(_velocity, Vector2.UP)
 
 
-func air():
+func air(delta):
 	_velocity.x *= 0.9
-	pass
+	_on_air_time += delta
+
+
+func jump():
+	if _on_air_time < JUMP_MAX_AIRBORNE_TIME:
+		_velocity.y = -JUMP_SPEED
 
 
 func pull():
@@ -443,17 +484,6 @@ func linear_velocity_x(delta):
 
 func linear_velocity_y(delta):
 	set_force_gravity()
-		
-	if _state == FALL:
-		pass
-	
-	if _on_air_time < JUMP_MAX_AIRBORNE_TIME and _input_JUMP and not _prev_JUMP_pressed and not _state == JUMP:
-		# _input_JUMP must also be allowed to happen if the character left the floor a little bit ago.
-		# Makes controls more snappy.
-		_velocity.y = -JUMP_SPEED
-	
-	_on_air_time += delta
-	_prev_JUMP_pressed = _input_JUMP
 
 
 func is_above_twin():
@@ -473,3 +503,8 @@ func _on_AttackCooldown_timeout():
 func _on_InvulnerabilityWindow_timeout():
 	is_invulnerable = false
 	$InvulnerabilityWindow.stop()
+
+
+func _on_RecoverStamina_timeout():
+	change_state(RECOVERING)
+	$RecoverStamina.stop()

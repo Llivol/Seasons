@@ -63,6 +63,11 @@ _global_script_classes=[ {
 "class": "Player",
 "language": "GDScript",
 "path": "res://player/Player.gd"
+}, {
+"base": "Timer",
+"class": "RecoverStamina",
+"language": "GDScript",
+"path": "res://player/RecoverStamina.gd"
 } ]
 _global_script_class_icons={
 "AttackCooldown": "",
@@ -75,7 +80,8 @@ _global_script_class_icons={
 "InvulnerabilityWindow": "",
 "LandChaser": "",
 "LandPatroller": "",
-"Player": ""
+"Player": "",
+"RecoverStamina": ""
 }
 
 [application]
