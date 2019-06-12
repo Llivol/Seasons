@@ -38,7 +38,6 @@ func get_enemy_in_range():
 	var algo_up = _up.get_collider()
 	var algo_front = _front.get_collider()
 	var algo_down = _down.get_collider()
-	print("break")
 	if _front.get_collider() is Enemy:
 		return _front.get_collider()
 	elif _up.get_collider() is Enemy:

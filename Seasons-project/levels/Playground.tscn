@@ -439,9 +439,6 @@ position = Vector2( 368, 176 )
 [node name="PlayerRight" parent="Twins" index="1"]
 position = Vector2( 72, 0 )
 
-[node name="Rope" parent="Twins" index="2"]
-texture_mode = -1035468800
-
 [node name="LPlayerLeft" type="Label" parent="."]
 margin_left = 48.0
 margin_top = 48.0

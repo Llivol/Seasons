@@ -27,19 +27,19 @@ onready var _transitions := {
 
 onready var _transitions := {
 	IDLE: [WALK, STOP, JUMP, FALL, HANG, HOVER, PULL, CLIMB, ATTACK, HURT, DIE],
-	WALK: [IDLE, STOP, JUMP, FALL, HANG, HOVER, PULL, CLIMB, ATTACK, HURT, DIE],
+	WALK: [IDLE, STOP, JUMP, FALL, HOVER, ATTACK, HURT, DIE],
 	STOP: [IDLE, WALK, JUMP, FALL, HANG, HOVER, PULL, CLIMB, ATTACK, HURT, DIE],
-	JUMP: [IDLE, WALK, STOP, FALL, HANG, HOVER, PULL, CLIMB, ATTACK, HURT, DIE],
-	FALL: [IDLE, HANG, HOVER, HURT, DIE],
-	HANG: [IDLE, WALK, STOP, JUMP, FALL, HOVER, PULL, CLIMB, ATTACK, HURT, DIE],
+	JUMP: [IDLE, FALL, HANG, HOVER, ATTACK, HURT, DIE],
+	FALL: [IDLE, WALK, HANG, HOVER, ATTACK, HURT, DIE],
+	HANG: [FALL, CLIMB, HOVER, HURT, DIE],
 	HOVER: [IDLE, WALK, STOP, JUMP, FALL, HANG, PULL, CLIMB, ATTACK, HURT, DIE],
 	CROUCH: [],
 	SNEAK: [],
-	PULL: [IDLE, WALK, STOP, JUMP, FALL, HANG, HOVER, CLIMB, ATTACK, HURT, DIE],
-	CLIMB: [IDLE, WALK, STOP, JUMP, FALL, HANG, HOVER, PULL, ATTACK, HURT, DIE],
-	ATTACK: [IDLE, WALK, STOP, JUMP, FALL, HANG, HOVER, PULL, CLIMB, HURT, DIE],
+	PULL: [IDLE, HOVER, HURT, DIE],
+	CLIMB: [IDLE, FALL, HANG, HOVER, HURT, DIE],
+	ATTACK: [IDLE, WALK, STOP, JUMP, FALL, HOVER, HURT, DIE],
 	HURT: [IDLE, WALK, STOP, JUMP, FALL, HANG, HOVER, PULL, CLIMB, ATTACK, DIE],
-	DIE: [],
+	DIE: [IDLE, WALK, JUMP, FALL, HANG, HOVER, PULL, CLIMB, ATTACK, HURT, DIE],
 }
 
 const GRAVITY = 2250*2 # pixels/second/second
@@ -49,12 +49,14 @@ const WALK_FORCE = 1000*2
 const WALK_MIN_SPEED = 10*2
 const WALK_MAX_SPEED = 250*2
 const STOP_FORCE = 5000*2
+const STOP_HOVER_FORCE = 200
 const JUMP_SPEED = 500*2
 const JUMP_FORCE = 32000*2
 const JUMP_MAX_AIRBORNE_TIME = 0.01
 const TANGENT_ACCELERATION = 1.2
 const CLIMB_SPEED  = 200
 const RECOVER_FORCE = 50
+const AIR_FRICCTION = 0.001
 
 const SLIDE_STOP_VELOCITY = 0.0 # one pixel/second
 const SLIDE_STOP_MIN_TRAVEL = 0.0 # one pixel
@@ -88,6 +90,7 @@ var _input_JUMP
 var _input_action
 
 var _state
+var _prev_state
 var _force setget set_force, get_force
 
 var _direction_to_twin
@@ -119,6 +122,7 @@ var states_strings := {
 
 func _init():
 	_state = IDLE
+	_prev_state = IDLE
 	_velocity = Vector2()
 	_force = Vector2()
 	_direction_to_twin = Vector2()
@@ -167,7 +171,7 @@ func get_velocity():
 func get_state():
 	return _state
 
-
+"""
 func set_state():
 	if _was_on_floor:
 		if _input_action:
@@ -199,21 +203,59 @@ func set_state():
 		
 		else: 
 			change_state(FALL)
+"""
 
+func set_state():
+	if _input_action:
+		if not is_on_floor() and not (_input_right or _input_left):
+			change_state(HANG)
+		else:
+			change_state(ATTACK)
+			
+	elif (_input_JUMP and _input_up) and is_below_twin():
+		change_state(CLIMB)
+			
+	elif _on_rope_max_distance:
+		change_state(HOVER)
+		
+	elif _was_on_floor: 
+		if _velocity.x:
+			change_state(WALK)
+		elif _input_JUMP:
+			change_state(JUMP)
+		else:
+			change_state(IDLE)
+	else:
+			change_state(FALL)
 
 func change_state(target_state: int) -> void:
 	if not target_state in _transitions[_state]:
 		return
+	print(states_strings[_state])
+	_prev_state = _state
 	_state = target_state
+	#leave_state()
 	enter_state()
 
 
 func enter_state() -> void:
 	match _state:
 		IDLE:
+			return
 			_velocity.x = 0.0
 		ATTACK:
 			attack(attack_range.get_enemy_in_range())
+			change_state(_prev_state)
+		DIE:
+			set_health(MAX_HEALTH)
+			change_state(_prev_state)
+		_:
+			return
+
+func leave_state() -> void:
+	match _state:
+		CLIMB:
+			_velocity = Vector2.ZERO
 		_:
 			return
 
@@ -258,7 +300,7 @@ func take_damage(value):
 
 
 func process_kinematics(delta):
-	check_on_floor()
+	#check_on_floor()
 	
 	linear_velocity_y(delta)
 	
@@ -283,7 +325,8 @@ func process_kinematics(delta):
 			climb()
 	
 	_velocity = move_and_slide(_velocity, Vector2.UP)
-
+	
+	set_on_floor(get_slide_count() > 0)
 
 func check_on_floor():
 	_was_on_floor = false
@@ -291,9 +334,15 @@ func check_on_floor():
 		_on_air_time = 0
 		_was_on_floor = true
 
+func set_on_floor(on_floor_collision):
+	if is_on_floor() or on_floor_collision:
+		_on_air_time = 0
+	
+	_was_on_floor = on_floor_collision or is_on_floor()
+
 
 func air():
-	#_velocity.x *= 0.8
+	_velocity.x *= 0.9
 	pass
 
 
@@ -347,17 +396,14 @@ func swing():
 		
 		v_tension = _direction_to_twin * distance_diff * RECOVER_FORCE #if (distance_diff == 0) else Vector2.ZERO
 	
-	v_tangent.x -= sin(v_tension.angle()) + 0.5
-	v_tangent.y -= sin(v_tension.angle()) + 0.5
+	if not (_input_left or _input_right):
+		v_tangent.x *= (1 - AIR_FRICCTION)
+		v_tangent.y  *= (1 - AIR_FRICCTION)
+		pass
 	
 	# 4: Reconstruim V
 	_velocity.x = v_tension.x + v_tangent.x
 	_velocity.y = v_tension.y + v_tangent.y
-	
-	if abs(_velocity.x) < 0.1:
-		_velocity.x = 0
-	if abs(_velocity.y) < 0.1:
-		_velocity.y = 0
 
 
 func attack(enemy):
@@ -373,6 +419,7 @@ func get_angle_in_first_quadrant(angle):
 		angle += PI/2
 	return angle
 
+
 func linear_velocity_x(delta):
 	
 	if _input_left:
@@ -387,11 +434,11 @@ func linear_velocity_x(delta):
 			if _direction == -1:
 				flip_direction()
 	
-	elif _state != HOVER or is_on_floor(): 
+	elif _state == HOVER or is_on_floor(): 
 		var vsign = sign(_velocity.x)
 		var vlen = abs(_velocity.x)
 
-		vlen -= STOP_FORCE * delta
+		vlen -= STOP_FORCE * delta if (not _state == HOVER) else STOP_HOVER_FORCE * delta 
 		if vlen < 0:
 			vlen = 0
 
