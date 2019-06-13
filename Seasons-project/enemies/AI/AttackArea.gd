@@ -16,7 +16,7 @@ func _process(delta):
 		_init = true
 
 func _draw():
-	if not Global.debug:
+	if not Cheats.debug:
 		return
 	
 	draw_circle(position, _parent.SIZE * 1.5, Global.COLOR_GREEN)

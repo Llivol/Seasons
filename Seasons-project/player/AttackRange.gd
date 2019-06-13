@@ -53,7 +53,7 @@ func get_enemy_in_range():
 
 
 func _draw():
-	if not Global.debug:
+	if not Cheats.debug:
 		return
 	draw_line(_up.position, _up.get_cast_to(), Global.COLOR_RED, 2.0)
 	draw_line(_front.position, _front.get_cast_to(), Global.COLOR_RED, 2.0)

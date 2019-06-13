@@ -17,7 +17,7 @@ func _process(delta):
 		_init = true
 
 func _draw():
-	if not Global.debug:
+	if not Cheats.debug or not _init:
 		return
 	
 	var red_a128 = Global.COLOR_RED

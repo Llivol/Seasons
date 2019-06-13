@@ -19,8 +19,6 @@ func _ready():
 func _process(delta):
 	_update_rope()
 	_update_distance()
-	if _distance >= ROPE_MAX_DISTANCE + 32:
-		print("too much distance")
 	if _distance >= ROPE_MAX_DISTANCE:
 		_rope.default_color = Global.COLOR_RED
 	else:
@@ -34,8 +32,8 @@ func get_distance():
 func _update_distance():
 	_distance = _player_left.global_position.distance_to(_player_right.global_position)
 	
-	_player_left.set_on_rope_max_distance(_distance >= ROPE_MAX_DISTANCE)
-	_player_right.set_on_rope_max_distance(_distance >= ROPE_MAX_DISTANCE)
+	_player_left.set_on_rope_max_distance(_distance >= ROPE_MAX_DISTANCE and not Cheats.infinite_rope_lenght)
+	_player_right.set_on_rope_max_distance(_distance >= ROPE_MAX_DISTANCE and not Cheats.infinite_rope_lenght)
 	
 	_player_left.set_on_rope_min_distance(abs(_player_right.global_position.y - _player_left.global_position.y) <= ROPE_MIN_DISTANCE)
 	_player_right.set_on_rope_min_distance(abs(_player_right.global_position.y - _player_left.global_position.y) <= ROPE_MIN_DISTANCE)

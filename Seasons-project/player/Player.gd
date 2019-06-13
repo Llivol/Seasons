@@ -23,7 +23,7 @@ onready var _transitions := {
 	ATTACK: [IDLE, WALK, STOP, JUMP, FALL, HOVER, HURT, DIE, EXHAUSTED],
 	HURT: [IDLE, WALK, STOP, JUMP, FALL, HANG, HOVER, PULL, CLIMB, ATTACK, DIE, EXHAUSTED],
 	DIE: [IDLE, WALK, JUMP, FALL, HANG, HOVER, PULL, CLIMB, ATTACK, HURT, DIE, EXHAUSTED],
-	EXHAUSTED: [HOVER, RECOVERING], #[IDLE, WALK, STOP, FALL, HOVER],
+	EXHAUSTED: [HOVER, HURT, DIE, RECOVERING], #[IDLE, WALK, STOP, FALL, HOVER],
 	RECOVERING: [WALK, JUMP, HANG, PULL, CLIMB, ATTACK, HURT, DIE],
 }
 
@@ -198,10 +198,10 @@ func set_state():
 		change_state(EXHAUSTED)
 		
 	elif is_on_floor(): 
-		if _velocity.x:
-			change_state(WALK)
-		elif _input_JUMP:
+		if _input_JUMP:
 			change_state(JUMP)
+		elif _velocity.x:
+			change_state(WALK)
 		else:
 			change_state(IDLE)
 	else:
@@ -311,7 +311,7 @@ func get_input(name):
 
 
 func take_damage(value):
-	if is_invulnerable: 
+	if is_invulnerable or Cheats.infinite_health: 
 		return
 	.take_damage(value)
 	change_state(HURT)
@@ -320,6 +320,8 @@ func take_damage(value):
 
 
 func consume_stamina(value):
+	if Cheats.infinite_stamina:
+		return
 	set_stamina(_current_stamina - value)
 
 
@@ -492,9 +494,9 @@ func is_above_twin():
 
 func is_below_twin():
 	var parent = get_parent()
-	return sin(_direction_to_twin.angle()) < -0.1 and not _on_rope_min_distance and abs(parent.get_distance()) < (parent.ROPE_MAX_DISTANCE + parent.ERROR_MARGIN)
-	
-	
+	return sin(_direction_to_twin.angle()) < -0.1 and not _on_rope_min_distance
+
+
 func _on_AttackCooldown_timeout():
 	can_attack = true
 	$AttackCooldown.stop()

@@ -15,6 +15,6 @@ func _process(delta):
 		_init = true
 
 func _draw():
-	if not Global.debug:
+	if not Cheats.debug:
 		return
 	draw_line(position, _parent.get_cast_to(), Global.COLOR_RED)

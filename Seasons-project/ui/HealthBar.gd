@@ -7,7 +7,7 @@ func _ready():
 	_parent = get_parent()
 	_init = false
 	
-	if _parent is Enemy and not Global.debug:
+	if _parent is Enemy and not Cheats.debug:
 		_init = true
 		hide()
 

@@ -39,7 +39,7 @@ func set_wall_detector_size(size):
 
 
 func _draw():
-	if not Global.debug:
+	if not Cheats.debug:
 		return
 	draw_line(_floor_detector.position, _floor_detector.get_cast_to(), Global.COLOR_LIGHT_BLUE, 2.0)
 	draw_line(_wall_detector.position, _wall_detector.get_cast_to(), Global.COLOR_RED, 2.0)
