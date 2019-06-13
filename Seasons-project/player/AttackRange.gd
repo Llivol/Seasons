@@ -21,6 +21,8 @@ func _process(delta):
 			show()
 		else:
 			hide()
+		if _parent.states_strings[_parent.get_state()] == "exhausted":
+			hide()
 		return
 	
 	if _parent.SIZE != null:
