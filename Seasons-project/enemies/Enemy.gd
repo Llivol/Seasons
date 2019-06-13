@@ -45,12 +45,13 @@ func chase(delta, flying = false, at_max_floor_distance = false):
 func flip_direction():
 	if _target == null:
 		.flip_direction()
-		_velocity = Vector2.ZERO
 	else:
 		var direction_to_target = (_target.global_position - position).normalized()
 		if _direction != 1 * sign(direction_to_target.x):
 			_direction = 1 * sign(direction_to_target.x)
 			self.scale.x *= -1
+			emit_signal("flip", _direction)
+		
 
 
 func update_direction():
