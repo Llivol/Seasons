@@ -7,6 +7,7 @@ var _init
 func _ready():
 	_parent = get_parent()
 	_init = false
+	set_draw_behind_parent(true)
 
 func _process(delta):
 	if _init:

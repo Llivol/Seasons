@@ -1,4 +1,5 @@
 extends Node2D
+class_name LedgeDetector
 
 var _parent
 var _init
@@ -8,16 +9,20 @@ var _wall_detector
 func _ready():
 	_parent = get_parent()
 	_floor_detector = $FloorDetector
+	_floor_detector.set_enabled(true)
 	_wall_detector = $WallDetector
+	_wall_detector.set_enabled(true)
 	_init = false
+	set_draw_behind_parent(true)
 
 func _process(delta):
 	if _init:
 		return
 	
 	if _parent.SIZE != null:
-		translate(Vector2(_parent.SIZE, 0))
 		_floor_detector.set_cast_to(Vector2(0, 8 + _parent.SIZE))
+		_wall_detector.set_cast_to(Vector2(2, 0))
+		translate(Vector2(_parent.SIZE, 0))
 		update()
 		_init = true
 

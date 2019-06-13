@@ -39,7 +39,7 @@ script = ExtResource( 7 )
 
 [node name="RecoverStamina" type="Timer" parent="."]
 script = ExtResource( 8 )
-[connection signal="flip" from="." to="StaminaBar" method="_on_flip"]
 [connection signal="flip" from="." to="HealthBar" method="_on_flip"]
+[connection signal="flip" from="." to="StaminaBar" method="_on_flip"]
 [connection signal="health_changed" from="." to="HealthBar" method="_on_health_changed"]
 [connection signal="stamina_changed" from="." to="StaminaBar" method="_on_stamina_changed"]

@@ -9,7 +9,7 @@ onready var fly_timer = $FlyTimer
 
 
 func _ready():
-	set_stats(Global.HEALTH_AVERAGE, Global.SIZE_AVERAGE, Global.AWARENESS_AVERAGE, Global.DAMAGE_AVERAGE, Global.AWARENESS_AVERAGE)
+	set_stats(Global.HEALTH_AVERAGE, Global.SIZE_AVERAGE, Global.SPEED_AVERAGE, Global.DAMAGE_AVERAGE, Global.AWARENESS_AVERAGE)
 
 
 func _process(delta):

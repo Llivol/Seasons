@@ -153,7 +153,7 @@ func _draw():
 	draw_circle(shape.position + Vector2(SIZE/2, -SIZE/2), SIZE/8, default_color_dark)
 
 
-func set_stats(size, max_health = 6, max_stamina = 100, damage = 1, attack_cd = 0.5, invulnerability_time = 10):
+func set_stats(size, max_health = 6, max_stamina = 100, damage = 1, attack_cd = 0.5, invulnerability_time = 1):
 	SIZE = size
 	MAX_HEALTH = max_health
 	_current_health = max_health
@@ -242,8 +242,9 @@ func enter_state() -> void:
 			is_invulnerable = true
 			change_state(_prev_state)
 		DIE:
-			set_health(MAX_HEALTH)
-			change_state(_prev_state)
+			if Cheats.debug:
+				set_health(MAX_HEALTH)
+				change_state(_prev_state)
 		EXHAUSTED:
 			_recover_speed = RECOVER_SPEED_FROM_IDLE if (_prev_state == IDLE) else RECOVER_SPEED_FROM_EXHAUSTED
 			$RecoverStamina.set_wait_time(EXHAUSTED_TIME_TO_RECOVER_STAMINA)
