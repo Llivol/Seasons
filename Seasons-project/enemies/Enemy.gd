@@ -68,4 +68,10 @@ func attack(player):
 
 func die():
 	.die()
+	if randf() < Global.DROP_CHANCE:
+		var power_up_scene = load("res://powerups/HealthUp.tscn") if (randf() < 0.5) else load("res://powerups/StaminaUp.tscn")
+		var power_up = power_up_scene.instance()
+		power_up.set_position(position)
+		get_parent().add_child(power_up)
+
 	queue_free()

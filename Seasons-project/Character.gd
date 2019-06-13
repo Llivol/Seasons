@@ -19,7 +19,8 @@ func _ready():
 func take_damage(value):
 	set_health(_current_health - value)
 
-func set_health(new_value):
+func set_health(value):
+	var new_value = min (value, MAX_HEALTH)
 	_current_health = max(0, new_value)
 	emit_signal("health_changed", _current_health)
 	if _current_health == 0:

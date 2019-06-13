@@ -45,7 +45,7 @@ const AIR_FRICCTION = 0.001
 const STAMINA_UNIT = 10
 const IDLE_TIME_TO_RECOVER_STAMINA = 2
 const EXHAUSTED_TIME_TO_RECOVER_STAMINA = 5
-const RECOVER_SPEED_FROM_IDLE = 5
+const RECOVER_SPEED_FROM_IDLE = 10
 const RECOVER_SPEED_FROM_EXHAUSTED = 2
 
 const SLIDE_STOP_VELOCITY = 0.0 # one pixel/second
@@ -209,7 +209,7 @@ func set_state():
 
 
 func set_stamina(value):
-	var new_value = min (value, 100)
+	var new_value = min (value, MAX_STAMINA)
 	_current_stamina = max(0, new_value)
 	emit_signal("stamina_changed", _current_stamina)
 	if _current_stamina == 0:
@@ -246,9 +246,10 @@ func enter_state() -> void:
 				set_health(MAX_HEALTH)
 				change_state(_prev_state)
 		EXHAUSTED:
-			_recover_speed = RECOVER_SPEED_FROM_IDLE if (_prev_state == IDLE) else RECOVER_SPEED_FROM_EXHAUSTED
 			$RecoverStamina.set_wait_time(EXHAUSTED_TIME_TO_RECOVER_STAMINA)
 			$RecoverStamina.start()
+		RECOVERING:
+			_recover_speed = RECOVER_SPEED_FROM_EXHAUSTED if (_prev_state == EXHAUSTED) else RECOVER_SPEED_FROM_IDLE
 		_:
 			return
 
@@ -330,6 +331,10 @@ func recover_stamina(value):
 	set_stamina(_current_stamina + value)
 
 
+func recover_health(value):
+	set_health(_current_health + value)
+
+
 func process_kinematics(delta):
 	check_on_floor()
 	
@@ -345,7 +350,7 @@ func process_kinematics(delta):
 		JUMP:
 			jump()
 			air(delta)
-			consume_stamina(STAMINA_UNIT * 3)
+			consume_stamina(STAMINA_UNIT * 2)
 		FALL:
 			air(delta)
 		HANG:
@@ -361,7 +366,7 @@ func process_kinematics(delta):
 		EXHAUSTED:
 			_velocity.x *= 0.5
 		RECOVERING:
-			recover_stamina(STAMINA_UNIT * 5 * delta)
+			recover_stamina(_recover_speed * STAMINA_UNIT * delta)
 	
 	_velocity = move_and_slide(_velocity, Vector2.UP)
 

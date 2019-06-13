@@ -29,7 +29,6 @@ func _draw():
 	draw_polygon(points_arc, colors)
 
 
-
 func _physics_process(delta):
 	move(delta, true) if (not _target) else chase(delta, true, ledge_detector.is_near_floor())
 
