@@ -1,7 +1,7 @@
 extends Character
 class_name Enemy
 
-const GRAVITY = 7000
+const GRAVITY = 9500
 const ACCELERATION = 20
 const CHASE_MULTIPLIER = 1.5
 
@@ -27,8 +27,9 @@ func set_stats(max_health, size, max_speed, damage, awareness = 0):
 func move(delta, flying = false):
 	_velocity.x = min(_velocity.x + ACCELERATION, MAX_SPEED) if (_direction == 1) else max(_velocity.x - ACCELERATION, -MAX_SPEED)
 	_velocity.y = GRAVITY * delta if (not flying) else 0
+	if has_node("LedgeDetector") and not flying and not $LedgeDetector.is_near_floor():
+		_velocity.x *= 0.5
 	_velocity = move_and_slide(_velocity)
-	print(is_on_floor())
 
 
 func chase(delta, flying = false, at_max_floor_distance = false): 

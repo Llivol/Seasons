@@ -24,6 +24,7 @@ func _draw():
 func _physics_process(delta):
 	move(delta)
 
+
 func _on_AttackArea_body_entered(body):
 	if body is Player:
 		attack(body)

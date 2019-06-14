@@ -32,6 +32,7 @@ shape = SubResource( 2 )
 script = ExtResource( 4 )
 
 [node name="LedgeDetector" type="Node2D" parent="."]
+editor/display_folded = true
 show_behind_parent = true
 script = ExtResource( 5 )
 
