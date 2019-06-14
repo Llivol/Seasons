@@ -18,7 +18,7 @@ func _ready():
 
 func set_stats(max_health, size, max_speed, damage, awareness = 0):
 	MAX_HEALTH = max_health
-	_current_health = max_health / 2
+	_current_health = max_health
 	SIZE = size
 	MAX_SPEED = max_speed
 	DAMAGE = damage

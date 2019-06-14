@@ -2,6 +2,7 @@ extends Node2D
 
 const ROPE_MAX_DISTANCE = 192
 const ROPE_MIN_DISTANCE = 32
+const HUG_DISTANCE = 16
 const ERROR_MARGIN = 4
 
 var _player_left
@@ -37,6 +38,9 @@ func _update_distance():
 	
 	_player_left.set_on_rope_min_distance(abs(_player_right.global_position.y - _player_left.global_position.y) <= ROPE_MIN_DISTANCE)
 	_player_right.set_on_rope_min_distance(abs(_player_right.global_position.y - _player_left.global_position.y) <= ROPE_MIN_DISTANCE)
+	
+	_player_left.set_on_hug_distance(_distance <= HUG_DISTANCE)
+	_player_right.set_on_hug_distance(_distance <= HUG_DISTANCE)
 	
 	_player_left.set_direction_to_twin((_player_right.global_position - _player_left.global_position).normalized())
 	_player_right.set_direction_to_twin((_player_left.global_position - _player_right.global_position).normalized())

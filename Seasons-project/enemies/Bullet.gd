@@ -42,6 +42,8 @@ func _draw():
 
 func set_direction(direction):
 	_direction = direction
+	randomize()
+	_direction += Vector2(randf() / 10, randf() / 10)
 
 
 func _on_body_entered(body):

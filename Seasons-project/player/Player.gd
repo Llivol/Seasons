@@ -9,22 +9,23 @@ export var default_color_dark = Global.COLOR_DARK_BLUE
 onready var attack_range = $AttackRange
 
 onready var _transitions := {
-	IDLE: [WALK, STOP, JUMP, FALL, HANG, HOVER, PULL, CLIMB, ATTACK, HURT, DIE, EXHAUSTED, RECOVERING],
-	WALK: [IDLE, STOP, JUMP, FALL, HOVER, ATTACK, HURT, DIE, EXHAUSTED],
-	STOP: [IDLE, WALK, JUMP, FALL, HANG, HOVER, PULL, CLIMB, ATTACK, HURT, DIE, EXHAUSTED],
-	JUMP: [IDLE, FALL, HANG, HOVER, ATTACK, HURT, DIE, EXHAUSTED],
-	FALL: [IDLE, WALK, HANG, HOVER, ATTACK, HURT, DIE, EXHAUSTED],
-	HANG: [FALL, CLIMB, HOVER, HURT, DIE, EXHAUSTED],
-	HOVER: [IDLE, WALK, STOP, JUMP, FALL, HANG, PULL, CLIMB, ATTACK, HURT, DIE, EXHAUSTED],
+	IDLE: [WALK, STOP, JUMP, FALL, HANG, HOVER, PULL, CLIMB, ATTACK, HURT, DEAD, EXHAUSTED, RECOVERING],
+	WALK: [IDLE, STOP, JUMP, FALL, HOVER, ATTACK, HURT, DEAD, EXHAUSTED],
+	STOP: [IDLE, WALK, JUMP, FALL, HANG, HOVER, PULL, CLIMB, ATTACK, HURT, DEAD, EXHAUSTED],
+	JUMP: [IDLE, FALL, HANG, HOVER, ATTACK, HURT, DEAD, EXHAUSTED],
+	FALL: [IDLE, WALK, HANG, HOVER, ATTACK, HURT, DEAD, EXHAUSTED],
+	HANG: [FALL, CLIMB, HOVER, HURT, DEAD, EXHAUSTED],
+	HOVER: [IDLE, WALK, STOP, JUMP, FALL, HANG, PULL, CLIMB, ATTACK, HURT, DEAD, EXHAUSTED],
 	CROUCH: [],
 	SNEAK: [],
-	PULL: [IDLE, HOVER, HURT, DIE, EXHAUSTED],
-	CLIMB: [IDLE, FALL, HANG, HOVER, HURT, DIE, EXHAUSTED],
-	ATTACK: [IDLE, WALK, STOP, JUMP, FALL, HOVER, HURT, DIE, EXHAUSTED],
-	HURT: [IDLE, WALK, STOP, JUMP, FALL, HANG, HOVER, PULL, CLIMB, ATTACK, DIE, EXHAUSTED],
-	DIE: [IDLE, WALK, JUMP, FALL, HANG, HOVER, PULL, CLIMB, ATTACK, HURT, DIE, EXHAUSTED],
-	EXHAUSTED: [HOVER, HURT, DIE, RECOVERING], #[IDLE, WALK, STOP, FALL, HOVER],
-	RECOVERING: [WALK, JUMP, HANG, PULL, CLIMB, ATTACK, HURT, DIE],
+	PULL: [IDLE, HOVER, HURT, DEAD, EXHAUSTED],
+	CLIMB: [IDLE, FALL, HANG, HOVER, HURT, DEAD, EXHAUSTED],
+	ATTACK: [IDLE, WALK, STOP, JUMP, FALL, HOVER, HURT, DEAD, EXHAUSTED],
+	HURT: [IDLE, WALK, STOP, JUMP, FALL, HANG, HOVER, PULL, CLIMB, ATTACK, DEAD, EXHAUSTED],
+	DEAD: [REVIVING],
+	EXHAUSTED: [HOVER, HURT, DEAD, RECOVERING], #[IDLE, WALK, STOP, FALL, HOVER],
+	RECOVERING: [WALK, JUMP, HANG, PULL, CLIMB, ATTACK, HURT, DEAD],
+	REVIVING: [WALK, JUMP, HANG, PULL, CLIMB, ATTACK, HURT, DEAD]
 }
 
 const GRAVITY = 4500
@@ -66,9 +67,10 @@ enum {
 	CLIMB		#10
 	ATTACK		#11
 	HURT		#12
-	DIE			#13
+	DEAD			#13
 	EXHAUSTED	#14
 	RECOVERING	#15
+	REVIVING	#16
 }
 
 var SIZE
@@ -93,6 +95,7 @@ var _direction_to_twin
 var _on_air_time = 100
 var _on_rope_max_distance = false
 var _on_rope_min_distance = false
+var _on_hug_distance = false
 var _recover_speed
 
 var _started = false
@@ -115,9 +118,10 @@ var states_strings := {
 	CLIMB: "climb",
 	ATTACK: "attack",
 	HURT: "hurt",
-	DIE: "die",
+	DEAD: "dead",
 	EXHAUSTED: "exhausted",
 	RECOVERING: "recovering",
+	REVIVING: "reviving"
 }
 
 func _init():
@@ -240,8 +244,8 @@ func enter_state() -> void:
 			$InvulnerabilityWindow.start()
 			is_invulnerable = true
 			change_state(_prev_state)
-		DIE:
-			if Cheats.debug:
+		DEAD:
+			if Cheats.unkillable:
 				set_health(MAX_HEALTH)
 				change_state(_prev_state)
 		EXHAUSTED:
@@ -249,6 +253,8 @@ func enter_state() -> void:
 			$RecoverStamina.start()
 		RECOVERING:
 			_recover_speed = RECOVER_SPEED_FROM_EXHAUSTED if (_prev_state == EXHAUSTED) else RECOVER_SPEED_FROM_IDLE
+		REVIVING:
+			recover_health(1)
 		_:
 			return
 
@@ -286,6 +292,10 @@ func set_on_rope_min_distance(on_rope_min_distance):
 	_on_rope_min_distance = on_rope_min_distance
 
 
+func set_on_hug_distance(on_hug_distance):
+	_on_hug_distance = on_hug_distance
+
+
 func set_inputs(name):
 	_input_left = Input.is_action_pressed(str(name, "_left"))
 	_input_right = Input.is_action_pressed(str(name, "_right"))
@@ -317,7 +327,7 @@ func take_damage(value):
 	.take_damage(value)
 	change_state(HURT)
 	if _current_health == 0:
-		change_state(DIE)
+		change_state(DEAD)
 
 
 func consume_stamina(value):
@@ -366,6 +376,9 @@ func process_kinematics(delta):
 			_velocity.x *= 0.5
 		RECOVERING:
 			recover_stamina(_recover_speed * STAMINA_UNIT * delta)
+		DEAD:
+			dead()
+			revive()
 	
 	_velocity = move_and_slide(_velocity, Vector2.UP)
 
@@ -444,6 +457,14 @@ func attack(enemy):
 		.attack(enemy)
 		$AttackCooldown.start()
 		can_attack = false
+
+
+func dead():
+	_velocity.x = 0
+
+func revive():
+	if _on_hug_distance:
+		change_state(REVIVING)
 
 
 func get_angle_in_first_quadrant(angle):
