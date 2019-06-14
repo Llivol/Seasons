@@ -32,6 +32,12 @@ func _process(delta):
 		DAMAGE = _parent.BULLET_DAMAGE
 		default_color = _parent.default_color
 		_init = true
+		update()
+
+
+func _draw():
+	if _init:
+		draw_circle(Vector2.ZERO, SIZE, _parent.default_color)
 
 
 func set_direction(direction):

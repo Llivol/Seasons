@@ -80,7 +80,7 @@ var _input_left
 var _input_right
 var _input_up
 var _input_down
-var _input_JUMP
+var _input_jump
 var _input_action
 
 var _state
@@ -90,7 +90,6 @@ var _current_stamina setget set_stamina, get_stamina
 
 var _direction_to_twin
 
-var _prev_JUMP_pressed = false
 var _on_air_time = 100
 var _on_rope_max_distance = false
 var _on_rope_min_distance = false
@@ -188,7 +187,7 @@ func set_state():
 		else:
 			change_state(ATTACK)
 			
-	elif (_input_JUMP and _input_up) and is_below_twin():
+	elif (_input_jump and _input_up) and is_below_twin():
 		change_state(CLIMB)
 			
 	elif _on_rope_max_distance:
@@ -198,7 +197,7 @@ func set_state():
 		change_state(EXHAUSTED)
 		
 	elif is_on_floor(): 
-		if _input_JUMP:
+		if _input_jump:
 			change_state(JUMP)
 		elif _velocity.x:
 			change_state(WALK)
@@ -292,7 +291,7 @@ func set_inputs(name):
 	_input_right = Input.is_action_pressed(str(name, "_right"))
 	_input_up = Input.is_action_pressed(str(name, "_up"))
 	_input_down = Input.is_action_pressed(str(name, "_down"))
-	_input_JUMP = Input.is_action_pressed(str(name, "_jump"))
+	_input_jump = Input.is_action_pressed(str(name, "_jump"))
 	_input_action = Input.is_action_pressed(str(name, "_action"))
 
 
@@ -307,7 +306,7 @@ func get_input(name):
 		"down":
 			return _input_down
 		"jump":
-			return _input_JUMP
+			return _input_jump
 		"action":
 			return _input_action
 
@@ -465,7 +464,7 @@ func linear_velocity_x(delta):
 	
 	if _input_left:
 		if _velocity.x > 1 and not _state == HOVER:
-			_velocity = Vector2.ZERO
+			_velocity.x = 0
 		if _velocity.x <= WALK_MIN_SPEED and _velocity.x > -WALK_MAX_SPEED:
 			_force.x -= WALK_FORCE
 			if _direction == 1:
@@ -473,7 +472,7 @@ func linear_velocity_x(delta):
 			
 	elif _input_right :
 		if _velocity.x < 0 and not _state == HOVER:
-			_velocity = Vector2.ZERO
+			_velocity.x = 0
 		if _velocity.x >= -WALK_MIN_SPEED and _velocity.x < WALK_MAX_SPEED:
 			_force.x += WALK_FORCE
 			if _direction == -1:

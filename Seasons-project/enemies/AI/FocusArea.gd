@@ -13,6 +13,7 @@ func _ready():
 
 func _process(delta):
 	if _init:
+		update()
 		return
 
 	if _parent.AWARENESS != null:

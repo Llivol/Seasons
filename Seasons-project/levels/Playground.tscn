@@ -474,7 +474,7 @@ custom_colors/font_color = Color( 0.101961, 0.109804, 0.172549, 1 )
 text = "Distance: "
 
 [node name="LandShooter" parent="." instance=ExtResource( 6 )]
-position = Vector2( 64, 480 )
+position = Vector2( 88, 480 )
 
 [node name="LandPatroller" parent="." instance=ExtResource( 7 )]
 position = Vector2( 864, 112 )

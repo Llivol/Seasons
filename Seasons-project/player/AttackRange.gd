@@ -23,6 +23,8 @@ func _process(delta):
 			hide()
 		if _parent.states_strings[_parent.get_state()] == "exhausted":
 			hide()
+		if !Cheats.debug:
+			hide()
 		return
 	
 	if _parent.SIZE != null:

@@ -38,7 +38,7 @@ func flip_direction():
 
 func apply_velocity(velocity):
 	_velocity += velocity
-	move_and_slide(velocity)
+	_velocity = move_and_slide(velocity)
 
 
 func attack(body):

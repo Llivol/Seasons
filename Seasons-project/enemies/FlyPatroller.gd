@@ -46,5 +46,4 @@ func _on_FlyTimer_timeout():
 
 func _on_AttackArea_body_entered(body):
 	if body is Player:
-		print("Fly patroller atacando")
 		attack(body)

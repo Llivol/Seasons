@@ -13,6 +13,10 @@ func _ready():
 
 func _process(delta):
 	if _init:
+		if Cheats.debug:
+			show()
+		if _parent is Enemy and not Cheats.debug:
+			hide()
 		return
 
 	if _parent.MAX_HEALTH != null:
