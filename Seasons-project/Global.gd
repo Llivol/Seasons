@@ -31,3 +31,10 @@ const AWARENESS_AVERAGE = 64
 const AWARENESS_BIG = 128
 
 const DROP_CHANCE = 0.5
+
+var window_size_x
+var window_size_y
+
+func _ready():
+	window_size_x = OS.get_window_size().x
+	window_size_y = OS.get_window_size().y
