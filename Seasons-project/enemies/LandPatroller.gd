@@ -11,8 +11,10 @@ func _ready():
 
 
 func _process(delta):
+
 	if ledge_detector.is_near_ledge() or ledge_detector.is_near_wall():
-		flip_direction()
+		if ledge_detector.is_near_floor():
+			flip_direction()
 
 
 func _draw():
@@ -21,7 +23,6 @@ func _draw():
 
 func _physics_process(delta):
 	move(delta)
-
 
 func _on_AttackArea_body_entered(body):
 	if body is Player:

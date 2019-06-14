@@ -12,7 +12,8 @@ func _ready():
 
 func _process(delta):
 	if ledge_detector.is_near_ledge() or ledge_detector.is_near_wall():
-		flip_direction()
+		if ledge_detector.is_near_floor():
+			flip_direction()
 
 func _draw():
 	draw_circle(Vector2.ZERO, SIZE, default_color)
