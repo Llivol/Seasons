@@ -1,7 +1,7 @@
 [gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://player/PlayerLeft.gd" type="Script" id=1]
-[ext_resource path="res://_src/ph_player1.png" type="Texture" id=2]
+[ext_resource path="res://_src/ph_player_left_v2.png" type="Texture" id=2]
 [ext_resource path="res://player/AttackRange.tscn" type="PackedScene" id=3]
 [ext_resource path="res://UI/HealthBar.tscn" type="PackedScene" id=4]
 [ext_resource path="res://ui/StaminaBar.tscn" type="PackedScene" id=5]
@@ -14,8 +14,7 @@
 [node name="PlayerLeft" type="KinematicBody2D"]
 script = ExtResource( 1 )
 
-[node name="SpriteRed" type="Sprite" parent="."]
-visible = false
+[node name="Sprite" type="Sprite" parent="."]
 texture = ExtResource( 2 )
 
 [node name="Collision" type="CollisionShape2D" parent="."]
@@ -25,10 +24,12 @@ one_way_collision = true
 [node name="AttackRange" parent="." instance=ExtResource( 3 )]
 
 [node name="HealthBar" parent="." instance=ExtResource( 4 )]
-margin_top = -32.0
-margin_bottom = -24.0
+margin_top = -40.0
+margin_bottom = -32.0
 
 [node name="StaminaBar" parent="." instance=ExtResource( 5 )]
+margin_top = -32.0
+margin_bottom = -24.0
 
 [node name="AttackCooldown" type="Timer" parent="."]
 wait_time = 10.0
@@ -39,7 +40,7 @@ script = ExtResource( 7 )
 
 [node name="RecoverStamina" type="Timer" parent="."]
 script = ExtResource( 8 )
-[connection signal="flip" from="." to="HealthBar" method="_on_flip"]
 [connection signal="flip" from="." to="StaminaBar" method="_on_flip"]
+[connection signal="flip" from="." to="HealthBar" method="_on_flip"]
 [connection signal="health_changed" from="." to="HealthBar" method="_on_health_changed"]
 [connection signal="stamina_changed" from="." to="StaminaBar" method="_on_stamina_changed"]

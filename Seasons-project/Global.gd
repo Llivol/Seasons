@@ -16,6 +16,7 @@ const HEALTH_HIGH = 4
 
 const SIZE_SMALL = 8
 const SIZE_AVERAGE = 16
+const SIZE_PLAYER = 12
 const SIZE_BIG = 32
 
 const SPEED_SLOW = 50

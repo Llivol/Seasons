@@ -142,18 +142,21 @@ func _process(delta):
 		return
 
 	if SIZE != null:
-		$Collision.shape.set_extents(Vector2(SIZE, SIZE))
+		$Collision.shape.set_extents(Vector2($Sprite.texture.get_size().x / 2, $Sprite.texture.get_size().y / 2))
 		_started = true
 		update()
 
 
 func _draw():
+	pass
+	"""
 	var shape: = $Collision
 	var extents: Vector2 = shape.shape.extents * 2.0
 	draw_rect(Rect2(shape.position - extents / 2.0, extents), default_color_dark)
 	extents *= 0.8
 	draw_rect(Rect2(shape.position - extents / 2.0, extents), default_color)
 	draw_circle(shape.position + Vector2(SIZE/2, -SIZE/2), SIZE/8, default_color_dark)
+	"""
 
 
 func set_stats(size, max_health = 6, max_stamina = 100, damage = 1, attack_cd = 0.5, invulnerability_time = 1):
