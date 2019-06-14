@@ -10,8 +10,10 @@ func _ready():
 	_parent = get_parent()
 	_floor_detector = $FloorDetector
 	_floor_detector.set_enabled(true)
+	_floor_detector.add_exception(_parent)
 	_wall_detector = $WallDetector
 	_wall_detector.set_enabled(true)
+	_wall_detector.add_exception(_parent)
 	_init = false
 	set_draw_behind_parent(true)
 
