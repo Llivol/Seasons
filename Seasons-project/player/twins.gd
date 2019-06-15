@@ -1,9 +1,9 @@
 extends Node2D
 
-const ROPE_MAX_DISTANCE = 192
-const ROPE_MIN_DISTANCE = 32
-const HUG_DISTANCE = 16
-const ERROR_MARGIN = 4
+const ROPE_MAX_DISTANCE = Global.UNIT * 12
+const ROPE_MIN_DISTANCE = Global.UNIT * 2
+const HUG_DISTANCE = Global.UNIT
+const ERROR_MARGIN = Global.UNIT / 4
 
 var _player_left
 var _player_right

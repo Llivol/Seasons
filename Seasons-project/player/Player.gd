@@ -7,27 +7,47 @@ export var default_color = Global.COLOR_BLUE
 export var default_color_dark = Global.COLOR_DARK_BLUE
 
 onready var attack_range = $AttackRange
-
+"""
 onready var _transitions := {
-	IDLE: [WALK, STOP, JUMP, FALL, HANG, HOVER, PULL, CLIMB, ATTACK, HURT, DEAD, EXHAUSTED, RECOVERING],
-	WALK: [IDLE, STOP, JUMP, FALL, HOVER, ATTACK, HURT, DEAD, EXHAUSTED],
-	STOP: [IDLE, WALK, JUMP, FALL, HANG, HOVER, PULL, CLIMB, ATTACK, HURT, DEAD, EXHAUSTED],
-	JUMP: [IDLE, FALL, HANG, HOVER, ATTACK, HURT, DEAD, EXHAUSTED],
-	FALL: [IDLE, WALK, HANG, HOVER, ATTACK, HURT, DEAD, EXHAUSTED],
-	HANG: [FALL, CLIMB, HOVER, HURT, DEAD, EXHAUSTED],
-	HOVER: [IDLE, WALK, STOP, JUMP, FALL, HANG, PULL, CLIMB, ATTACK, HURT, DEAD, EXHAUSTED],
+	IDLE: [WALK, STOP, JUMP, AIR, HANG, HOVER, PULL, CLIMB, ATTACK, HURT, DEAD, EXHAUST, RECOVER],
+	WALK: [IDLE, STOP, JUMP, AIR, HOVER, ATTACK, HURT, DEAD, EXHAUST],
+	STOP: [IDLE, WALK, JUMP, AIR, HANG, HOVER, PULL, CLIMB, ATTACK, HURT, DEAD, EXHAUST],
+	JUMP: [IDLE, AIR, HANG, HOVER, ATTACK, HURT, DEAD, EXHAUST],
+	AIR: [IDLE, WALK, HANG, HOVER, ATTACK, HURT, DEAD, EXHAUST],
+	HANG: [AIR, CLIMB, HOVER, HURT, DEAD, EXHAUST],
+	HOVER: [IDLE, WALK, STOP, JUMP, AIR, HANG, PULL, CLIMB, ATTACK, HURT, DEAD, EXHAUST],
 	CROUCH: [],
 	SNEAK: [],
-	PULL: [IDLE, HOVER, HURT, DEAD, EXHAUSTED],
-	CLIMB: [IDLE, FALL, HANG, HOVER, HURT, DEAD, EXHAUSTED],
-	ATTACK: [IDLE, WALK, STOP, JUMP, FALL, HOVER, HURT, DEAD, EXHAUSTED],
-	HURT: [IDLE, WALK, STOP, JUMP, FALL, HANG, HOVER, PULL, CLIMB, ATTACK, DEAD, EXHAUSTED],
-	DEAD: [REVIVING],
-	EXHAUSTED: [HOVER, HURT, DEAD, RECOVERING], #[IDLE, WALK, STOP, FALL, HOVER],
-	RECOVERING: [WALK, JUMP, HANG, PULL, CLIMB, ATTACK, HURT, DEAD],
-	REVIVING: [WALK, JUMP, HANG, PULL, CLIMB, ATTACK, HURT, DEAD]
+	PULL: [IDLE, HOVER, HURT, DEAD, EXHAUST],
+	CLIMB: [IDLE, AIR, HANG, HOVER, HURT, DEAD, EXHAUST],
+	ATTACK: [IDLE, WALK, STOP, JUMP, AIR, HOVER, HURT, DEAD, EXHAUST],
+	HURT: [IDLE, WALK, STOP, JUMP, AIR, HANG, HOVER, PULL, CLIMB, ATTACK, DEAD, EXHAUST],
+	DEAD: [REVIVE],
+	EXHAUST: [HOVER, HURT, DEAD, RECOVER], #[IDLE, WALK, STOP, AIR, HOVER],
+	RECOVER: [WALK, JUMP, HANG, PULL, CLIMB, ATTACK, HURT, DEAD],
+	REVIVE: [WALK, JUMP, HANG, PULL, CLIMB, ATTACK, HURT, DEAD]
 }
+"""
 
+onready var _transitions := {
+	AIR: [ATTACK, HANG, HOVER, HURT, IDLE, WALK],
+	ATTACK: [AIR, CROUCH, EXHAUST, HOVER, IDLE, JUMP, SNEAK, WALK],
+	CLIMB: [AIR, EXHAUST, HANG, HOVER, HURT, IDLE],
+	CROUCH: [],
+	DEAD: [REVIVE],
+	EXHAUST: [HOVER, HURT, RECOVER],
+	HANG: [AIR, CLIMB, EXHAUST, HOVER],
+	HOVER: [AIR, ATTACK, CLIMB, CROUCH, HANG, HURT, IDLE, JUMP, PULL, RECOVER, WALK],
+	HURT: [AIR, CLIMB, CROUCH, DEAD, EXHAUST, HANG, HOVER, HURT, IDLE, JUMP, PULL, SNEAK, WALK],
+	IDLE: [AIR, ATTACK, CLIMB, CROUCH, HANG, HOVER, HURT, JUMP, PULL, RECOVER, SNEAK, WALK],
+	JUMP: [AIR, ATTACK, CLIMB, EXHAUST, HANG, HOVER, HURT, IDLE],
+	PULL: [AIR, CROUCH, EXHAUST, HOVER, HURT, IDLE],
+	RECOVER: [AIR, ATTACK, CLIMB, CROUCH, HOVER, HURT, JUMP, PULL, STOP, WALK],
+	REVIVE: [IDLE],
+	SNEAK: [],
+	STOP: [AIR, IDLE, WALK, JUMP, HANG, HOVER, PULL, CLIMB, ATTACK, HURT, DEAD, EXHAUST],
+	WALK: [AIR, ATTACK, CLIMB, HOVER, HURT, IDLE, JUMP, PULL, STOP],
+}
 const GRAVITY = 4500
 
 const FLOOR_ANGLE_TOLERANCE = 40
@@ -44,33 +64,33 @@ const CLIMB_SPEED  = 200
 const RECOVER_FORCE = 50
 const AIR_FRICCTION = 0.001
 const STAMINA_UNIT = 10
-const IDLE_TIME_TO_RECOVER_STAMINA = 2
-const EXHAUSTED_TIME_TO_RECOVER_STAMINA = 5
+const IDLE_TIME_TO_RECOVER_STAMINA = 1
+const EXHAUSTED_TIME_TO_RECOVER_STAMINA = 3
 const RECOVER_SPEED_FROM_IDLE = 10
-const RECOVER_SPEED_FROM_EXHAUSTED = 2
+const RECOVER_SPEED_FROM_EXHAUSTED = 2.5
 
 const SLIDE_STOP_VELOCITY = 0.0 # one pixel/second
 const SLIDE_STOP_MIN_TRAVEL = 0.0 # one pixel
 
 
 enum {
-	IDLE,		#0 	
-	WALK,		#1
-	STOP		#2
-	JUMP		#3
-	FALL		#4
-	HANG		#5
-	HOVER		#6
-	CROUCH		#7
-	SNEAK		#8
-	PULL		#9
-	CLIMB		#10
-	ATTACK		#11
-	HURT		#12
-	DEAD			#13
-	EXHAUSTED	#14
-	RECOVERING	#15
-	REVIVING	#16
+	AIR,
+	ATTACK, 
+	CLIMB,
+	CROUCH, 
+	DEAD,
+	EXHAUST,
+	HANG, 
+	HOVER, 
+	HURT, 
+	IDLE, 
+	JUMP, 
+	PULL, 
+	RECOVER, 
+	REVIVE, 
+	SNEAK, 
+	STOP, 
+	WALK, 
 }
 
 var SIZE
@@ -105,24 +125,27 @@ var is_invulnerable = false
 var is_recovering = false
 
 var states_strings := {
-	IDLE: "idle",
-	WALK: "walk",
-	STOP: "stop",
-	JUMP: "jump",
-	FALL: "fall",
-	HANG: "hang",
-	HOVER: "hover",
-	CROUCH: "crouch",
-	SNEAK: "sneak",
-	PULL: "pull",
+	AIR: "air",
+	ATTACK: "attack", 
 	CLIMB: "climb",
-	ATTACK: "attack",
-	HURT: "hurt",
+	CROUCH: "crouch", 
 	DEAD: "dead",
-	EXHAUSTED: "exhausted",
-	RECOVERING: "recovering",
-	REVIVING: "reviving"
+	EXHAUST: "exhaust",
+	HANG: "hang", 
+	HOVER: "hover", 
+	HURT: "hurt", 
+	IDLE: "idle", 
+	JUMP: "jump", 
+	PULL: "pull", 
+	RECOVER: "recover", 
+	REVIVE: "revive", 
+	SNEAK: "sneak", 
+	STOP: "stop", 
+	WALK: "walk", 
 }
+
+
+""" PRIVATE """
 
 func _init():
 	_state = IDLE
@@ -136,6 +159,7 @@ func _ready():
 	$AttackCooldown.connect("timeout", self, "_on_AttackCooldown_timeout")
 	$InvulnerabilityWindow.connect("timeout", self, "_on_InvulnerabilityWindow_timeout")
 	$RecoverStamina.connect("timeout", self, "_on_RecoverStamina_timeout")
+
 
 func _process(delta):
 	if _started:
@@ -159,6 +183,8 @@ func _draw():
 	"""
 
 
+""" GETTERS & SETTERS """
+
 func set_stats(size, max_health = 6, max_stamina = 100, damage = 1, attack_cd = 0.5, invulnerability_time = 1):
 	SIZE = size
 	MAX_HEALTH = max_health
@@ -175,57 +201,6 @@ func set_colors(default_color, default_color_dark):
 	self.default_color_dark = default_color_dark
 
 
-func set_force_gravity():
-	_force = Vector2(0, GRAVITY)
-
-
-func get_velocity():
-	return _velocity
-
-
-func get_state():
-	return _state
-
-
-func set_state():
-	if _input_action:
-		if not is_on_floor() and not (_input_right or _input_left):
-			change_state(HANG)
-		else:
-			change_state(ATTACK)
-			
-	elif (_input_jump and _input_up) and is_below_twin():
-		change_state(CLIMB)
-			
-	elif _on_rope_max_distance:
-		change_state(HOVER)
-	
-	elif _current_stamina <= 0:
-		change_state(EXHAUSTED)
-		
-	elif is_on_floor(): 
-		if _input_jump:
-			change_state(JUMP)
-		elif _velocity.x:
-			change_state(WALK)
-		else:
-			change_state(IDLE)
-	else:
-			change_state(FALL)
-
-
-func set_stamina(value):
-	var new_value = min (value, MAX_STAMINA)
-	_current_stamina = max(0, new_value)
-	emit_signal("stamina_changed", _current_stamina)
-	if _current_stamina == 0:
-		change_state(EXHAUSTED)
-
-
-func get_stamina():
-	return _current_stamina
-
-
 func change_state(target_state: int) -> void:
 	if not target_state in _transitions[_state]:
 		return
@@ -237,66 +212,121 @@ func change_state(target_state: int) -> void:
 
 func enter_state() -> void:
 	match _state:
-		IDLE:
-			$RecoverStamina.set_wait_time(IDLE_TIME_TO_RECOVER_STAMINA)
-			$RecoverStamina.start()
+
+		AIR:
+			return
+
 		ATTACK:
-			attack(attack_range.get_enemy_in_range())
+			process_attack(attack_range.get_enemy_in_range())
+			consume_stamina(STAMINA_UNIT / 2)
 			change_state(_prev_state)
-		HURT:
-			$InvulnerabilityWindow.start()
-			is_invulnerable = true
-			change_state(_prev_state)
+
+		CLIMB: 
+			return
+
 		DEAD:
 			if Cheats.unkillable:
 				set_health(MAX_HEALTH)
 				change_state(_prev_state)
-		EXHAUSTED:
+
+		EXHAUST:
 			$RecoverStamina.set_wait_time(EXHAUSTED_TIME_TO_RECOVER_STAMINA)
 			$RecoverStamina.start()
-		RECOVERING:
-			_recover_speed = RECOVER_SPEED_FROM_EXHAUSTED if (_prev_state == EXHAUSTED) else RECOVER_SPEED_FROM_IDLE
-		REVIVING:
+
+		HANG: 
+			return
+
+		HOVER:
+			return
+
+		HURT:
+			$InvulnerabilityWindow.start()
+			is_invulnerable = true
+			change_state(_prev_state)
+
+		IDLE:
+			$RecoverStamina.set_wait_time(IDLE_TIME_TO_RECOVER_STAMINA)
+			$RecoverStamina.start()
+
+		JUMP: 
+			process_jump()
+			consume_stamina(STAMINA_UNIT * 2)
+
+		PULL:
+			return
+
+		RECOVER:
+			_recover_speed = RECOVER_SPEED_FROM_EXHAUSTED if (_prev_state == EXHAUST) else RECOVER_SPEED_FROM_IDLE
+
+		REVIVE:
 			recover_health(1)
+
+		WALK:
+			return
+
 		_:
 			return
 
 
 func leave_state() -> void:
 	match _state:
+
+		AIR:
+			return
+
+		ATTACK:
+			process_attack(attack_range.get_enemy_in_range())
+			consume_stamina(STAMINA_UNIT / 2)
+			change_state(_prev_state)
+
+		CLIMB: 
+			return
+
+		DEAD:
+			if Cheats.unkillable:
+				set_health(MAX_HEALTH)
+				change_state(_prev_state)
+
+		EXHAUST:
+			$RecoverStamina.set_wait_time(EXHAUSTED_TIME_TO_RECOVER_STAMINA)
+			$RecoverStamina.start()
+
+		HANG: 
+			return
+
+		HOVER:
+			return
+
+		HURT:
+			$InvulnerabilityWindow.start()
+			is_invulnerable = true
+			change_state(_prev_state)
+
 		IDLE:
 			$RecoverStamina.stop()
 			is_recovering = false
+
+		JUMP: 
+			return
+
+		PULL:
+			return
+
+		RECOVER:
+			_recover_speed = RECOVER_SPEED_FROM_EXHAUSTED if (_prev_state == EXHAUST) else RECOVER_SPEED_FROM_IDLE
+
+		REVIVE:
+			recover_health(1)
+
+		WALK:
+			return
+
 		_:
 			return
 
 
-func get_force():
-	return _force
-
-
-func set_force(force):
-	_force = force
-
-
-func add_force(force):
-	_force += force
-
-
-func set_direction_to_twin(direction_to_twin):
-	_direction_to_twin = direction_to_twin
-
-
-func set_on_rope_max_distance(on_rope_max_distance):
-	_on_rope_max_distance = on_rope_max_distance
-
-
-func set_on_rope_min_distance(on_rope_min_distance):
-	_on_rope_min_distance = on_rope_min_distance
-
-
-func set_on_hug_distance(on_hug_distance):
-	_on_hug_distance = on_hug_distance
+func get_state():
+	return _state
 
 
 func set_inputs(name):
@@ -324,6 +354,53 @@ func get_input(name):
 			return _input_action
 
 
+func get_force():
+	return _force
+
+
+func set_force(force):
+	_force = force
+
+
+func add_force(force):
+	_force += force
+
+
+func set_force_gravity():
+	_force = Vector2(0, GRAVITY)
+
+
+func get_velocity():
+	return _velocity
+
+
+func set_state():
+	if _input_action:
+		if not is_on_floor() and not (_input_right or _input_left):
+			change_state(HANG)
+		else:
+			change_state(ATTACK)
+			
+	elif (_input_jump and _input_up) and is_below_twin():
+		change_state(CLIMB)
+			
+	elif _on_rope_max_distance:
+		change_state(HOVER)
+	
+	elif _current_stamina <= 0:
+		change_state(EXHAUST)
+		
+	elif is_on_floor(): 
+		if _input_jump:
+			change_state(JUMP)
+		elif _velocity.x:
+			change_state(WALK)
+		else:
+			change_state(IDLE)
+	else:
+			change_state(AIR)
+
+
 func take_damage(value):
 	if is_invulnerable or Cheats.infinite_health: 
 		return
@@ -331,6 +408,22 @@ func take_damage(value):
 	change_state(HURT)
 	if _current_health == 0:
 		change_state(DEAD)
+
+
+func recover_health(value):
+	set_health(_current_health + value)
+
+
+func get_stamina():
+	return _current_stamina
+
+
+func set_stamina(value):
+	var new_value = min (value, MAX_STAMINA)
+	_current_stamina = max(0, new_value)
+	emit_signal("stamina_changed", _current_stamina)
+	if _current_stamina == 0:
+		change_state(EXHAUST)
 
 
 func consume_stamina(value):
@@ -343,9 +436,23 @@ func recover_stamina(value):
 	set_stamina(_current_stamina + value)
 
 
-func recover_health(value):
-	set_health(_current_health + value)
+func set_direction_to_twin(direction_to_twin):
+	_direction_to_twin = direction_to_twin
 
+
+func set_on_rope_max_distance(on_rope_max_distance):
+	_on_rope_max_distance = on_rope_max_distance
+
+
+func set_on_rope_min_distance(on_rope_min_distance):
+	_on_rope_min_distance = on_rope_min_distance
+
+
+func set_on_hug_distance(on_hug_distance):
+	_on_hug_distance = on_hug_distance
+
+
+""" KINEMATICS """
 
 func process_kinematics(delta):
 	check_on_floor()
@@ -359,61 +466,105 @@ func process_kinematics(delta):
 	set_state()
 	
 	match _state:
-		JUMP:
-			jump()
-			air(delta)
-			consume_stamina(STAMINA_UNIT * 2)
-		FALL:
-			air(delta)
-		HANG:
-			hang()
-			consume_stamina(STAMINA_UNIT * delta)
-		HOVER:
-			swing()
-		PULL:
-			pull()
+
+		AIR:
+			process_air(delta)
+
+		ATTACK:
+			return
+
 		CLIMB:
-			climb()
+			process_climb(delta)
 			consume_stamina(STAMINA_UNIT / 2 * delta)
-		EXHAUSTED:
-			_velocity.x *= 0.5
-		RECOVERING:
-			recover_stamina(_recover_speed * STAMINA_UNIT * delta)
+
 		DEAD:
-			dead()
-			revive()
+			process_dead()
+
+		EXHAUST:
+			_velocity.x *= 0.5
+			process_exhaust()
+
+		HANG:
+			process_hang()
+			consume_stamina(STAMINA_UNIT * delta)
+
+		HOVER:
+			process_hover()
+
+		HURT:
+			return
+
+		RECOVER:
+			recover_stamina(_recover_speed * STAMINA_UNIT * delta)
+
+		PULL:
+			process_pull()
 	
 	_velocity = move_and_slide(_velocity, Vector2.UP)
 
 
-func air(delta):
-	_velocity.x *= 0.9
+func linear_velocity_x(delta):
+	
+	if _input_left:
+		if _velocity.x > 1 and not _state == HOVER:
+			_velocity.x = 0
+		if _velocity.x <= WALK_MIN_SPEED and _velocity.x > -WALK_MAX_SPEED:
+			_force.x -= WALK_FORCE
+			if _direction == 1:
+				flip_direction()
+			
+	elif _input_right :
+		if _velocity.x < 0 and not _state == HOVER:
+			_velocity.x = 0
+		if _velocity.x >= -WALK_MIN_SPEED and _velocity.x < WALK_MAX_SPEED:
+			_force.x += WALK_FORCE
+			if _direction == -1:
+				flip_direction()
+	
+	elif _state == HOVER or is_on_floor(): 
+		var vsign = sign(_velocity.x)
+		var vlen = abs(_velocity.x)
+
+		vlen -= STOP_FORCE * delta if (not _state == HOVER or is_on_floor()) else STOP_HOVER_FORCE * delta 
+		if vlen < 0:
+			vlen = 0
+
+		_velocity.x = vlen * vsign
+
+
+func linear_velocity_y(delta):
+	set_force_gravity()
+
+
+func process_air(delta):
+	if _state == AIR:
+		_velocity.x *= 0.9
 	_on_air_time += delta
 
 
-func jump():
+func process_jump():
 	if _on_air_time < JUMP_MAX_AIRBORNE_TIME:
 		_velocity.y = -JUMP_SPEED
 
 
-func pull():
+func process_pull():
 	pass
 
 
-func climb():
+func process_climb(delta):
 	var v_tension = _direction_to_twin.normalized() * CLIMB_SPEED
-	
 	
 	_velocity.x = v_tension.x * abs(cos(_direction_to_twin.angle()))
 	_velocity.y = v_tension.y * -sin(_direction_to_twin.angle())
+	_velocity.y += GRAVITY * delta
 
 
-func hang():
+func process_hang():
 	_velocity.x = 0
 	_velocity.y = 0
 
 
-func swing():
+func process_hover():
 	
 	# 1: Desc. velocity en tangent i tension
 	var angle_between_rope_and_velocity = _direction_to_twin.angle_to(_velocity)
@@ -455,20 +606,27 @@ func swing():
 	_velocity.y = v_tension.y + v_tangent.y
 
 
-func attack(enemy):
+func process_attack(enemy):
 	if (enemy and can_attack):
-		.attack(enemy)
+		.process_attack(enemy)
 		$AttackCooldown.start()
 		can_attack = false
 
 
-func dead():
+func process_exhaust():
+	if _input_left or _input_right or _input_jump or _input_action:
+		$RecoverStamina.stop()
+		$RecoverStamina.set_wait_time(EXHAUSTED_TIME_TO_RECOVER_STAMINA)
+		$RecoverStamina.start()
+
+
+func process_dead():
 	_velocity.x = 0
-
-func revive():
 	if _on_hug_distance:
-		change_state(REVIVING)
+		change_state(REVIVE)
 
+
+""" AUXILIAR """
 
 func get_angle_in_first_quadrant(angle):
 	while angle > PI/2:
@@ -484,39 +642,6 @@ func check_on_floor():
 		_on_air_time = 0
 
 
-func linear_velocity_x(delta):
-	
-	if _input_left:
-		if _velocity.x > 1 and not _state == HOVER:
-			_velocity.x = 0
-		if _velocity.x <= WALK_MIN_SPEED and _velocity.x > -WALK_MAX_SPEED:
-			_force.x -= WALK_FORCE
-			if _direction == 1:
-				flip_direction()
-			
-	elif _input_right :
-		if _velocity.x < 0 and not _state == HOVER:
-			_velocity.x = 0
-		if _velocity.x >= -WALK_MIN_SPEED and _velocity.x < WALK_MAX_SPEED:
-			_force.x += WALK_FORCE
-			if _direction == -1:
-				flip_direction()
-	
-	elif _state == HOVER or is_on_floor(): 
-		var vsign = sign(_velocity.x)
-		var vlen = abs(_velocity.x)
-
-		vlen -= STOP_FORCE * delta if (not _state == HOVER or is_on_floor()) else STOP_HOVER_FORCE * delta 
-		if vlen < 0:
-			vlen = 0
-
-		_velocity.x = vlen * vsign
-
-
-func linear_velocity_y(delta):
-	set_force_gravity()
-
-
 func is_above_twin():
 	return sin(_direction_to_twin.angle()) > 0.1 and not _on_rope_min_distance
 
@@ -525,6 +650,8 @@ func is_below_twin():
 	var parent = get_parent()
 	return sin(_direction_to_twin.angle()) < -0.1 and not _on_rope_min_distance
 
+
+""" SIGNALS """
 
 func _on_AttackCooldown_timeout():
 	can_attack = true
@@ -537,5 +664,5 @@ func _on_InvulnerabilityWindow_timeout():
 
 
 func _on_RecoverStamina_timeout():
-	change_state(RECOVERING)
+	change_state(RECOVER)
 	$RecoverStamina.stop()
