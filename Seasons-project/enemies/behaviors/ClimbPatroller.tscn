@@ -1,11 +1,12 @@
 [gd_scene load_steps=9 format=2]
 
-[ext_resource path="res://enemies/ClimbPatroller.gd" type="Script" id=1]
+[ext_resource path="res://enemies/behaviors/ClimbPatroller.gd" type="Script" id=1]
 [ext_resource path="res://_src/ph_climb_patroller.png" type="Texture" id=2]
 [ext_resource path="res://enemies/AI/AttackArea.gd" type="Script" id=3]
 [ext_resource path="res://enemies/AI/DynamicCollisionShape.gd" type="Script" id=4]
 [ext_resource path="res://ui/HealthBar.tscn" type="PackedScene" id=5]
 [ext_resource path="res://enemies/AI/Waypoints.gd" type="Script" id=6]
+
 
 [sub_resource type="CircleShape2D" id=1]
 

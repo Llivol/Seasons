@@ -3,7 +3,7 @@ class_name LandShooter
 
 export var default_color = Global.COLOR_RED
 
-onready var bullet_scene = preload("res://enemies/Bullet.tscn")
+onready var bullet_scene = preload("res://enemies/AI/Bullet.tscn")
 
 var ATTACK_CD
 var BULLET_SPEED
