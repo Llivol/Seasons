@@ -31,12 +31,14 @@ func _draw():
 
 
 func _physics_process(delta):
-	move(delta) if (not _target) else shoot()
+	move(delta)
+	shoot()
 
 func shoot():
 	if _target and can_attack:
+		flip_direction()
 		var bullet = bullet_scene.instance()
-		bullet.set_direction((_target.global_position - global_position).normalized())
+		bullet.set_direction((_target.global_position - global_position).normalized() * _direction) 
 		add_child(bullet)
 		$AttackCooldown.start()
 		can_attack = false
@@ -59,10 +61,3 @@ func _on_FocusArea_body_exited(body):
 func _on_AttackCooldown_timeout():
 	can_attack = true
 	$AttackCooldown.stop()
-
-
-""" Override"""
-func flip_direction(is_shooting = false):
-	if is_shooting:
-		return
-	.flip_direction()

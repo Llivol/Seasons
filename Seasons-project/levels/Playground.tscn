@@ -1,17 +1,11 @@
-[gd_scene load_steps=56 format=2]
+[gd_scene load_steps=50 format=2]
 
 [ext_resource path="res://levels/Playground.gd" type="Script" id=1]
 [ext_resource path="res://_src/ph_wallv2.png" type="Texture" id=2]
 [ext_resource path="res://_src/ph_bg.png" type="Texture" id=3]
 [ext_resource path="res://_src/ph_wall_single_way.png" type="Texture" id=4]
 [ext_resource path="res://player/Twins.tscn" type="PackedScene" id=5]
-[ext_resource path="res://enemies/behaviors/LandShooter.tscn" type="PackedScene" id=6]
-[ext_resource path="res://enemies/behaviors/LandPatroller.tscn" type="PackedScene" id=7]
-[ext_resource path="res://enemies/behaviors/LandChaser.tscn" type="PackedScene" id=8]
-[ext_resource path="res://enemies/behaviors/FlyPatroller.tscn" type="PackedScene" id=9]
-[ext_resource path="res://enemies/behaviors/FlyChaser.tscn" type="PackedScene" id=10]
-[ext_resource path="res://enemies/behaviors/ClimbPatroller.tscn" type="PackedScene" id=11]
-[ext_resource path="res://enemies/behaviors/ClimbChaser.tscn" type="PackedScene" id=12]
+[ext_resource path="res://enemies/Yeti.tscn" type="PackedScene" id=6]
 
 [sub_resource type="ConvexPolygonShape2D" id=1]
 points = PoolVector2Array( 0, 0, 32, 0, 32, 32, 0, 32 )
@@ -473,25 +467,7 @@ margin_bottom = 72.0
 custom_colors/font_color = Color( 0.101961, 0.109804, 0.172549, 1 )
 text = "Distance: "
 
-[node name="LandShooter" parent="." instance=ExtResource( 6 )]
-position = Vector2( 88, 480 )
-
-[node name="LandPatroller" parent="." instance=ExtResource( 7 )]
-position = Vector2( 368, 120 )
-
-[node name="LandChaser" parent="." instance=ExtResource( 8 )]
-position = Vector2( 864, 112 )
-
-[node name="FlyPatroller" parent="." instance=ExtResource( 9 )]
-position = Vector2( 80, 112 )
-
-[node name="FlyChaser" parent="." instance=ExtResource( 10 )]
-position = Vector2( 944, 224 )
-
-[node name="ClimbPatroller" parent="." instance=ExtResource( 11 )]
-position = Vector2( 400, 352 )
-
-[node name="ClimbChaser" parent="." instance=ExtResource( 12 )]
-position = Vector2( 336, 688 )
+[node name="Yeti" parent="." instance=ExtResource( 6 )]
+position = Vector2( 368, 528 )
 
 [editable path="Twins"]
