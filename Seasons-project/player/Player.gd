@@ -185,7 +185,7 @@ func _draw():
 
 """ GETTERS & SETTERS """
 
-func set_stats(size, max_health = 6, max_stamina = 100, damage = 1, attack_cd = 0.5, invulnerability_time = 1):
+func set_stats(size, max_health = 6, max_stamina = 100, damage = 2, attack_cd = 0.5, invulnerability_time = 1):
 	SIZE = size
 	MAX_HEALTH = max_health
 	_current_health = max_health
@@ -217,7 +217,7 @@ func enter_state() -> void:
 			return
 
 		ATTACK:
-			process_attack(attack_range.get_enemy_in_range())
+			attack(attack_range.get_enemy_in_range())
 			consume_stamina(STAMINA_UNIT / 2)
 			change_state(_prev_state)
 
@@ -275,7 +275,7 @@ func leave_state() -> void:
 			return
 
 		ATTACK:
-			process_attack(attack_range.get_enemy_in_range())
+			attack(attack_range.get_enemy_in_range())
 			consume_stamina(STAMINA_UNIT / 2)
 			change_state(_prev_state)
 
@@ -606,9 +606,9 @@ func process_hover():
 	_velocity.y = v_tension.y + v_tangent.y
 
 
-func process_attack(enemy):
+func attack(enemy):
 	if (enemy and can_attack):
-		.process_attack(enemy)
+		.attack(enemy)
 		$AttackCooldown.start()
 		can_attack = false
 

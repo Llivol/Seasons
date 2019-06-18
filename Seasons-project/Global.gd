@@ -10,9 +10,10 @@ const COLOR_LIGHT_GREEN = Color("#a7f070")
 const COLOR_GREEN = Color("#38b764")
 const COLOR_DARK_GREEN = Color("#257179")
 
-const HEALTH_LOW = 1
-const HEALTH_AVERAGE = 2
-const HEALTH_HIGH = 4
+const HEALTH_LOW = 2
+const HEALTH_AVERAGE = 4
+const HEALTH_PLAYER = 6
+const HEALTH_HIGH = 8
 
 const SIZE_SMALL = 8
 const SIZE_AVERAGE = 16
@@ -27,7 +28,7 @@ const DAMAGE_LOW = 1
 const DAMAGE_AVERAGE = 2
 const DAMAGE_HIGH = 3
 
-const AWARENESS_SMALL = 48
+const AWARENESS_SMALL = 32
 const AWARENESS_AVERAGE = 64
 const AWARENESS_BIG = 128
 
