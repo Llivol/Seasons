@@ -29,7 +29,12 @@ func set_health(value):
 func get_health():
 	return _current_health
 
-func flip_direction(is_shooting = false):
+
+func get_sprite():
+	return $Sprite
+
+
+func flip_direction():
 	_direction = 1 if (_direction == -1) else -1
 	_velocity = Vector2.ZERO
 	self.scale.x *= -1
@@ -42,6 +47,8 @@ func apply_velocity(velocity):
 
 
 func attack(body):
+	var knockback = KNOCKBACK_MULTIPLIER
+	var damage = DAMAGE
 	body.apply_velocity((body.global_position - global_position).normalized() * KNOCKBACK_MULTIPLIER * DAMAGE)
 	body.take_damage(DAMAGE)
 

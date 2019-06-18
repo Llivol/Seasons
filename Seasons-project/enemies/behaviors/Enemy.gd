@@ -49,7 +49,7 @@ func chase(delta, flying = false, at_max_floor_distance = false):
 	_velocity = move_and_slide(_velocity)
 
 """ Override """
-func flip_direction(is_shooting = false):
+func flip_direction():
 	if _target == null:
 		.flip_direction()
 	else:

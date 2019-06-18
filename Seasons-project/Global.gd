@@ -10,27 +10,27 @@ const COLOR_LIGHT_GREEN = Color("#a7f070")
 const COLOR_GREEN = Color("#38b764")
 const COLOR_DARK_GREEN = Color("#257179")
 
-const HEALTH_LOW = 2
-const HEALTH_AVERAGE = 4
-const HEALTH_PLAYER = 6
-const HEALTH_HIGH = 8
+const HEALTH_LOW = 2.0
+const HEALTH_AVERAGE = 4.0
+const HEALTH_PLAYER = 6.0
+const HEALTH_HIGH = 8.0
 
-const SIZE_SMALL = 8
-const SIZE_AVERAGE = 16
-const SIZE_PLAYER = 12
-const SIZE_BIG = 32
+const SIZE_SMALL = 8.0
+const SIZE_AVERAGE = 16.0
+const SIZE_PLAYER = 12.0
+const SIZE_BIG = 32.0
 
-const SPEED_SLOW = 50
-const SPEED_AVERAGE = 100
-const SPEED_FAST = 200
+const SPEED_SLOW = 50.0
+const SPEED_AVERAGE = 100.0
+const SPEED_FAST = 200.0
 
-const DAMAGE_LOW = 1
-const DAMAGE_AVERAGE = 2
-const DAMAGE_HIGH = 3
+const DAMAGE_LOW = 1.0
+const DAMAGE_AVERAGE = 2.0
+const DAMAGE_HIGH = 3.0
 
-const AWARENESS_SMALL = 48
-const AWARENESS_AVERAGE = 96
-const AWARENESS_BIG = 192
+const AWARENESS_SMALL = 48.0
+const AWARENESS_AVERAGE = 96.0
+const AWARENESS_BIG = 192.0
 
 const DROP_CHANCE = 0.5
 

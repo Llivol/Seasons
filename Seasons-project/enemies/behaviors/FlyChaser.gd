@@ -33,7 +33,7 @@ func set_fly_time(new_time):
 	fly_time = new_time
 
 """Override"""
-func flip_direction(is_shooting = false):
+func flip_direction():
 	.flip_direction()
 	fly_timer.start(fly_time)
 

@@ -56,7 +56,7 @@ func move(delta, flying=false):
 
 
 """ Override """
-func flip_direction(is_shooting = false):
+func flip_direction():
 	.flip_direction()
 	waypoints.set_clockwise(not waypoints.is_clockwise())
 	target_position = waypoints.get_next_point_position()

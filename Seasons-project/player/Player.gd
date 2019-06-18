@@ -210,6 +210,37 @@ func change_state(target_state: int) -> void:
 	enter_state()
 
 
+func set_state():
+	if _current_health <= 0:
+		change_state(DEAD)
+		return
+
+	if _input_action:
+		if not is_on_floor() and not (_input_right or _input_left):
+			change_state(HANG)
+		else:
+			change_state(ATTACK)
+			
+	elif (_input_jump and _input_up) and is_below_twin():
+		change_state(CLIMB)
+			
+	elif _on_rope_max_distance:
+		change_state(HOVER)
+	
+	elif _current_stamina <= 0:
+		change_state(EXHAUST)
+		
+	elif is_on_floor(): 
+		if _input_jump:
+			change_state(JUMP)
+		elif _velocity.x:
+			change_state(WALK)
+		else:
+			change_state(IDLE)
+	else:
+			change_state(AIR)
+
+
 func enter_state() -> void:
 	match _state:
 
@@ -372,33 +403,6 @@ func set_force_gravity():
 
 func get_velocity():
 	return _velocity
-
-
-func set_state():
-	if _input_action:
-		if not is_on_floor() and not (_input_right or _input_left):
-			change_state(HANG)
-		else:
-			change_state(ATTACK)
-			
-	elif (_input_jump and _input_up) and is_below_twin():
-		change_state(CLIMB)
-			
-	elif _on_rope_max_distance:
-		change_state(HOVER)
-	
-	elif _current_stamina <= 0:
-		change_state(EXHAUST)
-		
-	elif is_on_floor(): 
-		if _input_jump:
-			change_state(JUMP)
-		elif _velocity.x:
-			change_state(WALK)
-		else:
-			change_state(IDLE)
-	else:
-			change_state(AIR)
 
 
 func take_damage(value):
@@ -627,6 +631,11 @@ func process_dead():
 
 
 """ AUXILIAR """
+
+func flip_direction():
+	if _state == DEAD:
+		return
+	.flip_direction()
 
 func get_angle_in_first_quadrant(angle):
 	while angle > PI/2:
