@@ -145,6 +145,7 @@ gdscript/warnings/integer_division=false
 [display]
 
 window/size/height=1024
+window/stretch/mode="viewport"
 
 [input]
 
@@ -242,4 +243,5 @@ Cheat_unkillable={
 
 [rendering]
 
+quality/2d/use_pixel_snap=true
 environment/default_environment="res://default_env.tres"
