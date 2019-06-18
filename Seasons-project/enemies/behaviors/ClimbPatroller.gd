@@ -1,7 +1,8 @@
 extends Enemy
-
+class_name ClimbPatroller
 
 export var default_color = Global.COLOR_YELLOW
+export var wait_time = 1 setget set_wait_time
 
 onready var wait_timer: Timer = $Timer
 onready var waypoints: = get_parent().get_node("Waypoints")
@@ -10,26 +11,25 @@ var target_position: = Vector2()
 var just_collided: = false
 
 
-func _ready() -> void:
-	set_stats(Global.HEALTH_AVERAGE, Global.SIZE_BIG, Global.SPEED_FAST, Global.DAMAGE_AVERAGE)
-	position = waypoints.get_start_position()
-	target_position = waypoints.get_next_point_position()
-
 func _physics_process(delta):
 	move(delta)
 
 
 func _draw():
-	var n = 4
-	var points_arc = PoolVector2Array()
-	points_arc.push_back(Vector2.ZERO)
-	var colors = PoolColorArray([default_color])
-	
-	for i in range(n + 1):
-		var angle_point = deg2rad(i * 360 / n - 90)
-		points_arc.push_back(Vector2(cos(angle_point), sin(angle_point)) * SIZE)
-	draw_polygon(points_arc, colors)
+	if not Cheats.sprites:
+		var n = 4
+		var points_arc = PoolVector2Array()
+		points_arc.push_back(Vector2.ZERO)
+		var colors = PoolColorArray([default_color])
+		
+		for i in range(n + 1):
+			var angle_point = deg2rad(i * 360 / n - 90)
+			points_arc.push_back(Vector2(cos(angle_point), sin(angle_point)) * SIZE)
+		draw_polygon(points_arc, colors)
 
+
+func set_wait_time(new_time):
+	wait_time = new_time
 
 """ Override """
 func move(delta, flying=false):
@@ -42,16 +42,19 @@ func move(delta, flying=false):
 	if distance_to_target < 2 :
 		position = target_position
 		_velocity = Vector2.ZERO
+		if target_position == waypoints.get_start_position() and waypoints.is_clockwise():
+			.flip_direction()
+			waypoints.set_clockwise(not waypoints.is_clockwise())	
 		target_position = waypoints.get_next_point_position()
 		set_physics_process(false)
-		wait_timer.start()
+		wait_timer.start(wait_time)
 	else:
 		move_and_slide(_velocity)
 		check_collisions()
 
 
 """ Override """
-func flip_direction():
+func flip_direction(is_shooting = false):
 	.flip_direction()
 	waypoints.set_clockwise(not waypoints.is_clockwise())
 	target_position = waypoints.get_next_point_position()

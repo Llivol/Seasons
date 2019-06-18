@@ -1,11 +1,11 @@
 [gd_scene load_steps=14 format=2]
 
-[ext_resource path="res://enemies/behaviors/LandShooter.gd" type="Script" id=1]
-[ext_resource path="res://_src/ph_land_chaser.png" type="Texture" id=2]
+[ext_resource path="res://enemies/Squirrel.gd" type="Script" id=1]
+[ext_resource path="res://_src/enemies/enemies_squirrel_0.png" type="Texture" id=2]
 [ext_resource path="res://enemies/AI/AttackArea.gd" type="Script" id=3]
 [ext_resource path="res://enemies/AI/AwarenessArea.gd" type="Script" id=4]
 [ext_resource path="res://enemies/AI/FocusArea.gd" type="Script" id=5]
-[ext_resource path="res://enemies/AI/DynamicCollisionShape.gd" type="Script" id=6]
+[ext_resource path="res://enemies/AI/DynamicCollisionRectangleShape.gd" type="Script" id=6]
 [ext_resource path="res://enemies/AI/LedgeDetector.gd" type="Script" id=7]
 [ext_resource path="res://ui/HealthBar.tscn" type="PackedScene" id=8]
 [ext_resource path="res://player/AttackCooldown.gd" type="Script" id=9]
@@ -16,13 +16,12 @@
 
 [sub_resource type="CircleShape2D" id=3]
 
-[sub_resource type="CircleShape2D" id=4]
+[sub_resource type="RectangleShape2D" id=4]
 
-[node name="LandShooter" type="KinematicBody2D"]
+[node name="Squirrel" type="KinematicBody2D"]
 script = ExtResource( 1 )
 
 [node name="Sprite" type="Sprite" parent="."]
-visible = false
 texture = ExtResource( 2 )
 
 [node name="AttackArea" type="Area2D" parent="."]
@@ -49,8 +48,7 @@ script = ExtResource( 5 )
 [node name="Shape" type="CollisionShape2D" parent="FocusArea"]
 shape = SubResource( 3 )
 
-[node name="DynamicCollisionShape" type="CollisionShape2D" parent="."]
-show_behind_parent = true
+[node name="DynamicCollisionRectangleShape" type="CollisionShape2D" parent="."]
 shape = SubResource( 4 )
 script = ExtResource( 6 )
 

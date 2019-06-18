@@ -24,6 +24,11 @@ func set_stats(max_health, size, max_speed, damage, awareness = 0):
 	DAMAGE = damage
 	AWARENESS = awareness
 
+func set_sprite_size():
+	var scale = Vector2((2 * SIZE / Global.SIZE_AVERAGE), (2 * SIZE / Global.SIZE_AVERAGE))
+	var this_sprite = $Sprite
+	this_sprite.set_scale(scale)
+
 func move(delta, flying = false):
 	_velocity.x = min(_velocity.x + ACCELERATION, MAX_SPEED) if (_direction == 1) else max(_velocity.x - ACCELERATION, -MAX_SPEED)
 	_velocity.y = GRAVITY * delta if (not flying) else 0
@@ -43,8 +48,8 @@ func chase(delta, flying = false, at_max_floor_distance = false):
 			_velocity.y = 0
 	_velocity = move_and_slide(_velocity)
 
-
-func flip_direction():
+""" Override """
+func flip_direction(is_shooting = false):
 	if _target == null:
 		.flip_direction()
 	else:

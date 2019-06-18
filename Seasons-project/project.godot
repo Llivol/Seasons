@@ -34,6 +34,16 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://enemies/behaviors/ClimbChaser.gd"
 }, {
+"base": "Enemy",
+"class": "ClimbPatroller",
+"language": "GDScript",
+"path": "res://enemies/behaviors/ClimbPatroller.gd"
+}, {
+"base": "CollisionShape2D",
+"class": "DynamicCollisionRectangleShape",
+"language": "GDScript",
+"path": "res://enemies/AI/DynamicCollisionRectangleShape.gd"
+}, {
 "base": "CollisionShape2D",
 "class": "DynamicCollisionShape",
 "language": "GDScript",
@@ -105,6 +115,8 @@ _global_script_class_icons={
 "AwarenessArea": "",
 "Character": "",
 "ClimbChaser": "",
+"ClimbPatroller": "",
+"DynamicCollisionRectangleShape": "",
 "DynamicCollisionShape": "",
 "Enemy": "",
 "FlyChaser": "",

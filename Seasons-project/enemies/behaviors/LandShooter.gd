@@ -12,26 +12,26 @@ var BULLET_DAMAGE
 
 var can_attack
 
-func _ready():
-	set_stats(Global.HEALTH_HIGH, Global.SIZE_AVERAGE, 0, Global.DAMAGE_LOW, Global.AWARENESS_BIG)
-	set_shooter_stats()
-	can_attack = true
+onready var ledge_detector = $LedgeDetector
 
-
-func set_shooter_stats(attack_cd = 2, bullet_speed = 200, bullet_size = 4, bullet_damage = Global.DAMAGE_AVERAGE):
+func set_shooter_stats(bullet_damage = Global.DAMAGE_AVERAGE, attack_cd = 2, bullet_speed = 200, bullet_size = 4):
 	ATTACK_CD = attack_cd
 	BULLET_SPEED = bullet_speed
 	BULLET_SIZE = bullet_size
 	BULLET_DAMAGE = bullet_damage
 
+func _process(delta):
+	if ledge_detector.is_near_ledge() or ledge_detector.is_near_wall():
+		if ledge_detector.is_near_floor():
+			flip_direction()
 
 func _draw():
-	draw_circle(Vector2.ZERO, SIZE, default_color)
+	if not Cheats.sprites:
+		draw_circle(Vector2.ZERO, SIZE, default_color)
 
 
 func _physics_process(delta):
-	move(delta)
-	shoot()
+	move(delta) if (not _target) else shoot()
 
 func shoot():
 	if _target and can_attack:
@@ -62,5 +62,7 @@ func _on_AttackCooldown_timeout():
 
 
 """ Override"""
-func flip_direction():
-	return
+func flip_direction(is_shooting = false):
+	if is_shooting:
+		return
+	.flip_direction()
