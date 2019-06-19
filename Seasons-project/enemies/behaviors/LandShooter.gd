@@ -41,9 +41,10 @@ func shoot():
 		flip_direction()
 		var bullet = bullet_scene.instance()
 		var bullet_direction = (_target.global_position - global_position).normalized()
-		bullet_direction.x *= _direction
 		bullet.set_direction(bullet_direction) 
-		add_child(bullet)
+		get_parent().add_child(bullet)
+		bullet.set_stats(self, BULLET_SIZE, BULLET_SPEED, BULLET_DAMAGE)
+		bullet.global_position = self.global_position
 		$AttackCooldown.start()
 		can_attack = false
 

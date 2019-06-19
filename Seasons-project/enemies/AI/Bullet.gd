@@ -7,24 +7,28 @@ var SPEED
 var DAMAGE
 
 var _parent
-var _init
 
 var _direction setget set_direction
 
-var default_color
+var default_color = Global.COLOR_RED
 
 func _ready():
 	connect("body_entered", self, "_on_body_entered")
-	_parent = get_parent()
 	position = Vector2.ZERO
-	_init = false
 
+
+func set_stats(parent, size, speed, damage):
+	_parent = parent
+	self.SIZE = size
+	self.SPEED = speed
+	self.DAMAGE = damage
+	update()
 
 func _process(delta):
-	if _init:
-		position += _direction * SPEED * delta
-		return
-	
+
+	position += _direction * SPEED * delta
+
+	"""
 	if _parent != null and _parent.BULLET_SPEED != null:
 		
 		SPEED = _parent.BULLET_SPEED
@@ -33,11 +37,11 @@ func _process(delta):
 		default_color = _parent.default_color
 		_init = true
 		update()
-
+	"""
 
 func _draw():
-	if _init:
-		draw_circle(Vector2.ZERO, SIZE, _parent.default_color)
+	if SIZE:
+		draw_circle(Vector2.ZERO, SIZE, default_color)
 
 
 func set_direction(direction):
@@ -47,7 +51,7 @@ func set_direction(direction):
 
 
 func _on_body_entered(body):
-	if body.is_a_parent_of(self):
+	if body == _parent:
 		return
 	if body is Character:
 		body.apply_velocity((body.global_position - global_position).normalized() * KNOCKBACK_MULTIPLIER * DAMAGE)

@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://levels/Level.gd" type="Script" id=1]
 [ext_resource path="res://levels/PlaygroundTileset.tres" type="TileSet" id=2]
 [ext_resource path="res://player/Twins.tscn" type="PackedScene" id=3]
 [ext_resource path="res://levels/Viewport.tscn" type="PackedScene" id=4]
+[ext_resource path="res://enemies/Yeti.tscn" type="PackedScene" id=5]
 
 [node name="PlaygroundScroll" type="Node2D"]
 script = ExtResource( 1 )
@@ -19,5 +20,8 @@ tile_data = PoolIntArray( -2031616, 0, 196611, -2031615, 0, 196612, -2031614, 0,
 position = Vector2( 38.2158, 450 )
 
 [node name="Viewport" parent="." instance=ExtResource( 4 )]
+
+[node name="Yeti" parent="." instance=ExtResource( 5 )]
+position = Vector2( 340, 480 )
 
 [editable path="Twins"]
