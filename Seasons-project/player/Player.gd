@@ -465,7 +465,7 @@ func process_kinematics(delta):
 
 		CLIMB:
 			process_climb(delta)
-			consume_stamina(STAMINA_UNIT / 2 * delta)
+			consume_stamina(STAMINA_UNIT * delta)
 
 		DEAD:
 			process_dead()
@@ -489,6 +489,7 @@ func process_kinematics(delta):
 
 		PULL:
 			process_pull(delta)
+			consume_stamina(STAMINA_UNIT * delta)
 	
 	_velocity = move_and_slide(_velocity, Vector2.UP)
 
@@ -666,3 +667,9 @@ func _on_InvulnerabilityWindow_timeout():
 func _on_RecoverStamina_timeout():
 	change_state(RECOVER)
 	$RecoverStamina.stop()
+
+
+func _on_viewport_exited(viewport):
+	set_health(0)
+	set_stamina(0)
+	change_state(DEAD)
