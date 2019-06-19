@@ -79,12 +79,14 @@ func _on_Timer_timeout() -> void:
 
 
 func _on_AttackArea_body_entered(body):
-	if body is Player:
+	if body is Player and not body.is_dead():
 		attack(body)
+		if body == _target and body.is_dead():
+			_target = null
 
 
 func _on_AwarenessArea_body_entered(body):
-	if body is Player:
+	if body is Player and not body.is_dead():
 		_target = body
 		_velocity = Vector2.ZERO
 		flip_direction()

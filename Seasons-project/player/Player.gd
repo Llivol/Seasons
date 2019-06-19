@@ -30,23 +30,23 @@ onready var _transitions := {
 """
 
 onready var _transitions := {
-	AIR: [ATTACK, HANG, HOVER, HURT, IDLE, WALK],
+	AIR: [ATTACK, DEAD, HANG, HOVER, HURT, IDLE, WALK],
 	ATTACK: [AIR, CROUCH, EXHAUST, HOVER, IDLE, JUMP, SNEAK, WALK],
-	CLIMB: [AIR, EXHAUST, HANG, HOVER, HURT, IDLE],
+	CLIMB: [AIR, DEAD, EXHAUST, HANG, HOVER, HURT, IDLE],
 	CROUCH: [],
 	DEAD: [REVIVE],
-	EXHAUST: [HOVER, HURT, RECOVER],
-	HANG: [AIR, CLIMB, EXHAUST, HOVER],
-	HOVER: [AIR, ATTACK, CLIMB, CROUCH, HANG, HURT, IDLE, JUMP, PULL, RECOVER, WALK],
+	EXHAUST: [DEAD, HOVER, HURT, RECOVER],
+	HANG: [AIR, CLIMB, DEAD, EXHAUST, HOVER],
+	HOVER: [AIR, ATTACK, CLIMB, CROUCH, DEAD, HANG, HURT, IDLE, JUMP, PULL, RECOVER, WALK],
 	HURT: [AIR, CLIMB, CROUCH, DEAD, EXHAUST, HANG, HOVER, HURT, IDLE, JUMP, PULL, SNEAK, WALK],
-	IDLE: [AIR, ATTACK, CLIMB, CROUCH, HANG, HOVER, HURT, JUMP, PULL, RECOVER, SNEAK, WALK],
-	JUMP: [AIR, ATTACK, CLIMB, EXHAUST, HANG, HOVER, HURT, IDLE],
-	PULL: [AIR, CROUCH, EXHAUST, HOVER, HURT, IDLE],
-	RECOVER: [AIR, ATTACK, CLIMB, CROUCH, HOVER, HURT, JUMP, PULL, STOP, WALK],
+	IDLE: [AIR, ATTACK, CLIMB, CROUCH, DEAD, HANG, HOVER, HURT, JUMP, PULL, RECOVER, SNEAK, WALK],
+	JUMP: [AIR, ATTACK, CLIMB, DEAD, EXHAUST, HANG, HOVER, HURT, IDLE],
+	PULL: [AIR, CROUCH, EXHAUST, DEAD, HOVER, HURT, IDLE],
+	RECOVER: [AIR, ATTACK, CLIMB, CROUCH, DEAD, HOVER, HURT, JUMP, PULL, STOP, WALK],
 	REVIVE: [IDLE],
 	SNEAK: [],
 	STOP: [AIR, IDLE, WALK, JUMP, HANG, HOVER, PULL, CLIMB, ATTACK, HURT, DEAD, EXHAUST],
-	WALK: [AIR, ATTACK, CLIMB, HOVER, HURT, IDLE, JUMP, PULL, STOP],
+	WALK: [AIR, ATTACK, CLIMB, DEAD, HOVER, HURT, IDLE, JUMP, PULL, STOP],
 }
 const GRAVITY = 4500
 
@@ -102,8 +102,8 @@ var _input_left
 var _input_right
 var _input_up
 var _input_down
-var _input_jump
 var _input_action
+var _input_pickaxe
 
 var _state
 var _prev_state
@@ -215,13 +215,13 @@ func set_state():
 		change_state(DEAD)
 		return
 
-	if _input_action:
+	if _input_pickaxe:
 		if not is_on_floor() and not (_input_right or _input_left):
 			change_state(HANG)
 		else:
 			change_state(ATTACK)
 			
-	elif (_input_jump and _input_up) and is_below_twin():
+	elif (_input_action and _input_up) and is_below_twin():
 		change_state(CLIMB)
 			
 	elif _on_rope_max_distance:
@@ -231,7 +231,7 @@ func set_state():
 		change_state(EXHAUST)
 		
 	elif is_on_floor(): 
-		if _input_jump:
+		if _input_action:
 			change_state(JUMP)
 		elif _velocity.x:
 			change_state(WALK)
@@ -360,13 +360,17 @@ func get_state():
 	return _state
 
 
+func is_dead():
+	return _state == DEAD
+
+
 func set_inputs(name):
 	_input_left = Input.is_action_pressed(str(name, "_left"))
 	_input_right = Input.is_action_pressed(str(name, "_right"))
 	_input_up = Input.is_action_pressed(str(name, "_up"))
 	_input_down = Input.is_action_pressed(str(name, "_down"))
-	_input_jump = Input.is_action_pressed(str(name, "_jump"))
 	_input_action = Input.is_action_pressed(str(name, "_action"))
+	_input_pickaxe = Input.is_action_pressed(str(name, "_pickaxe"))
 
 
 func get_input(name):
@@ -379,10 +383,10 @@ func get_input(name):
 			return _input_up
 		"down":
 			return _input_down
-		"jump":
-			return _input_jump
 		"action":
 			return _input_action
+		"pickaxe":
+			return _input_pickaxe
 
 
 func get_force():
@@ -618,7 +622,7 @@ func attack(enemy):
 
 
 func process_exhaust():
-	if _input_left or _input_right or _input_jump or _input_action:
+	if _input_left or _input_right or _input_action or _input_pickaxe:
 		$RecoverStamina.stop()
 		$RecoverStamina.set_wait_time(EXHAUSTED_TIME_TO_RECOVER_STAMINA)
 		$RecoverStamina.start()

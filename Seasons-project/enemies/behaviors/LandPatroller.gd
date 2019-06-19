@@ -23,5 +23,5 @@ func _physics_process(delta):
 
 
 func _on_AttackArea_body_entered(body):
-	if body is Player:
+	if body is Player and not body.is_dead():
 		attack(body)

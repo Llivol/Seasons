@@ -24,6 +24,8 @@ func _process(delta):
 	if ledge_detector.is_near_ledge() or ledge_detector.is_near_wall():
 		if ledge_detector.is_near_floor():
 			flip_direction()
+	if _target and _target.is_dead():
+		_target = null
 
 func _draw():
 	if not Cheats.sprites:
@@ -45,12 +47,16 @@ func shoot():
 
 
 func _on_AttackArea_body_entered(body):
-	if body is Player:
+	if body is Player and not body.is_dead():
 		attack(body)
+		if body == _target and body.is_dead():
+			_target = null
 
 func _on_AwarenessArea_body_entered(body):
 	if body is Player:
 		_target = body
+		if body.is_dead():
+			_target = null
 
 
 func _on_FocusArea_body_exited(body):
