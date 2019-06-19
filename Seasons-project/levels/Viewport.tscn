@@ -1,0 +1,44 @@
+[gd_scene format=2]
+
+[node name="Viewport" type="Node2D"]
+position = Vector2( 256, 512 )
+
+[node name="Camera2D" type="Camera2D" parent="."]
+editor/display_folded = true
+current = true
+drag_margin_left = 0.0
+drag_margin_top = 0.0
+drag_margin_right = 0.0
+drag_margin_bottom = 0.0
+
+[node name="LPlayerLeft" type="Label" parent="Camera2D"]
+margin_left = -236.0
+margin_top = -252.0
+margin_right = -177.0
+margin_bottom = -238.0
+custom_colors/font_color = Color( 0.101961, 0.109804, 0.172549, 1 )
+text = "Player 1: "
+
+[node name="LPlayerRight" type="Label" parent="Camera2D"]
+margin_left = -236.0
+margin_top = -238.0
+margin_right = -156.0
+margin_bottom = -224.0
+custom_colors/font_color = Color( 0.101961, 0.109804, 0.172549, 1 )
+text = "Player 2: "
+
+[node name="LDistance" type="Label" parent="Camera2D"]
+margin_left = -236.0
+margin_top = -224.0
+margin_right = -156.0
+margin_bottom = -210.0
+custom_colors/font_color = Color( 0.101961, 0.109804, 0.172549, 1 )
+text = "Distance: "
+
+[node name="LAltitude" type="Label" parent="Camera2D"]
+margin_left = -236.0
+margin_top = -210.0
+margin_right = -156.0
+margin_bottom = -196.0
+custom_colors/font_color = Color( 0.101961, 0.109804, 0.172549, 1 )
+text = "Altitude: "

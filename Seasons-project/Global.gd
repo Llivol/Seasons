@@ -32,7 +32,7 @@ const AWARENESS_SMALL = 24.0
 const AWARENESS_AVERAGE = 48.0
 const AWARENESS_BIG = 96.0
 
-const DROP_CHANCE = 0.5
+const DROP_CHANCE = 1
 
 const UNIT = 16
 

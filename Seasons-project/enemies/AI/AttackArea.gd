@@ -17,7 +17,8 @@ func _process(delta):
 		return
 	
 	if _parent.SIZE != null:
-		size_multiplier = _parent.get_size_multiplier() / 1.9
+		size_multiplier = _parent.get_size_multiplier() / 2
+		size_multiplier += 0.1 * _parent.get_size_multiplier()
 		$Shape.shape.set_extents(Vector2(_parent.get_sprite().texture.get_size().x, _parent.get_sprite().texture.get_size().y) * size_multiplier)
 		update()
 		_init = true
@@ -27,4 +28,4 @@ func _draw():
 		return
 	
 	var rect = Rect2(position - Vector2(_parent.get_sprite().texture.get_size().x, _parent.get_sprite().texture.get_size().y) * size_multiplier, Vector2(_parent.get_sprite().texture.get_size().x * 2, _parent.get_sprite().texture.get_size().y * 2) * size_multiplier)
-	draw_rect(rect, Global.COLOR_GREEN)
+	draw_rect(rect, Global.COLOR_BLUE)

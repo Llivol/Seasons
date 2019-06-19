@@ -1,4 +1,5 @@
 extends Node2D
+class_name Level
 
 var player_left
 var player_right
@@ -29,10 +30,10 @@ func _process(delta):
 		start_altitude = player_left.global_position.y
 		current_altitude = start_altitude
 		max_altitude = start_altitude - current_altitude
-		viewport.global_position = Vector2(Global.window_size_x / 4, Global.window_size_y / 2)
-	
+		viewport.global_position = Vector2(Global.window_size_x / 2, Global.window_size_y / 2)
+
 	update_altitude()
-	
+
 	distance = Vector2(abs(player_left.global_position.x - player_right.global_position.x), abs(player_left.global_position.y - player_right.global_position.y))
 	l_player_left.set_text(str("Player Left: pos", player_left.global_position.round(), ", vel", player_left.get_velocity().round(), ", force", player_left.get_force().round(), "; status: ", player_left.states_strings[player_left.get_state()]))
 	l_player_right.set_text(str("Player Right: pos", player_right.global_position.round(), ", vel", player_right.get_velocity().round(), ", force", player_right.get_force().round(), "; status: ", player_right.states_strings[player_right.get_state()]))
@@ -40,7 +41,7 @@ func _process(delta):
 	l_altitude.set_text(str("Cur altitude: ", round(current_altitude)))
 	pass
 
-func _draw(): 
+func _draw():
 	if start_altitude:
 		draw_line (Vector2(0, current_altitude), Vector2(32*16, current_altitude), Global.COLOR_RED, 2)
 

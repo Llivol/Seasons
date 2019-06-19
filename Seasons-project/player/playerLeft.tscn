@@ -10,6 +10,7 @@
 [ext_resource path="res://player/RecoverStamina.gd" type="Script" id=8]
 
 [sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 6, 8 )
 
 [node name="PlayerLeft" type="KinematicBody2D"]
 script = ExtResource( 1 )
@@ -45,9 +46,10 @@ script = ExtResource( 7 )
 script = ExtResource( 8 )
 
 [node name="FallNotifier" type="VisibilityNotifier2D" parent="."]
-rect = Rect2( -8, -8, 16, 16 )
-[connection signal="flip" from="." to="HealthBar" method="_on_flip"]
+position = Vector2( 0, -4 )
+rect = Rect2( -4, -4, 8, 8 )
 [connection signal="flip" from="." to="StaminaBar" method="_on_flip"]
+[connection signal="flip" from="." to="HealthBar" method="_on_flip"]
 [connection signal="health_changed" from="." to="HealthBar" method="_on_health_changed"]
 [connection signal="stamina_changed" from="." to="StaminaBar" method="_on_stamina_changed"]
 [connection signal="viewport_exited" from="FallNotifier" to="." method="_on_viewport_exited"]

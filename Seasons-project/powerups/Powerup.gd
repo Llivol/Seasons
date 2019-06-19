@@ -6,12 +6,12 @@ var SIZE
 var default_color
 
 func _ready():
-	SIZE = Global.SIZE_SMALL
+	SIZE = Global.SIZE_SMALL / 2
 	$Shape.shape.set_radius(SIZE)
 
 
 func set_position(pos):
-	global_position = pos + Vector2(0, -Global.SIZE_SMALL)
+	global_position = pos
 
 
 func _draw():

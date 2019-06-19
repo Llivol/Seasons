@@ -4,7 +4,7 @@ class_name Character
 signal health_changed(new_value)
 signal flip()
 
-const KNOCKBACK_MULTIPLIER = 500
+const KNOCKBACK_MULTIPLIER = 300
 
 var MAX_HEALTH
 var DAMAGE
@@ -55,8 +55,9 @@ func apply_velocity(velocity):
 
 func attack(body):
 	var knockback = KNOCKBACK_MULTIPLIER
-	var damage = DAMAGE
-	body.apply_velocity((body.global_position - global_position).normalized() * KNOCKBACK_MULTIPLIER * DAMAGE)
+	var damage = self.DAMAGE
+	var size_diff = self.SIZE / body.SIZE
+	body.apply_velocity((body.global_position - global_position).normalized() * KNOCKBACK_MULTIPLIER * size_diff)
 	body.take_damage(DAMAGE)
 
 

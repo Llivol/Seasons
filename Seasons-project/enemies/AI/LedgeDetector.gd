@@ -48,10 +48,10 @@ func _process(delta):
 	
 	if _parent.SIZE != null:
 		if has_node("FloorDetector"):
-			_floor_detector.set_cast_to(Vector2(0, 4 + _parent.get_sprite_size().y))
+			_floor_detector.set_cast_to(Vector2(0, _parent.get_sprite_size().y * _parent.get_size_multiplier()))
 		if has_node("LedgeDetector"):
 			_ledge_detector.translate(Vector2(_parent.get_sprite_size().x * _parent.get_size_multiplier() / 2, 0))
-			_ledge_detector.set_cast_to(Vector2(0, 4 + _parent.get_sprite_size().y))
+			_ledge_detector.set_cast_to(Vector2(0, _parent.get_sprite_size().y * _parent.get_size_multiplier()))
 		if has_node("WallDetector"):
 			_wall_detector.translate(Vector2(_parent.get_sprite_size().x * _parent.get_size_multiplier() / 2 + 1, 0))
 			_wall_detector.set_cast_to(Vector2(1, 0))

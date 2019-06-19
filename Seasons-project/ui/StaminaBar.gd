@@ -14,7 +14,7 @@ func _process(delta):
 	if _parent.MAX_STAMINA != null:
 		max_value = _parent.MAX_STAMINA
 		value = _parent.get_stamina()
-		margin_top = -1 * (_parent.SIZE + 5)
+		margin_top = -1 * (_parent.get_sprite_size().y + 2)
 		_init = true
 
 func _on_stamina_changed(new_value: int) -> void:
