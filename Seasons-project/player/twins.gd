@@ -30,6 +30,9 @@ func get_distance():
 	return _distance
 
 
+func get_twin(player):
+	return _player_left if (player == _player_right) else _player_right
+
 func _update_distance():
 	_distance = _player_left.global_position.distance_to(_player_right.global_position)
 	

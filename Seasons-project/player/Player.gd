@@ -7,27 +7,6 @@ export var default_color = Global.COLOR_BLUE
 export var default_color_dark = Global.COLOR_DARK_BLUE
 
 onready var attack_range = $AttackRange
-"""
-onready var _transitions := {
-	IDLE: [WALK, STOP, JUMP, AIR, HANG, HOVER, PULL, CLIMB, ATTACK, HURT, DEAD, EXHAUST, RECOVER],
-	WALK: [IDLE, STOP, JUMP, AIR, HOVER, ATTACK, HURT, DEAD, EXHAUST],
-	STOP: [IDLE, WALK, JUMP, AIR, HANG, HOVER, PULL, CLIMB, ATTACK, HURT, DEAD, EXHAUST],
-	JUMP: [IDLE, AIR, HANG, HOVER, ATTACK, HURT, DEAD, EXHAUST],
-	AIR: [IDLE, WALK, HANG, HOVER, ATTACK, HURT, DEAD, EXHAUST],
-	HANG: [AIR, CLIMB, HOVER, HURT, DEAD, EXHAUST],
-	HOVER: [IDLE, WALK, STOP, JUMP, AIR, HANG, PULL, CLIMB, ATTACK, HURT, DEAD, EXHAUST],
-	CROUCH: [],
-	SNEAK: [],
-	PULL: [IDLE, HOVER, HURT, DEAD, EXHAUST],
-	CLIMB: [IDLE, AIR, HANG, HOVER, HURT, DEAD, EXHAUST],
-	ATTACK: [IDLE, WALK, STOP, JUMP, AIR, HOVER, HURT, DEAD, EXHAUST],
-	HURT: [IDLE, WALK, STOP, JUMP, AIR, HANG, HOVER, PULL, CLIMB, ATTACK, DEAD, EXHAUST],
-	DEAD: [REVIVE],
-	EXHAUST: [HOVER, HURT, DEAD, RECOVER], #[IDLE, WALK, STOP, AIR, HOVER],
-	RECOVER: [WALK, JUMP, HANG, PULL, CLIMB, ATTACK, HURT, DEAD],
-	REVIVE: [WALK, JUMP, HANG, PULL, CLIMB, ATTACK, HURT, DEAD]
-}
-"""
 
 onready var _transitions := {
 	AIR: [ATTACK, DEAD, HANG, HOVER, HURT, IDLE, WALK],
@@ -223,7 +202,10 @@ func set_state():
 			
 	elif (_input_action and _input_up) and is_below_twin():
 		change_state(CLIMB)
-			
+		
+	elif (_input_action and _input_down) and is_above_twin():
+		change_state(PULL)
+		
 	elif _on_rope_max_distance:
 		change_state(HOVER)
 	
@@ -506,7 +488,7 @@ func process_kinematics(delta):
 			recover_stamina(_recover_speed * STAMINA_UNIT * delta)
 
 		PULL:
-			process_pull()
+			process_pull(delta)
 	
 	_velocity = move_and_slide(_velocity, Vector2.UP)
 
@@ -555,8 +537,14 @@ func process_jump():
 		_velocity.y = -JUMP_SPEED
 
 
-func process_pull():
-	pass
+func process_pull(delta):
+	var v_tension = _direction_to_twin.normalized() * CLIMB_SPEED
+	var broda = get_parent().get_twin(self)
+	var velocity = Vector2()
+	velocity.x = - v_tension.x * abs(cos(_direction_to_twin.angle()))
+	velocity.y = v_tension.y * -sin(_direction_to_twin.angle())
+	velocity.y += GRAVITY * delta
+	broda.apply_velocity(velocity)
 
 
 func process_climb(delta):
@@ -660,7 +648,6 @@ func is_above_twin():
 
 
 func is_below_twin():
-	var parent = get_parent()
 	return sin(_direction_to_twin.angle()) < -0.1 and not _on_rope_min_distance
 
 
