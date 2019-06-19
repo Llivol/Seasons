@@ -9,6 +9,7 @@ const CHASE_MULTIPLIER = 1.5
 var MAX_SPEED
 var SIZE
 var AWARENESS
+var DROPS_HEALTH
 
 var _target
 
@@ -16,12 +17,13 @@ func _ready():
 	_direction = 1
 	_velocity = Vector2()
 
-func set_stats(max_health, size, max_speed, damage, awareness = 0):
+func set_stats(max_health, size, max_speed, damage, drops_health, awareness = 0):
 	MAX_HEALTH = max_health
 	_current_health = max_health
 	SIZE = size
 	MAX_SPEED = max_speed
 	DAMAGE = damage
+	DROPS_HEALTH = drops_health
 	AWARENESS = awareness
 
 func set_sprite_size():
@@ -89,8 +91,7 @@ func die():
 func drop():
 	randomize()
 	if randf() < Global.DROP_CHANCE:
-		randomize()
-		var power_up_scene = load("res://powerups/HealthUp.tscn") if (randf() < 0.5) else load("res://powerups/StaminaUp.tscn")
+		var power_up_scene = load("res://powerups/HealthUp.tscn") if (DROPS_HEALTH) else load("res://powerups/StaminaUp.tscn")
 		var power_up = power_up_scene.instance()
 		power_up.set_position(position)
 		get_parent().add_child(power_up)
