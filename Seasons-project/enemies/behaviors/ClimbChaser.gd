@@ -34,7 +34,7 @@ func set_wait_time(new_time):
 
 
 """ Override """
-func move(delta, flying=false):
+func move(delta, flying = false, shooting = false):
 	var direction: = (target_position - position).normalized()
 	var velocity = min(abs(_velocity.length()) +  ACCELERATION, MAX_SPEED)
 	var distance_to_target: = position.distance_to(target_position)

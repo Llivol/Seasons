@@ -9,7 +9,7 @@
 [ext_resource path="res://enemies/AI/LedgeDetector.gd" type="Script" id=7]
 [ext_resource path="res://ui/HealthBar.tscn" type="PackedScene" id=8]
 
-[sub_resource type="CircleShape2D" id=1]
+[sub_resource type="RectangleShape2D" id=5]
 
 [sub_resource type="CircleShape2D" id=2]
 
@@ -24,12 +24,11 @@ script = ExtResource( 1 )
 texture = ExtResource( 2 )
 
 [node name="AttackArea" type="Area2D" parent="."]
-editor/display_folded = true
 show_behind_parent = true
 script = ExtResource( 3 )
 
 [node name="Shape" type="CollisionShape2D" parent="AttackArea"]
-shape = SubResource( 1 )
+shape = SubResource( 5 )
 
 [node name="AwarenessArea" type="Area2D" parent="."]
 editor/display_folded = true
@@ -62,6 +61,10 @@ script = ExtResource( 7 )
 [node name="LedgeDetector" type="RayCast2D" parent="LedgeDetector"]
 
 [node name="HealthBar" parent="." instance=ExtResource( 8 )]
+margin_left = -8.0
+margin_top = -16.0
+margin_right = 0.0
+margin_bottom = -20.0
 [connection signal="flip" from="." to="HealthBar" method="_on_flip"]
 [connection signal="health_changed" from="." to="HealthBar" method="_on_health_changed"]
 [connection signal="body_entered" from="AttackArea" to="." method="_on_AttackArea_body_entered"]

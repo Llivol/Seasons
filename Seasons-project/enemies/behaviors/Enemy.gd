@@ -25,12 +25,19 @@ func set_stats(max_health, size, max_speed, damage, awareness = 0):
 	AWARENESS = awareness
 
 func set_sprite_size():
-	var scale = Vector2((2 * SIZE / Global.SIZE_AVERAGE), (2 * SIZE / Global.SIZE_AVERAGE))
+	var scale = Vector2((SIZE / Global.SIZE_AVERAGE), (SIZE / Global.SIZE_AVERAGE))
 	var this_sprite = $Sprite
 	this_sprite.set_scale(scale)
 
-func move(delta, flying = false):
+
+func get_size_multiplier():
+	return SIZE / Global.SIZE_AVERAGE
+
+
+func move(delta, flying = false, shooting = false):
 	_velocity.x = min(_velocity.x + ACCELERATION, MAX_SPEED) if (_direction == 1) else max(_velocity.x - ACCELERATION, -MAX_SPEED)
+	if shooting:
+		_velocity.x = 0
 	_velocity.y = GRAVITY * delta if (not flying) else 0
 	if has_node("LedgeDetector") and not flying and not $LedgeDetector.is_near_floor():
 		_velocity.x *= 0.5

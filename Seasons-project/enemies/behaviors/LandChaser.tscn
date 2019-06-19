@@ -9,8 +9,7 @@
 [ext_resource path="res://enemies/AI/LedgeDetector.gd" type="Script" id=7]
 [ext_resource path="res://ui/HealthBar.tscn" type="PackedScene" id=8]
 
-
-[sub_resource type="CircleShape2D" id=1]
+[sub_resource type="RectangleShape2D" id=1]
 
 [sub_resource type="CircleShape2D" id=2]
 
@@ -26,7 +25,6 @@ visible = false
 texture = ExtResource( 2 )
 
 [node name="AttackArea" type="Area2D" parent="."]
-editor/display_folded = true
 show_behind_parent = true
 script = ExtResource( 3 )
 

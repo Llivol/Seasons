@@ -34,6 +34,13 @@ func get_sprite():
 	return $Sprite
 
 
+func get_sprite_size():
+	var sprite_size = Vector2()
+	sprite_size.x = $Sprite.texture.get_size().x
+	sprite_size.y = $Sprite.texture.get_size().y
+	return sprite_size
+
+
 func flip_direction():
 	_direction = 1 if (_direction == -1) else -1
 	_velocity = Vector2.ZERO

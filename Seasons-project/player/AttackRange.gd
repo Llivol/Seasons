@@ -28,12 +28,13 @@ func _process(delta):
 		return
 	
 	if _parent.SIZE != null:
-		translate(Vector2(_parent.SIZE + 1, 0))
-		_up.translate(Vector2(0, -_parent.SIZE / 2))
-		_up.set_cast_to(Vector2(_parent.SIZE*2, -_parent.SIZE / 2))
-		_front.set_cast_to(Vector2(_parent.SIZE*2, 0))
-		_down.translate(Vector2(0, _parent.SIZE / 2))
-		_down.set_cast_to(Vector2(_parent.SIZE*2, _parent.SIZE / 2))
+		var sprite_size = _parent.get_sprite_size()
+		translate(Vector2(_parent.get_sprite_size().x / 2 + 1, 0))
+		_up.translate(Vector2(0, -_parent.get_sprite_size().y / 4))
+		_up.set_cast_to(Vector2(_parent.get_sprite_size().x, -_parent.get_sprite_size().y / 4))
+		_front.set_cast_to(Vector2(_parent.get_sprite_size().x, 0))
+		_down.translate(Vector2(0, _parent.get_sprite_size().y / 4))
+		_down.set_cast_to(Vector2(_parent.get_sprite_size().x, _parent.get_sprite_size().y / 4))
 		update()
 		_init = true
 
@@ -59,6 +60,6 @@ func get_enemy_in_range():
 func _draw():
 	if not Cheats.debug:
 		return
-	draw_line(_up.position, _up.get_cast_to(), Global.COLOR_RED, 2.0)
-	draw_line(_front.position, _front.get_cast_to(), Global.COLOR_RED, 2.0)
-	draw_line(_down.position, _down.get_cast_to(), Global.COLOR_RED, 2.0)
+	draw_line(_up.position, _up.get_cast_to(), Global.COLOR_RED, 1.0)
+	draw_line(_front.position, _front.get_cast_to(), Global.COLOR_RED, 1.0)
+	draw_line(_down.position, _down.get_cast_to(), Global.COLOR_RED, 1.0)

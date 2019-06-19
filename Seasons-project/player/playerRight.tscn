@@ -24,12 +24,15 @@ one_way_collision = true
 [node name="AttackRange" parent="." instance=ExtResource( 3 )]
 
 [node name="HealthBar" parent="." instance=ExtResource( 4 )]
-margin_top = -40.0
-margin_bottom = -32.0
+margin_left = -8.0
+margin_right = 8.0
+margin_bottom = -12.0
 
 [node name="StaminaBar" parent="." instance=ExtResource( 5 )]
-margin_top = -32.0
-margin_bottom = -24.0
+margin_left = -8.0
+margin_top = -16.0
+margin_right = 8.0
+margin_bottom = -12.0
 
 [node name="AttackCooldown" type="Timer" parent="."]
 wait_time = 10.0

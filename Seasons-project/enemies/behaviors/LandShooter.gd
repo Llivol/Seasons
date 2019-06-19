@@ -14,7 +14,7 @@ var can_attack
 
 onready var ledge_detector = $LedgeDetector
 
-func set_shooter_stats(bullet_damage = Global.DAMAGE_AVERAGE, attack_cd = 2, bullet_speed = 200, bullet_size = 4):
+func set_shooter_stats(bullet_damage = Global.DAMAGE_AVERAGE, attack_cd = 2, bullet_speed = 100, bullet_size = 2):
 	ATTACK_CD = attack_cd
 	BULLET_SPEED = bullet_speed
 	BULLET_SIZE = bullet_size
@@ -33,14 +33,16 @@ func _draw():
 
 
 func _physics_process(delta):
-	move(delta)
+	move(delta, false, _target)
 	shoot()
 
 func shoot():
 	if _target and can_attack:
 		flip_direction()
 		var bullet = bullet_scene.instance()
-		bullet.set_direction((_target.global_position - global_position).normalized() * _direction) 
+		var bullet_direction = (_target.global_position - global_position).normalized()
+		bullet_direction.x *= _direction
+		bullet.set_direction(bullet_direction) 
 		add_child(bullet)
 		$AttackCooldown.start()
 		can_attack = false

@@ -18,7 +18,7 @@ func _process(delta):
 
 	if _parent.SIZE != null:
 		#shape.set_extents(Vector2(_parent.SIZE, _parent.SIZE))
-		size_multiplier = _parent.SIZE / Global.SIZE_AVERAGE
+		size_multiplier = _parent.get_size_multiplier() / 2.0
 		shape.set_extents(Vector2(_parent.get_sprite().texture.get_size().x, _parent.get_sprite().texture.get_size().y) * size_multiplier)
 		update()
 		_init = true

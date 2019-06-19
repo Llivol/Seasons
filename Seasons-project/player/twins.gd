@@ -24,6 +24,9 @@ func _process(delta):
 		_rope.default_color = Global.COLOR_RED
 	else:
 		_rope.default_color = Global.COLOR_ORANGE
+	
+	if _player_left.is_dead() and _player_right.is_dead():
+		print("emit signal game over")
 
 
 func get_distance():

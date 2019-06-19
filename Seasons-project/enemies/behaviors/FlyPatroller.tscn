@@ -8,8 +8,7 @@
 [ext_resource path="res://enemies/AI/LedgeDetector.gd" type="Script" id=6]
 [ext_resource path="res://ui/HealthBar.tscn" type="PackedScene" id=7]
 
-
-[sub_resource type="CircleShape2D" id=1]
+[sub_resource type="RectangleShape2D" id=1]
 
 [sub_resource type="CircleShape2D" id=2]
 
@@ -25,7 +24,6 @@ autostart = true
 script = ExtResource( 3 )
 
 [node name="AttackArea" type="Area2D" parent="."]
-editor/display_folded = true
 script = ExtResource( 4 )
 
 [node name="Shape" type="CollisionShape2D" parent="AttackArea"]

@@ -4,6 +4,8 @@ class_name AttackArea
 var _parent
 var _init
 
+var size_multiplier = 1
+
 func _ready():
 	_parent = get_parent()
 	_init = false
@@ -15,11 +17,14 @@ func _process(delta):
 		return
 	
 	if _parent.SIZE != null:
-		$Shape.shape.set_radius(_parent.SIZE + 1)
+		size_multiplier = _parent.get_size_multiplier() / 1.9
+		$Shape.shape.set_extents(Vector2(_parent.get_sprite().texture.get_size().x, _parent.get_sprite().texture.get_size().y) * size_multiplier)
+		update()
 		_init = true
 
 func _draw():
 	if not Cheats.debug:
 		return
 	
-	draw_circle(position, _parent.SIZE + 1, Global.COLOR_GREEN)
+	var rect = Rect2(position - Vector2(_parent.get_sprite().texture.get_size().x, _parent.get_sprite().texture.get_size().y) * size_multiplier, Vector2(_parent.get_sprite().texture.get_size().x * 2, _parent.get_sprite().texture.get_size().y * 2) * size_multiplier)
+	draw_rect(rect, Global.COLOR_GREEN)

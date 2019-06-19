@@ -21,8 +21,11 @@ func _process(delta):
 
 	if _parent.MAX_HEALTH != null:
 		max_value = _parent.MAX_HEALTH
-		value = _parent.get_health() 
-		margin_top = -1 * (_parent.SIZE + 20)
+		value = _parent.get_health()
+		if get_parent().has_node("StaminaBar"):
+			margin_top = -1 * (_parent.get_sprite_size().y + 8)
+		else:
+			margin_top = -1 * (_parent.get_sprite_size().y + (4 * _parent.get_size_multiplier()))
 		_init = true
 
 func _on_health_changed(new_value: int) -> void:
