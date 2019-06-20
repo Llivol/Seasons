@@ -1,0 +1,105 @@
+[gd_scene load_steps=14 format=2]
+
+[ext_resource path="res://enemies/ErminePlus.gd" type="Script" id=1]
+[ext_resource path="res://_src/enemies/enemies_ermine_1.png" type="Texture" id=2]
+[ext_resource path="res://enemies/AI/AttackArea.gd" type="Script" id=3]
+[ext_resource path="res://enemies/AI/AwarenessArea.gd" type="Script" id=4]
+[ext_resource path="res://enemies/AI/FocusArea.gd" type="Script" id=5]
+[ext_resource path="res://enemies/AI/DynamicCollisionRectangleShape.gd" type="Script" id=6]
+[ext_resource path="res://ui/HealthBar.tscn" type="PackedScene" id=7]
+[ext_resource path="res://player/AttackCooldown.gd" type="Script" id=8]
+[ext_resource path="res://enemies/AI/Waypoints.gd" type="Script" id=9]
+
+[sub_resource type="RectangleShape2D" id=1]
+
+[sub_resource type="CircleShape2D" id=2]
+
+[sub_resource type="CircleShape2D" id=3]
+
+[sub_resource type="RectangleShape2D" id=4]
+
+[node name="ErminePlus" type="Node2D"]
+
+[node name="Body" type="KinematicBody2D" parent="."]
+collision_layer = 4
+collision_mask = 55
+script = ExtResource( 1 )
+
+[node name="Sprite" type="Sprite" parent="Body"]
+texture = ExtResource( 2 )
+
+[node name="Timer" type="Timer" parent="Body"]
+wait_time = 0.2
+
+[node name="AttackArea" type="Area2D" parent="Body"]
+editor/display_folded = true
+collision_layer = 64
+collision_mask = 2
+script = ExtResource( 3 )
+
+[node name="Shape" type="CollisionShape2D" parent="Body/AttackArea"]
+shape = SubResource( 1 )
+
+[node name="AwarenessArea" type="Area2D" parent="Body"]
+editor/display_folded = true
+collision_layer = 64
+collision_mask = 2
+script = ExtResource( 4 )
+
+[node name="Shape" type="CollisionShape2D" parent="Body/AwarenessArea"]
+shape = SubResource( 2 )
+
+[node name="FocusArea" type="Area2D" parent="Body"]
+editor/display_folded = true
+collision_layer = 64
+collision_mask = 2
+script = ExtResource( 5 )
+
+[node name="Shape" type="CollisionShape2D" parent="Body/FocusArea"]
+shape = SubResource( 3 )
+
+[node name="DynamicCollisionRectangleShape" type="CollisionShape2D" parent="Body"]
+shape = SubResource( 4 )
+script = ExtResource( 6 )
+
+[node name="HealthBar" parent="Body" instance=ExtResource( 7 )]
+margin_left = -8.0
+margin_top = -16.0
+margin_right = 0.0
+margin_bottom = -20.0
+
+[node name="AttackCooldown" type="Timer" parent="Body"]
+script = ExtResource( 8 )
+
+[node name="Waypoints" type="Node2D" parent="."]
+script = ExtResource( 9 )
+editor_process = true
+line_color = Color( 0.228943, 0.710254, 0.945312, 1 )
+line_width = 2.0
+triangle_color = Color( 0.722656, 0.908997, 1, 1 )
+_clockwise = false
+
+[node name="Start" type="Position2D" parent="Waypoints"]
+
+[node name="1" type="Position2D" parent="Waypoints"]
+position = Vector2( 32, 32 )
+
+[node name="2" type="Position2D" parent="Waypoints"]
+position = Vector2( 64, 0 )
+
+[node name="3" type="Position2D" parent="Waypoints"]
+position = Vector2( 96, 32 )
+
+[node name="4" type="Position2D" parent="Waypoints"]
+position = Vector2( 64, 0 )
+
+[node name="5" type="Position2D" parent="Waypoints"]
+position = Vector2( 32, 32 )
+[connection signal="flip" from="Body" to="Body/HealthBar" method="_on_flip"]
+[connection signal="health_changed" from="Body" to="Body/HealthBar" method="_on_health_changed"]
+[connection signal="timeout" from="Body/Timer" to="Body" method="_on_Timer_timeout"]
+[connection signal="body_entered" from="Body/AttackArea" to="Body" method="_on_AttackArea_body_entered"]
+[connection signal="body_exited" from="Body/AttackArea" to="Body" method="_on_AttackArea_body_exited"]
+[connection signal="body_entered" from="Body/AwarenessArea" to="Body" method="_on_AwarenessArea_body_entered"]
+[connection signal="body_exited" from="Body/FocusArea" to="Body" method="_on_FocusArea_body_exited"]
+[connection signal="timeout" from="Body/AttackCooldown" to="Body" method="_on_AttackCooldown_timeout"]
