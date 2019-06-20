@@ -41,24 +41,3 @@ func flip_direction():
 
 func _on_FlyTimer_timeout():
 	flip_direction()
-
-"""
-func _on_AttackArea_body_entered(body):
-	if body is Player and not body.is_dead():
-		attack(body)
-		if body == _target and body.is_dead():
-			_target = null
-
-
-func _on_AwarenessArea_body_entered(body):
-	if body is Player and not body.is_dead():
-		_target = body
-		_velocity = Vector2.ZERO
-		flip_direction()
-
-
-func _on_FocusArea_body_exited(body):
-	if body is Player and body == _target:
-		_target = null
-		update_direction()
-"""

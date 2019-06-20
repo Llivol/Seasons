@@ -41,9 +41,3 @@ func flip_direction():
 
 func _on_FlyTimer_timeout():
 	flip_direction()
-
-"""
-func _on_AttackArea_body_entered(body):
-	if body is Player and not body.is_dead():
-		attack(body)
-"""

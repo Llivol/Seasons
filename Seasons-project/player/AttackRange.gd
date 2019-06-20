@@ -40,18 +40,15 @@ func _process(delta):
 
 
 func is_enemy_in_range():
-	return _up.get_collider() is Enemy or _front.get_collider() is Enemy or _down.get_collider() is Enemy
+	return _up.is_colliding() or _front.is_colliding() or _down.is_colliding()
 
 
 func get_enemy_in_range():
-	var algo_up = _up.get_collider()
-	var algo_front = _front.get_collider()
-	var algo_down = _down.get_collider()
-	if _front.get_collider() is Enemy:
+	if _front.is_colliding():
 		return _front.get_collider()
-	elif _up.get_collider() is Enemy:
+	elif _up.is_colliding():
 		return _up.get_collider()
-	elif _down.get_collider() is Enemy:
+	elif _down.is_colliding():
 		return _down.get_collider()
 	else:
 		return null

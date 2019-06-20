@@ -28,16 +28,6 @@ func _process(delta):
 
 	position += _direction * SPEED * delta
 
-	"""
-	if _parent != null and _parent.BULLET_SPEED != null:
-		
-		SPEED = _parent.BULLET_SPEED
-		SIZE = _parent.BULLET_SIZE
-		DAMAGE = _parent.BULLET_DAMAGE
-		default_color = _parent.default_color
-		_init = true
-		update()
-	"""
 
 func _draw():
 	if SIZE:
@@ -53,7 +43,10 @@ func set_direction(direction):
 func _on_body_entered(body):
 	if body == _parent:
 		return
-	if body is Character:
-		body.apply_velocity((body.global_position - global_position).normalized() * KNOCKBACK_MULTIPLIER * DAMAGE)
-		body.take_damage(DAMAGE)
+	if body is TileMap:
+		queue_free()
+		return
+	
+	body.apply_velocity((body.global_position - global_position).normalized() * KNOCKBACK_MULTIPLIER * DAMAGE)
+	body.take_damage(DAMAGE)
 	queue_free()

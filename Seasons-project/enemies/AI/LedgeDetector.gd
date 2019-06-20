@@ -24,16 +24,10 @@ func _ready():
 		_wall_detector.set_enabled(true)
 		_wall_detector.add_exception(_parent)
 		
-		_wall_detector_top = RayCast2D.new()
-		_wall_detector_top.set_name("WallDetectorTop")
-		add_child(_wall_detector_top)
 		_wall_detector_top = $WallDetectorTop
 		_wall_detector_top.set_enabled(true)
 		_wall_detector_top.add_exception(_parent)
 		
-		_wall_detector_bot = RayCast2D.new()
-		_wall_detector_bot.set_name("WallDetectorBot")
-		add_child(_wall_detector_bot)
 		_wall_detector_bot = $WallDetectorBot
 		_wall_detector_bot.set_enabled(true)
 		_wall_detector_bot.add_exception(_parent)

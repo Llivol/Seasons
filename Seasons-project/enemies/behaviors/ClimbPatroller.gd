@@ -75,8 +75,3 @@ func check_collisions():
 
 func _on_Timer_timeout() -> void:
 	set_physics_process(true)
-"""
-func _on_AttackArea_body_entered(body):
-	if body is Player and not body.is_dead():
-		attack(body)
-"""

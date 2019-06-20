@@ -106,7 +106,7 @@ func drop():
 
 
 func _on_AttackArea_body_entered(body):
-	if body is Player and not body.is_dead():
+	if not body.is_dead():
 		_attack_target = body
 		can_attack = true
 		attack()
@@ -120,14 +120,13 @@ func _on_AttackArea_body_exited(body):
 
 
 func _on_AwarenessArea_body_entered(body):
-	if body is Player:
-		_target = body
-		if body.is_dead():
-			_target = null
+	_target = body
+	if body.is_dead():
+		_target = null
 
 
 func _on_FocusArea_body_exited(body):
-	if body is Player and body == _target:
+	if body == _target:
 		_target = null
 
 

@@ -7,6 +7,5 @@ func _ready():
 	default_color = Global.COLOR_GREEN
 
 func _on_body_entered(body):
-	if body is Player:
-		body.recover_stamina(value)
-		queue_free()
+	body.recover_stamina(value)
+	queue_free()

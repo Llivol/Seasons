@@ -77,29 +77,3 @@ func check_collisions():
 
 func _on_Timer_timeout() -> void:
 	set_physics_process(true)
-
-"""
-func _on_AttackArea_body_entered(body):
-	if body is Player and not body.is_dead():
-		attack(body)
-		if body == _target and body.is_dead():
-			_target = null
-
-
-func _on_AwarenessArea_body_entered(body):
-	if body is Player and not body.is_dead():
-		_target = body
-		_velocity = Vector2.ZERO
-		flip_direction()
-		if not on_awarness_position: 
-			on_awarness_position = global_position
-
-
-func _on_FocusArea_body_exited(body):
-	if body is Player and body == _target:
-		_target = null
-		update_direction()
-		waypoints.translate_children(global_position - on_awarness_position)
-		on_awarness_position = null
-		target_position = waypoints.get_next_point_position()
-"""
