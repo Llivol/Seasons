@@ -49,7 +49,7 @@ position = Vector2( 43.5, 480 )
 position = Vector2( 43.5, 185.786 )
 
 [node name="Fox" parent="." instance=ExtResource( 8 )]
-position = Vector2( 101.5, 480.5 )
+position = Vector2( 107.5, 480 )
 
 [node name="Goat" parent="." instance=ExtResource( 9 )]
 position = Vector2( 43.5, 240 )
@@ -79,4 +79,4 @@ position = Vector2( 304, 48 )
 position = Vector2( 368, 388 )
 
 [node name="Twins" parent="." instance=ExtResource( 18 )]
-position = Vector2( 16, 112 )
+position = Vector2( 297, 388 )

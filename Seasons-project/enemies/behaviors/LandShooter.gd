@@ -11,11 +11,12 @@ var BULLET_DAMAGE
 
 onready var ledge_detector = $LedgeDetector
 
-func set_shooter_stats(attack_cd = 2, bullet_speed = 100, bullet_size = 2, bullet_damage = Global.DAMAGE_AVERAGE):
+func set_shooter_stats(attack_cd = 2, bullet_speed = 100, bullet_size = 2, bullet_damage = Global.DAMAGE_AVERAGE, bullet_color = Global.COLOR_RED):
 	ATTACK_CD = attack_cd
 	BULLET_SPEED = bullet_speed
 	BULLET_SIZE = bullet_size
 	BULLET_DAMAGE = bullet_damage
+	default_color = bullet_color
 
 func _process(delta):
 	if ledge_detector.is_near_ledge() or ledge_detector.is_near_wall():
@@ -40,7 +41,7 @@ func shoot():
 		var bullet_direction = (_target.global_position - global_position).normalized()
 		bullet.set_direction(bullet_direction) 
 		get_parent().add_child(bullet)
-		bullet.set_stats(self, BULLET_SIZE, BULLET_SPEED, BULLET_DAMAGE)
+		bullet.set_stats(self, BULLET_SIZE, BULLET_SPEED, BULLET_DAMAGE, default_color)
 		bullet.global_position = self.global_position
 		$AttackCooldown.start()
 		can_attack = false

@@ -9,6 +9,7 @@ const COLOR_YELLOW = Color("#ffcd75")
 const COLOR_LIGHT_GREEN = Color("#a7f070")
 const COLOR_GREEN = Color("#38b764")
 const COLOR_DARK_GREEN = Color("#257179")
+const COLOR_WHITE = Color("#f4f4f4")
 
 const AS_SLOW = 2.0
 const AS_AVERAGE = 1.0
@@ -43,6 +44,16 @@ const AWARENESS_BIG = 96.0
 const DROP_CHANCE = 1
 
 const UNIT = 16
+
+enum Layers {
+	ENVIROMENT, 
+	PLAYER, 
+	ENEMY,
+	POWERUP, 
+	HAZARD, 
+	PROJECTILE, 
+	AREA,
+}
 
 var window_size_x
 var window_size_y

@@ -10,18 +10,19 @@ var _parent
 
 var _direction setget set_direction
 
-var default_color = Global.COLOR_RED
+var default_color
 
 func _ready():
 	connect("body_entered", self, "_on_body_entered")
 	position = Vector2.ZERO
 
 
-func set_stats(parent, size, speed, damage):
+func set_stats(parent, size, speed, damage, color):
 	_parent = parent
 	self.SIZE = size
 	self.SPEED = speed
 	self.DAMAGE = damage
+	self.default_color = color
 	update()
 
 func _process(delta):
