@@ -10,20 +10,25 @@ var MAX_SPEED
 var SIZE
 var AWARENESS
 var DROPS_HEALTH
+var ATTACK_CD
 
 var _target
+var _attack_target
+
+var can_attack
 
 func _ready():
 	_direction = 1
 	_velocity = Vector2()
 
-func set_stats(max_health, size, max_speed, damage, drops_health, awareness = 0):
+func set_stats(max_health, size, max_speed, damage, drops_health, attack_cd, awareness = 0):
 	MAX_HEALTH = max_health
 	_current_health = max_health
 	SIZE = size
 	MAX_SPEED = max_speed
 	DAMAGE = damage
 	DROPS_HEALTH = drops_health
+	ATTACK_CD = attack_cd
 	AWARENESS = awareness
 
 func set_sprite_size():
@@ -74,12 +79,15 @@ func update_direction():
 	if _direction != sign(_velocity.x):
 		_direction = sign(_velocity.x)
 		self.scale.x *= -1
-	
 
-func attack(player):
-	if not player.is_invulnerable:
-		.attack(player)
-	flip_direction()
+
+func attack(player = _attack_target):
+	if player and can_attack:
+		if not player.is_invulnerable and not player.is_dead():
+			.attack(player)
+		flip_direction()
+		$AttackCooldown.start()
+		can_attack = false
 
 
 func die():
@@ -95,3 +103,34 @@ func drop():
 		var power_up = power_up_scene.instance()
 		power_up.set_position(position)
 		get_parent().add_child(power_up)
+
+
+func _on_AttackArea_body_entered(body):
+	if body is Player and not body.is_dead():
+		_attack_target = body
+		can_attack = true
+		attack()
+		if body == _target and body.is_dead():
+			_target = null
+			_attack_target = null
+
+
+func _on_AttackArea_body_exited(body):
+	_attack_target = null
+
+
+func _on_AwarenessArea_body_entered(body):
+	if body is Player:
+		_target = body
+		if body.is_dead():
+			_target = null
+
+
+func _on_FocusArea_body_exited(body):
+	if body is Player and body == _target:
+		_target = null
+
+
+func _on_AttackCooldown_timeout():
+	can_attack = true
+	$AttackCooldown.stop()

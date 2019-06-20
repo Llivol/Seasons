@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://enemies/Ermine.gd" type="Script" id=1]
 [ext_resource path="res://_src/enemies/enemies_ermine_0.png" type="Texture" id=2]
@@ -7,7 +7,8 @@
 [ext_resource path="res://enemies/AI/FocusArea.gd" type="Script" id=5]
 [ext_resource path="res://enemies/AI/DynamicCollisionRectangleShape.gd" type="Script" id=6]
 [ext_resource path="res://ui/HealthBar.tscn" type="PackedScene" id=7]
-[ext_resource path="res://enemies/AI/Waypoints.gd" type="Script" id=8]
+[ext_resource path="res://player/AttackCooldown.gd" type="Script" id=8]
+[ext_resource path="res://enemies/AI/Waypoints.gd" type="Script" id=9]
 
 [sub_resource type="RectangleShape2D" id=1]
 
@@ -58,8 +59,11 @@ margin_top = -16.0
 margin_right = 0.0
 margin_bottom = -20.0
 
-[node name="Waypoints" type="Node2D" parent="."]
+[node name="AttackCooldown" type="Timer" parent="Body"]
 script = ExtResource( 8 )
+
+[node name="Waypoints" type="Node2D" parent="."]
+script = ExtResource( 9 )
 editor_process = true
 line_color = Color( 0.228943, 0.710254, 0.945312, 1 )
 line_width = 2.0
@@ -86,5 +90,7 @@ position = Vector2( 32, 32 )
 [connection signal="health_changed" from="Body" to="Body/HealthBar" method="_on_health_changed"]
 [connection signal="timeout" from="Body/Timer" to="Body" method="_on_Timer_timeout"]
 [connection signal="body_entered" from="Body/AttackArea" to="Body" method="_on_AttackArea_body_entered"]
+[connection signal="body_exited" from="Body/AttackArea" to="Body" method="_on_AttackArea_body_exited"]
 [connection signal="body_entered" from="Body/AwarenessArea" to="Body" method="_on_AwarenessArea_body_entered"]
 [connection signal="body_exited" from="Body/FocusArea" to="Body" method="_on_FocusArea_body_exited"]
+[connection signal="timeout" from="Body/AttackCooldown" to="Body" method="_on_AttackCooldown_timeout"]

@@ -20,8 +20,10 @@ func _draw():
 
 func _physics_process(delta):
 	move(delta)
+	attack()
 
-
+"""
 func _on_AttackArea_body_entered(body):
 	if body is Player and not body.is_dead():
 		attack(body)
+"""

@@ -10,6 +10,10 @@ const COLOR_LIGHT_GREEN = Color("#a7f070")
 const COLOR_GREEN = Color("#38b764")
 const COLOR_DARK_GREEN = Color("#257179")
 
+const AS_SLOW = 2.0
+const AS_AVERAGE = 1.0
+const AS_FAST = 0.5
+
 const HEALTH_LOW = 2.0
 const HEALTH_AVERAGE = 4.0
 const HEALTH_PLAYER = 6.0
@@ -19,6 +23,10 @@ const SIZE_SMALL = 8.0
 const SIZE_AVERAGE = 16.0
 const SIZE_PLAYER = 12.0
 const SIZE_BIG = 32.0
+
+const BULLET_SIZE_TINY = 2.0
+const BULLET_SIZE_AVERAGE = 4.0
+const BULLET_SIZE_LARGE = 8.0
 
 const SPEED_SLOW = 25.0
 const SPEED_AVERAGE = 50.0

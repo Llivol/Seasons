@@ -5,16 +5,13 @@ export var default_color = Global.COLOR_RED
 
 onready var bullet_scene = preload("res://enemies/AI/Bullet.tscn")
 
-var ATTACK_CD
 var BULLET_SPEED
 var BULLET_SIZE
 var BULLET_DAMAGE
 
-var can_attack
-
 onready var ledge_detector = $LedgeDetector
 
-func set_shooter_stats(bullet_damage = Global.DAMAGE_AVERAGE, attack_cd = 2, bullet_speed = 100, bullet_size = 2):
+func set_shooter_stats(attack_cd = 2, bullet_speed = 100, bullet_size = 2, bullet_damage = Global.DAMAGE_AVERAGE):
 	ATTACK_CD = attack_cd
 	BULLET_SPEED = bullet_speed
 	BULLET_SIZE = bullet_size
@@ -47,26 +44,3 @@ func shoot():
 		bullet.global_position = self.global_position
 		$AttackCooldown.start()
 		can_attack = false
-
-
-func _on_AttackArea_body_entered(body):
-	if body is Player and not body.is_dead():
-		attack(body)
-		if body == _target and body.is_dead():
-			_target = null
-
-func _on_AwarenessArea_body_entered(body):
-	if body is Player:
-		_target = body
-		if body.is_dead():
-			_target = null
-
-
-func _on_FocusArea_body_exited(body):
-	if body is Player and body == _target:
-		_target = null
-
-
-func _on_AttackCooldown_timeout():
-	can_attack = true
-	$AttackCooldown.stop()

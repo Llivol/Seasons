@@ -14,6 +14,7 @@ var on_awarness_position
 
 func _physics_process(delta):
 	move(delta) if (not _target) else chase(delta, true)
+	attack()
 
 
 func _draw():
@@ -77,7 +78,7 @@ func check_collisions():
 func _on_Timer_timeout() -> void:
 	set_physics_process(true)
 
-
+"""
 func _on_AttackArea_body_entered(body):
 	if body is Player and not body.is_dead():
 		attack(body)
@@ -101,3 +102,4 @@ func _on_FocusArea_body_exited(body):
 		waypoints.translate_children(global_position - on_awarness_position)
 		on_awarness_position = null
 		target_position = waypoints.get_next_point_position()
+"""

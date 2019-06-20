@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://enemies/Bee.gd" type="Script" id=1]
 [ext_resource path="res://_src/enemies/enemies_bee_0.png" type="Texture" id=2]
@@ -9,8 +9,9 @@
 [ext_resource path="res://enemies/AI/DynamicCollisionRectangleShape.gd" type="Script" id=7]
 [ext_resource path="res://enemies/AI/LedgeDetector.gd" type="Script" id=8]
 [ext_resource path="res://ui/HealthBar.tscn" type="PackedScene" id=9]
+[ext_resource path="res://player/AttackCooldown.gd" type="Script" id=10]
 
-[sub_resource type="RectangleShape2D" id=5]
+[sub_resource type="RectangleShape2D" id=1]
 
 [sub_resource type="CircleShape2D" id=2]
 
@@ -32,7 +33,7 @@ script = ExtResource( 3 )
 script = ExtResource( 4 )
 
 [node name="Shape" type="CollisionShape2D" parent="AttackArea"]
-shape = SubResource( 5 )
+shape = SubResource( 1 )
 
 [node name="AwarenessArea" type="Area2D" parent="."]
 editor/display_folded = true
@@ -64,9 +65,14 @@ margin_left = -8.0
 margin_top = -16.0
 margin_right = 0.0
 margin_bottom = -20.0
+
+[node name="AttackCooldown" type="Timer" parent="."]
+script = ExtResource( 10 )
 [connection signal="flip" from="." to="HealthBar" method="_on_flip"]
 [connection signal="health_changed" from="." to="HealthBar" method="_on_health_changed"]
 [connection signal="timeout" from="FlyTimer" to="." method="_on_FlyTimer_timeout"]
 [connection signal="body_entered" from="AttackArea" to="." method="_on_AttackArea_body_entered"]
+[connection signal="body_exited" from="AttackArea" to="." method="_on_AttackArea_body_exited"]
 [connection signal="body_entered" from="AwarenessArea" to="." method="_on_AwarenessArea_body_entered"]
 [connection signal="body_exited" from="FocusArea" to="." method="_on_FocusArea_body_exited"]
+[connection signal="timeout" from="AttackCooldown" to="." method="_on_AttackCooldown_timeout"]

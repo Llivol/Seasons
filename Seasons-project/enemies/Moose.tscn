@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://enemies/Moose.gd" type="Script" id=1]
 [ext_resource path="res://_src/enemies/enemies_moose_0.png" type="Texture" id=2]
@@ -6,6 +6,7 @@
 [ext_resource path="res://enemies/AI/DynamicCollisionRectangleShape.gd" type="Script" id=4]
 [ext_resource path="res://enemies/AI/LedgeDetector.gd" type="Script" id=5]
 [ext_resource path="res://ui/HealthBar.tscn" type="PackedScene" id=6]
+[ext_resource path="res://player/AttackCooldown.gd" type="Script" id=7]
 
 [sub_resource type="RectangleShape2D" id=1]
 
@@ -44,6 +45,11 @@ margin_left = -8.0
 margin_top = -16.0
 margin_right = 0.0
 margin_bottom = -20.0
+
+[node name="AttackCooldown" type="Timer" parent="."]
+script = ExtResource( 7 )
 [connection signal="flip" from="." to="HealthBar" method="_on_flip"]
 [connection signal="health_changed" from="." to="HealthBar" method="_on_health_changed"]
 [connection signal="body_entered" from="AttackArea" to="." method="_on_AttackArea_body_entered"]
+[connection signal="body_exited" from="AttackArea" to="." method="_on_AttackArea_body_exited"]
+[connection signal="timeout" from="AttackCooldown" to="." method="_on_AttackCooldown_timeout"]

@@ -28,6 +28,7 @@ func _draw():
 
 func _physics_process(delta):
 	move(delta, true)
+	attack()
 
 func set_fly_time(new_time):
 	fly_time = new_time
@@ -41,7 +42,8 @@ func flip_direction():
 func _on_FlyTimer_timeout():
 	flip_direction()
 
-
+"""
 func _on_AttackArea_body_entered(body):
 	if body is Player and not body.is_dead():
 		attack(body)
+"""

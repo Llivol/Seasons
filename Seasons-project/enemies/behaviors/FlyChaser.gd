@@ -28,6 +28,7 @@ func _draw():
 
 func _physics_process(delta):
 	move(delta, true) if (not _target) else chase(delta, true, ledge_detector.is_near_floor())
+	attack()
 
 func set_fly_time(new_time):
 	fly_time = new_time
@@ -41,7 +42,7 @@ func flip_direction():
 func _on_FlyTimer_timeout():
 	flip_direction()
 
-
+"""
 func _on_AttackArea_body_entered(body):
 	if body is Player and not body.is_dead():
 		attack(body)
@@ -60,3 +61,4 @@ func _on_FocusArea_body_exited(body):
 	if body is Player and body == _target:
 		_target = null
 		update_direction()
+"""

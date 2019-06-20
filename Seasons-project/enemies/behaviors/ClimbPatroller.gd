@@ -13,6 +13,7 @@ var just_collided: = false
 
 func _physics_process(delta):
 	move(delta)
+	attack()
 
 
 func _draw():
@@ -74,7 +75,8 @@ func check_collisions():
 
 func _on_Timer_timeout() -> void:
 	set_physics_process(true)
-
+"""
 func _on_AttackArea_body_entered(body):
 	if body is Player and not body.is_dead():
 		attack(body)
+"""

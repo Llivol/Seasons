@@ -16,13 +16,18 @@ func _draw():
 
 func _physics_process(delta):
 	move(delta) if (not _target) else chase(delta)
+	attack()
 
-
+"""
 func _on_AttackArea_body_entered(body):
-	if body is Player and not body.is_dead():
-		attack(body)
-		if body == _target and body.is_dead():
+	_attack_target = body
+	if _attack_target is Player and not _attack_target.is_dead():
+		attack(_attack_target)
+		$AttackCooldown.start()
+		if _attack_target == _target and _attack_target.is_dead():
 			_target = null
+			_attack_target = null
+
 
 func _on_AwarenessArea_body_entered(body):
 	if body is Player and not body.is_dead():
@@ -35,3 +40,13 @@ func _on_FocusArea_body_exited(body):
 	if body is Player and body == _target:
 		_target = null
 		update_direction()
+
+
+func _on_AttackCooldown_timeout():
+	if _attack_target is Player and not _attack_target.is_dead():
+		attack(_attack_target)
+		$AttackCooldown.start()
+		if _attack_target == _target and _attack_target.is_dead():
+			_target = null
+			_attack_target = null
+"""

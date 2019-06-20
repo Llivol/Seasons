@@ -70,6 +70,7 @@ margin_bottom = -20.0
 script = ExtResource( 9 )
 [connection signal="health_changed" from="." to="HealthBar" method="_on_health_changed"]
 [connection signal="body_entered" from="AttackArea" to="." method="_on_AttackArea_body_entered"]
+[connection signal="body_exited" from="AttackArea" to="." method="_on_AttackArea_body_exited"]
 [connection signal="body_entered" from="AwarenessArea" to="." method="_on_AwarenessArea_body_entered"]
 [connection signal="body_exited" from="FocusArea" to="." method="_on_FocusArea_body_exited"]
 [connection signal="timeout" from="AttackCooldown" to="." method="_on_AttackCooldown_timeout"]

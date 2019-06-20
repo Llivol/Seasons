@@ -1,11 +1,12 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://enemies/Goat.gd" type="Script" id=1]
 [ext_resource path="res://_src/enemies/enemies_goat_0.png" type="Texture" id=2]
 [ext_resource path="res://enemies/AI/AttackArea.gd" type="Script" id=3]
 [ext_resource path="res://enemies/AI/DynamicCollisionRectangleShape.gd" type="Script" id=4]
 [ext_resource path="res://ui/HealthBar.tscn" type="PackedScene" id=5]
-[ext_resource path="res://enemies/AI/Waypoints.gd" type="Script" id=6]
+[ext_resource path="res://player/AttackCooldown.gd" type="Script" id=6]
+[ext_resource path="res://enemies/AI/Waypoints.gd" type="Script" id=7]
 
 [sub_resource type="RectangleShape2D" id=1]
 
@@ -38,8 +39,11 @@ margin_top = -16.0
 margin_right = 0.0
 margin_bottom = -20.0
 
-[node name="Waypoints" type="Node2D" parent="."]
+[node name="AttackCooldown" type="Timer" parent="Body"]
 script = ExtResource( 6 )
+
+[node name="Waypoints" type="Node2D" parent="."]
+script = ExtResource( 7 )
 editor_process = true
 line_color = Color( 0.228943, 0.710254, 0.945312, 1 )
 line_width = 2.0
@@ -66,3 +70,5 @@ position = Vector2( 32, 0 )
 [connection signal="health_changed" from="Body" to="Body/HealthBar" method="_on_health_changed"]
 [connection signal="timeout" from="Body/Timer" to="Body" method="_on_Timer_timeout"]
 [connection signal="body_entered" from="Body/AttackArea" to="Body" method="_on_AttackArea_body_entered"]
+[connection signal="body_exited" from="Body/AttackArea" to="Body" method="_on_AttackArea_body_exited"]
+[connection signal="timeout" from="Body/AttackCooldown" to="Body" method="_on_AttackCooldown_timeout"]
