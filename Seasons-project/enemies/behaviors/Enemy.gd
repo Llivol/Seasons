@@ -54,6 +54,8 @@ func move(delta, flying = false, shooting = false):
 func chase(delta, flying = false, at_max_floor_distance = false): 
 	var direction_to_target = (_target.global_position - global_position).normalized() 
 	_velocity.x = min(_velocity.x + ACCELERATION, MAX_SPEED * CHASE_MULTIPLIER) if (direction_to_target.x > 0) else max(_velocity.x - ACCELERATION, -MAX_SPEED * CHASE_MULTIPLIER)
+	if has_node("LedgeDetector") and not flying and $LedgeDetector.is_near_ledge():
+		_velocity.x = 0
 	if not flying:
 		_velocity.y = GRAVITY * delta
 	else:

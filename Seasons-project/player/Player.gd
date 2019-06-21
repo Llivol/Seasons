@@ -152,14 +152,6 @@ func _process(delta):
 
 func _draw():
 	pass
-	"""
-	var shape: = $Collision
-	var extents: Vector2 = shape.shape.extents * 2.0
-	draw_rect(Rect2(shape.position - extents / 2.0, extents), default_color_dark)
-	extents *= 0.8
-	draw_rect(Rect2(shape.position - extents / 2.0, extents), default_color)
-	draw_circle(shape.position + Vector2(SIZE/2, -SIZE/2), SIZE/8, default_color_dark)
-	"""
 
 
 """ GETTERS & SETTERS """
@@ -272,7 +264,8 @@ func enter_state() -> void:
 			_recover_speed = RECOVER_SPEED_FROM_EXHAUSTED if (_prev_state == EXHAUST) else RECOVER_SPEED_FROM_IDLE
 
 		REVIVE:
-			recover_health(1)
+			if _current_health == 0:
+				recover_health(1)
 
 		WALK:
 			return
@@ -619,7 +612,7 @@ func process_exhaust():
 
 func process_dead():
 	_velocity.x = 0
-	if _on_hug_distance:
+	if _on_hug_distance or _current_health > 0:
 		change_state(REVIVE)
 
 
@@ -629,6 +622,7 @@ func flip_direction():
 	if _state == DEAD:
 		return
 	.flip_direction()
+
 
 func get_angle_in_first_quadrant(angle):
 	while angle > PI/2:
