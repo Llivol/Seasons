@@ -9,32 +9,54 @@ var _player_left
 var _player_right
 var _rope
 var _distance := 0.0
+var _joint
 
 
 func _ready():
 	_player_left = $PlayerLeft
 	_player_right = $PlayerRight
 	_rope = $Rope
+	_joint = true
 
 
 func _process(delta):
-	_update_rope()
-	_update_distance()
-	if _distance >= ROPE_MAX_DISTANCE:
-		_rope.default_color = Global.COLOR_RED
+	if _joint:
+		_update_rope()
+		_update_distance()
+		if _distance >= ROPE_MAX_DISTANCE:
+			_rope.default_color = Global.COLOR_RED
+		else:
+			_rope.default_color = Global.COLOR_ORANGE
+		
+		if _player_left.is_dead() and _player_right.is_dead():
+			print("emit signal game over")
 	else:
-		_rope.default_color = Global.COLOR_ORANGE
-	
-	if _player_left.is_dead() and _player_right.is_dead():
-		print("emit signal game over")
+		if _player_left and _player_left.is_dead() or _player_right and _player_right.is_dead():
+			print("emit signal game over")
 
 
 func get_distance():
+	if not _joint:
+		return -1
 	return _distance
 
 
 func get_twin(player):
 	return _player_left if (player == _player_right) else _player_right
+
+
+func cut_the_rope(player):
+	var twin = get_twin(player)
+	if twin == _player_left:
+		_player_left = null
+	else:
+		_player_right = null
+	_joint = false
+	$Rope.queue_free()
+
+
+func is_joint():
+	return _joint
 
 func _update_distance():
 	_distance = _player_left.global_position.distance_to(_player_right.global_position)

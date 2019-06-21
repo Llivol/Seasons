@@ -47,6 +47,7 @@ const IDLE_TIME_TO_RECOVER_STAMINA = 1
 const EXHAUSTED_TIME_TO_RECOVER_STAMINA = 3
 const RECOVER_SPEED_FROM_IDLE = 10.0
 const RECOVER_SPEED_FROM_EXHAUSTED = 2.5
+const CUT_THE_ROPE_TIME = 2
 
 const SLIDE_STOP_VELOCITY = 0.0 # one pixel/second
 const SLIDE_STOP_MIN_TRAVEL = 0.0 # one pixel
@@ -98,6 +99,7 @@ var _on_hug_distance = false
 var _recover_speed
 
 var _started = false
+var _parent
 
 var can_attack = true
 var is_invulnerable = false
@@ -135,9 +137,11 @@ func _init():
 
 
 func _ready():
+	_parent = get_parent()
 	$AttackCooldown.connect("timeout", self, "_on_AttackCooldown_timeout")
 	$InvulnerabilityWindow.connect("timeout", self, "_on_InvulnerabilityWindow_timeout")
 	$RecoverStamina.connect("timeout", self, "_on_RecoverStamina_timeout")
+	$CutTheRope.connect("timeout", self, "_on_CutTheRope_timeout")
 
 
 func _process(delta):
@@ -152,6 +156,17 @@ func _process(delta):
 
 func _draw():
 	pass
+
+
+func _input(event):
+	if _parent.is_joint() and _parent.get_twin(self).is_dead():
+		if event.is_action_pressed(str(name, "_pickaxe")):
+			print("Start cutting the rope")
+			$CutTheRope.start(CUT_THE_ROPE_TIME)
+	
+		if event.is_action_released(str(name, "_pickaxe")):
+			print("Stop cutting the rope")
+			$CutTheRope.stop()
 
 
 """ GETTERS & SETTERS """
@@ -264,7 +279,7 @@ func enter_state() -> void:
 			_recover_speed = RECOVER_SPEED_FROM_EXHAUSTED if (_prev_state == EXHAUST) else RECOVER_SPEED_FROM_IDLE
 
 		REVIVE:
-			if _current_health == 0:
+			if _parent.is_joint() and _current_health == 0:
 				recover_health(1)
 
 		WALK:
@@ -661,6 +676,12 @@ func _on_InvulnerabilityWindow_timeout():
 func _on_RecoverStamina_timeout():
 	change_state(RECOVER)
 	$RecoverStamina.stop()
+
+
+func _on_CutTheRope_timeout():
+	_parent.cut_the_rope(self)
+	print("Has cortao la cuerda")
+	$CutTheRope.queue_free()
 
 
 func _on_viewport_exited(viewport):
