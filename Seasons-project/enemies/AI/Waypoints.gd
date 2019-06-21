@@ -1,5 +1,6 @@
 tool
 extends Node2D
+class_name Waypoints
 
 export var editor_process: = true setget set_editor_process
 
