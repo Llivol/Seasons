@@ -161,6 +161,8 @@ func _draw():
 
 
 func _input(event):
+	if event.is_action_pressed(str(name, "_pickaxe")):
+		change_state(ATTACK)
 	if _parent.is_joint() and _parent.get_twin(self).is_dead():
 		if event.is_action_pressed(str(name, "_pickaxe")):
 			$CutTheRope.start(CUT_THE_ROPE_TIME)
@@ -204,8 +206,6 @@ func set_state():
 	if _input_pickaxe:
 		if not is_on_floor() and not (_input_right or _input_left):
 			change_state(HANG)
-		else:
-			change_state(ATTACK)
 			
 	elif (_input_action and _input_up) and is_below_twin():
 		change_state(CLIMB)

@@ -1,18 +1,22 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://levels/Playground.gd" type="Script" id=1]
 [ext_resource path="res://levels/PlaygroundTileset.tres" type="TileSet" id=2]
 [ext_resource path="res://player/Twins.tscn" type="PackedScene" id=3]
-[ext_resource path="res://enemies/Bear.tscn" type="PackedScene" id=4]
-[ext_resource path="res://enemies/Butterfly.tscn" type="PackedScene" id=5]
-[ext_resource path="res://enemies/Bee.tscn" type="PackedScene" id=6]
-[ext_resource path="res://enemies/Mushroom.tscn" type="PackedScene" id=7]
-[ext_resource path="res://enemies/Squirrel.tscn" type="PackedScene" id=8]
-[ext_resource path="res://enemies/Vulture.tscn" type="PackedScene" id=9]
-[ext_resource path="res://enemies/Yeti.tscn" type="PackedScene" id=10]
-[ext_resource path="res://enemies/Moose.tscn" type="PackedScene" id=11]
-[ext_resource path="res://enemies/Snake.tscn" type="PackedScene" id=12]
-[ext_resource path="res://enemies/Goat.tscn" type="PackedScene" id=13]
+[ext_resource path="res://enemies/Butterfly.tscn" type="PackedScene" id=4]
+[ext_resource path="res://enemies/Bee.tscn" type="PackedScene" id=5]
+[ext_resource path="res://enemies/Mushroom.tscn" type="PackedScene" id=6]
+[ext_resource path="res://enemies/Squirrel.tscn" type="PackedScene" id=7]
+[ext_resource path="res://enemies/Vulture.tscn" type="PackedScene" id=8]
+[ext_resource path="res://enemies/Yeti.tscn" type="PackedScene" id=9]
+[ext_resource path="res://enemies/Moose.tscn" type="PackedScene" id=10]
+[ext_resource path="res://enemies/Snake.tscn" type="PackedScene" id=11]
+[ext_resource path="res://enemies/Goat.tscn" type="PackedScene" id=12]
+[ext_resource path="res://enemies/BearPlus.tscn" type="PackedScene" id=13]
+[ext_resource path="res://enemies/BeePlus.tscn" type="PackedScene" id=14]
+[ext_resource path="res://enemies/CaterpillarPlus.tscn" type="PackedScene" id=15]
+[ext_resource path="res://enemies/HarePlus.tscn" type="PackedScene" id=16]
+[ext_resource path="res://enemies/MushroomPlus.tscn" type="PackedScene" id=17]
 
 [node name="Playground" type="Node2D"]
 script = ExtResource( 1 )
@@ -49,40 +53,49 @@ margin_bottom = 72.0
 custom_colors/font_color = Color( 0.101961, 0.109804, 0.172549, 1 )
 text = "Distance: "
 
-[node name="Bear" parent="." instance=ExtResource( 4 )]
-position = Vector2( 368, 64 )
-
-[node name="Butterfly" parent="." instance=ExtResource( 5 )]
+[node name="Butterfly" parent="." instance=ExtResource( 4 )]
 position = Vector2( 48, 128 )
 
-[node name="Butterfly2" parent="." instance=ExtResource( 5 )]
+[node name="Butterfly2" parent="." instance=ExtResource( 4 )]
 position = Vector2( 272, 144 )
 
-[node name="Bee" parent="." instance=ExtResource( 6 )]
-position = Vector2( 144, 112 )
-
-[node name="Bee2" parent="." instance=ExtResource( 6 )]
+[node name="Bee2" parent="." instance=ExtResource( 5 )]
 position = Vector2( 112, 160 )
 
-[node name="Mushroom" parent="." instance=ExtResource( 7 )]
+[node name="Mushroom" parent="." instance=ExtResource( 6 )]
 position = Vector2( 280, 352 )
 
-[node name="Squirrel" parent="." instance=ExtResource( 8 )]
+[node name="Squirrel" parent="." instance=ExtResource( 7 )]
 position = Vector2( 152, 280 )
 
-[node name="Vulture" parent="." instance=ExtResource( 9 )]
+[node name="Vulture" parent="." instance=ExtResource( 8 )]
 position = Vector2( 232, 248 )
 
-[node name="Yeti" parent="." instance=ExtResource( 10 )]
+[node name="Yeti" parent="." instance=ExtResource( 9 )]
 position = Vector2( 40, 304 )
 
-[node name="Moose" parent="." instance=ExtResource( 11 )]
+[node name="Moose" parent="." instance=ExtResource( 10 )]
 position = Vector2( 184, 192 )
 
-[node name="Snake" parent="." instance=ExtResource( 12 )]
+[node name="Snake" parent="." instance=ExtResource( 11 )]
 position = Vector2( 176, 72 )
 
-[node name="Goat" parent="." instance=ExtResource( 13 )]
-position = Vector2( 32, 456 )
+[node name="Goat" parent="." instance=ExtResource( 12 )]
+position = Vector2( 32, 450 )
+
+[node name="BearPlus" parent="." instance=ExtResource( 13 )]
+position = Vector2( 360, 64 )
+
+[node name="BeePlus" parent="." instance=ExtResource( 14 )]
+position = Vector2( 144, 112 )
+
+[node name="CaterpillarPlus" parent="." instance=ExtResource( 15 )]
+position = Vector2( 328, 264 )
+
+[node name="HarePlus" parent="." instance=ExtResource( 16 )]
+position = Vector2( 448, 192 )
+
+[node name="MushroomPlus" parent="." instance=ExtResource( 17 )]
+position = Vector2( 120, 416 )
 
 [editable path="Twins"]

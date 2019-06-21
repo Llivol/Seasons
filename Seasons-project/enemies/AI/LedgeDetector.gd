@@ -48,13 +48,13 @@ func _process(delta):
 			_ledge_detector.set_cast_to(Vector2(0, _parent.get_sprite_size().y * _parent.get_size_multiplier()))
 		if has_node("WallDetector"):
 			_wall_detector.translate(Vector2(_parent.get_sprite_size().x * _parent.get_size_multiplier() / 2 + 1, 0))
-			_wall_detector.set_cast_to(Vector2(1, 0))
+			_wall_detector.set_cast_to(Vector2(2, 0))
 			
 			_wall_detector_top.translate(Vector2(_parent.get_sprite_size().x * _parent.get_size_multiplier() / 2 + 1, -_parent.get_sprite_size().y * _parent.get_size_multiplier() / 4))
-			_wall_detector_top.set_cast_to(Vector2(1, -_parent.get_sprite_size().y * _parent.get_size_multiplier() / 4))
+			_wall_detector_top.set_cast_to(Vector2(2, -_parent.get_sprite_size().y * _parent.get_size_multiplier() / 4))
 			
 			_wall_detector_bot.translate(Vector2(_parent.get_sprite_size().x * _parent.get_size_multiplier() / 2 + 1, _parent.get_sprite_size().y * _parent.get_size_multiplier() / 4))
-			_wall_detector_bot.set_cast_to(Vector2(1, _parent.get_sprite_size().y * _parent.get_size_multiplier() / 4))
+			_wall_detector_bot.set_cast_to(Vector2(2, _parent.get_sprite_size().y * _parent.get_size_multiplier() / 4))
 
 		update()
 		_init = true
