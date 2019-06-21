@@ -1,6 +1,8 @@
 extends Area2D
 class_name Powerup
 
+const GRAVITY = 10
+
 var SIZE
 
 var default_color
@@ -10,8 +12,12 @@ func _ready():
 	$Shape.shape.set_radius(SIZE)
 
 
+func _process(delta):
+	global_position += Vector2(0, GRAVITY * delta)
+
+
 func set_position(pos):
-	global_position = pos
+	global_position = pos - Vector2(0, Global.SIZE_SMALL)
 
 
 func _draw():

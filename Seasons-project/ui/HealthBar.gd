@@ -32,6 +32,8 @@ func _on_health_changed(new_value: int) -> void:
 	value = new_value
 	yield(animate_value(new_value), "completed")
 
+func update_max_health():
+	max_value = _parent.MAX_HEALTH
 
 func animate_value(target, tween_duration = 1.0):
 	$Tween.interpolate_property(self, 'value', value, target, tween_duration, Tween.TRANS_SINE, Tween.EASE_OUT)

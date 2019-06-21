@@ -22,6 +22,10 @@ func _on_stamina_changed(new_value: int) -> void:
 	yield(animate_value(new_value), "completed")
 
 
+func update_max_stamina():
+	max_value = _parent.MAX_STAMINA
+
+
 func animate_value(target, tween_duration = 1.0):
 	$Tween.interpolate_property(self, 'value', value, target, tween_duration, Tween.TRANS_SINE, Tween.EASE_OUT)
 	$Tween.start()

@@ -48,6 +48,8 @@ const EXHAUSTED_TIME_TO_RECOVER_STAMINA = 3
 const RECOVER_SPEED_FROM_IDLE = 10.0
 const RECOVER_SPEED_FROM_EXHAUSTED = 2.5
 const CUT_THE_ROPE_TIME = 2
+const BONUS_HEALTH = 1
+const BONUS_STAMINA = STAMINA_UNIT
 
 const SLIDE_STOP_VELOCITY = 0.0 # one pixel/second
 const SLIDE_STOP_MIN_TRAVEL = 0.0 # one pixel
@@ -161,11 +163,9 @@ func _draw():
 func _input(event):
 	if _parent.is_joint() and _parent.get_twin(self).is_dead():
 		if event.is_action_pressed(str(name, "_pickaxe")):
-			print("Start cutting the rope")
 			$CutTheRope.start(CUT_THE_ROPE_TIME)
 	
 		if event.is_action_released(str(name, "_pickaxe")):
-			print("Stop cutting the rope")
 			$CutTheRope.stop()
 
 
@@ -409,7 +409,10 @@ func take_damage(value):
 
 
 func recover_health(value):
-	set_health(_current_health + value)
+	if _current_health < MAX_HEALTH:
+		set_health(_current_health + value)
+	else: 
+		increase_max_health(BONUS_HEALTH)
 
 
 func get_stamina():
@@ -431,7 +434,16 @@ func consume_stamina(value):
 
 
 func recover_stamina(value):
-	set_stamina(_current_stamina + value)
+	if _current_stamina < MAX_STAMINA:
+		set_stamina(_current_stamina + value)
+	else:
+		increase_max_stamina()
+
+
+func increase_max_stamina():
+	MAX_STAMINA += BONUS_STAMINA
+	set_stamina(MAX_STAMINA)
+	$StaminaBar.update_max_stamina()
 
 
 func set_direction_to_twin(direction_to_twin):
@@ -493,7 +505,7 @@ func process_kinematics(delta):
 			return
 
 		RECOVER:
-			recover_stamina(_recover_speed * STAMINA_UNIT * delta)
+			recover_stamina(_recover_speed * STAMINA_UNIT * delta) if(_current_stamina < MAX_STAMINA) else set_stamina(MAX_STAMINA)
 
 		PULL:
 			process_pull(delta)
@@ -680,7 +692,6 @@ func _on_RecoverStamina_timeout():
 
 func _on_CutTheRope_timeout():
 	_parent.cut_the_rope(self)
-	print("Has cortao la cuerda")
 	$CutTheRope.queue_free()
 
 

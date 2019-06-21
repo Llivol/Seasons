@@ -20,6 +20,10 @@ var can_attack
 func _ready():
 	_direction = 1
 	_velocity = Vector2()
+	var node = VisibilityNotifier2D.new()
+	node.set_name("OutOfViewportNotifier")
+	add_child(node)
+	node.connect("viewport_exited", self, "_on_viewport_exited")
 
 func set_stats(max_health, size, max_speed, damage, drops_health, attack_cd, awareness = 0):
 	MAX_HEALTH = max_health
@@ -135,3 +139,8 @@ func _on_FocusArea_body_exited(body):
 func _on_AttackCooldown_timeout():
 	can_attack = true
 	$AttackCooldown.stop()
+
+
+func _on_viewport_exited(viewport):
+	print("adios de la vida")
+	queue_free()

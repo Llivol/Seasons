@@ -26,6 +26,11 @@ func set_health(value):
 	if _current_health == 0:
 		die()
 
+func increase_max_health(value):
+	MAX_HEALTH += value
+	set_health(MAX_HEALTH)
+	$HealthBar.update_max_health()
+
 func get_health():
 	return _current_health
 
