@@ -32,3 +32,17 @@ func _input(event):
 	if event.is_action_pressed("Cheat_unkillable"):
 		unkillable = !unkillable
 		print(str(">> Unkillable mode setted to: ", unkillable))
+	if event.is_action_pressed("Cheat_restart"):
+		var current_scene = get_tree().get_current_scene().filename
+		get_tree().change_scene(current_scene)
+		print(str(">> Reloading scene... ", current_scene))
+		
+		# Remove the current level
+		#var level = root.get_node("Level")
+		#root.remove_child(level)
+		#level.call_deferred("free")
+		
+		# Add the next level
+		#var next_level_resource = load("res://path/to/scene.tscn)
+		#var next_level = next_level.instance()
+		#root.add_child(next_level)

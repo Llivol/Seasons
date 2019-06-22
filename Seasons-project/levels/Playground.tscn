@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://levels/Playground.gd" type="Script" id=1]
 [ext_resource path="res://levels/PlaygroundTileset.tres" type="TileSet" id=2]
@@ -13,10 +13,9 @@
 [ext_resource path="res://enemies/Snake.tscn" type="PackedScene" id=11]
 [ext_resource path="res://enemies/Goat.tscn" type="PackedScene" id=12]
 [ext_resource path="res://enemies/BearPlus.tscn" type="PackedScene" id=13]
-[ext_resource path="res://enemies/BeePlus.tscn" type="PackedScene" id=14]
-[ext_resource path="res://enemies/CaterpillarPlus.tscn" type="PackedScene" id=15]
-[ext_resource path="res://enemies/HarePlus.tscn" type="PackedScene" id=16]
-[ext_resource path="res://enemies/MushroomPlus.tscn" type="PackedScene" id=17]
+[ext_resource path="res://enemies/CaterpillarPlus.tscn" type="PackedScene" id=14]
+[ext_resource path="res://enemies/HarePlus.tscn" type="PackedScene" id=15]
+[ext_resource path="res://enemies/MushroomPlus.tscn" type="PackedScene" id=16]
 
 [node name="Playground" type="Node2D"]
 script = ExtResource( 1 )
@@ -34,12 +33,14 @@ editor/display_folded = true
 position = Vector2( 48, 54.9 )
 
 [node name="LPlayerLeft" type="Label" parent="."]
+visible = false
 margin_right = 128.0
 margin_bottom = 37.8
 custom_colors/font_color = Color( 0.101961, 0.109804, 0.172549, 1 )
 text = "Player 1: "
 
 [node name="LPlayerRight" type="Label" parent="."]
+visible = false
 margin_top = 16.0
 margin_right = 128.0
 margin_bottom = 54.9
@@ -47,6 +48,7 @@ custom_colors/font_color = Color( 0.101961, 0.109804, 0.172549, 1 )
 text = "Player 2: "
 
 [node name="LDistance" type="Label" parent="."]
+visible = false
 margin_top = 32.0
 margin_right = 128.0
 margin_bottom = 72.0
@@ -86,16 +88,13 @@ position = Vector2( 32, 450 )
 [node name="BearPlus" parent="." instance=ExtResource( 13 )]
 position = Vector2( 360, 64 )
 
-[node name="BeePlus" parent="." instance=ExtResource( 14 )]
-position = Vector2( 144, 112 )
-
-[node name="CaterpillarPlus" parent="." instance=ExtResource( 15 )]
+[node name="CaterpillarPlus" parent="." instance=ExtResource( 14 )]
 position = Vector2( 328, 264 )
 
-[node name="HarePlus" parent="." instance=ExtResource( 16 )]
+[node name="HarePlus" parent="." instance=ExtResource( 15 )]
 position = Vector2( 448, 192 )
 
-[node name="MushroomPlus" parent="." instance=ExtResource( 17 )]
+[node name="MushroomPlus" parent="." instance=ExtResource( 16 )]
 position = Vector2( 120, 416 )
 
 [editable path="Twins"]

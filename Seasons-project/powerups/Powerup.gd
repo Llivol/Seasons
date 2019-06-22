@@ -8,7 +8,7 @@ var SIZE
 var default_color
 
 func _ready():
-	SIZE = Global.SIZE_SMALL / 2
+	SIZE = Global.SIZE_TINY / 2
 	$Shape.shape.set_radius(SIZE)
 
 
@@ -17,7 +17,7 @@ func _process(delta):
 
 
 func set_position(pos):
-	global_position = pos - Vector2(0, Global.SIZE_SMALL)
+	global_position = pos - Vector2(0, Global.SIZE_TINY)
 
 
 func _draw():
