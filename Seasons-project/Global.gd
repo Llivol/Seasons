@@ -41,13 +41,11 @@ const AWARENESS_TINY = 24.0
 const AWARENESS_AVERAGE = 48.0
 const AWARENESS_LARGE = 96.0
 
-const FLY_TIME_LOW = 2.0
-const FLY_TIME_AVERAGE = 4.0
-const FLY_TIME_HIGH = 8.0
-
-const WAIT_TIME_LOW = 0.5
-const WAIT_TIME_AVERAGE = 1
-const WAIT_TIME_HIGH = 2
+const TIME_VERY_LOW = 0.5
+const TIME_LOW = 1.0
+const TIME_AVERAGE = 2.0
+const TIME_HIGH = 4.0
+const TIME_VERY_HIGH = 8.0
 
 const DROP_CHANCE = 1
 

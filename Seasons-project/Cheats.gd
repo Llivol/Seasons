@@ -35,7 +35,7 @@ func _input(event):
 	if event.is_action_pressed("Cheat_restart"):
 		var current_scene = get_tree().get_current_scene().filename
 		get_tree().change_scene(current_scene)
-		print(str(">> Reloading scene... ", current_scene))
+		print(">> Reloading scene...")
 		
 		# Remove the current level
 		#var level = root.get_node("Level")
