@@ -1,7 +1,7 @@
 extends Area2D
 class_name Powerup
 
-const GRAVITY = 10
+const GRAVITY = 8
 
 var SIZE
 
