@@ -2,7 +2,7 @@ extends Enemy
 class_name FlyPatroller
 
 export var default_color = Global.COLOR_YELLOW
-export var fly_time = 2
+export var fly_time = 2 setget set_fly_time
 
 onready var ledge_detector = $LedgeDetector
 onready var fly_timer = $FlyTimer
@@ -36,6 +36,7 @@ func set_fly_time(new_time):
 """Override"""
 func flip_direction():
 	.flip_direction()
+	fly_timer.stop()
 	fly_timer.start(fly_time)
 
 

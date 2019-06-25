@@ -45,6 +45,8 @@ func get_sprite_size():
 	sprite_size.y = $Sprite.texture.get_size().y
 	return sprite_size
 
+func get_direction():
+	return _direction
 
 func flip_direction():
 	_direction = 1 if (_direction == -1) else -1

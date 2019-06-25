@@ -305,6 +305,7 @@ Cheat_restart={
 2d_physics/layer_5="hazard"
 2d_physics/layer_6="projectile"
 2d_physics/layer_7="area"
+2d_physics/layer_8="aux z1"
 
 [rendering]
 

@@ -23,7 +23,7 @@ func spawn():
 		get_parent().add_child(child)
 		var child_position = self.global_position
 		randomize()
-		var angle = rand_range(30, 150) if not (BELOW) else rand_range(210, 330) 
+		var angle = rand_range(PI,  2 * PI) if (BELOW) else rand_range(0, PI) 
 		var distance = rand_range(min(SIZE * 2, AWARENESS / 2), AWARENESS)
 		child_position.x += distance * cos(angle)
 		child_position.y -= distance * sin(angle)

@@ -6,10 +6,10 @@ var ATTACK_CD = Global.TIME_VERY_LOW
 var _attack_target
 var can_attack
 
-func attack(player = _attack_target):
+func attack(player = _attack_target, knockback = true):
 	if player:
 		if not player.is_invulnerable and not player.is_dead():
-			.attack(player)
+			.attack(player, knockback)
 		$AttackCooldown.start()
 
 func _on_AttackArea_body_entered(body):

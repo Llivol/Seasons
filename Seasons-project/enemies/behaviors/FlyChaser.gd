@@ -36,6 +36,7 @@ func set_fly_time(new_time):
 """Override"""
 func flip_direction():
 	.flip_direction()
+	fly_timer.stop()
 	fly_timer.start(fly_time)
 
 

@@ -68,9 +68,12 @@ func get_size_multiplier():
 	return SIZE / Global.SIZE_AVERAGE
 
 
-func attack(body):
+func attack(body, knockback = true):
 	var size_diff = self.SIZE / body.SIZE
-	body.apply_velocity((body.global_position - global_position).normalized() * KNOCKBACK_MULTIPLIER * size_diff)
+	print("attack")
+	print(knockback)
+	if knockback:
+		body.apply_velocity((body.global_position - global_position).normalized() * KNOCKBACK_MULTIPLIER * size_diff)
 	body.take_damage(DAMAGE)
 
 func apply_velocity(velocity):
