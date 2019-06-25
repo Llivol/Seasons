@@ -4,6 +4,7 @@ class_name LedgeDetector
 var _parent
 var _init
 var _floor_detector
+var _ceil_detector
 var _ledge_detector
 var _wall_detector
 var _wall_detector_top
@@ -19,6 +20,10 @@ func _ready():
 		_floor_detector = $FloorDetector
 		_floor_detector.set_enabled(true)
 		_floor_detector.add_exception(_parent)
+	if has_node("CeilDetector"):
+		_ceil_detector = $CeilDetector
+		_ceil_detector.set_enabled(true)
+		_ceil_detector.add_exception(_parent)
 	if has_node("WallDetector"):
 		_wall_detector = $WallDetector
 		_wall_detector.set_enabled(true)
@@ -42,7 +47,9 @@ func _process(delta):
 	
 	if _parent.SIZE != null:
 		if has_node("FloorDetector"):
-			_floor_detector.set_cast_to(Vector2(0, _parent.get_sprite_size().y * _parent.get_size_multiplier()))
+			_floor_detector.set_cast_to(Vector2(0, _parent.get_sprite_size().y / 2 * _parent.get_size_multiplier() + 0.2))
+		if has_node("CeilDetector"):
+			_ceil_detector.set_cast_to(Vector2(0, - _parent.get_sprite_size().y / 2 * _parent.get_size_multiplier() - 0.2))
 		if has_node("LedgeDetector"):
 			_ledge_detector.translate(Vector2(_parent.get_sprite_size().x * _parent.get_size_multiplier() / 2, 0))
 			_ledge_detector.set_cast_to(Vector2(0, _parent.get_sprite_size().y * _parent.get_size_multiplier()))
@@ -61,14 +68,26 @@ func _process(delta):
 
 
 func is_near_ledge() -> bool:
+	if not _ledge_detector:
+		return false
 	return not _ledge_detector.is_colliding()
 
 
 func is_near_floor() -> bool:
+	if not _floor_detector:
+		return false
 	return _floor_detector.is_colliding()
 
 
+func is_near_ceil() -> bool:
+	if not _ceil_detector:
+		return false
+	return _ceil_detector.is_colliding()
+
+
 func is_near_wall() -> bool:
+	if not _wall_detector:
+		return false
 	return _wall_detector.is_colliding() or _wall_detector_top.is_colliding() or _wall_detector_bot.is_colliding()
 
 
@@ -81,6 +100,8 @@ func _draw():
 		return
 	if has_node("FloorDetector"):
 		draw_line(_floor_detector.position, _floor_detector.position + _floor_detector.get_cast_to(), Global.COLOR_LIGHT_BLUE, 1.0)
+	if has_node("CeilDetector"):
+		draw_line(_ceil_detector.position, _ceil_detector.position + _ceil_detector.get_cast_to(), Global.COLOR_LIGHT_BLUE, 1.0)
 	if has_node("LedgeDetector"):
 		draw_line(_ledge_detector.position, _ledge_detector.position + _ledge_detector.get_cast_to(), Global.COLOR_LIGHT_BLUE, 1.0)
 	if has_node("WallDetector"):

@@ -8,7 +8,7 @@
 [ext_resource path="res://enemies/AI/DynamicCollisionShape.gd" type="Script" id=6]
 [ext_resource path="res://enemies/AI/LedgeDetector.gd" type="Script" id=7]
 [ext_resource path="res://ui/HealthBar.tscn" type="PackedScene" id=8]
-[ext_resource path="res://player/AttackCooldown.gd" type="Script" id=9]
+[ext_resource path="res://hazards/AI/SpawnCooldown.gd" type="Script" id=9]
 
 [sub_resource type="RectangleShape2D" id=1]
 

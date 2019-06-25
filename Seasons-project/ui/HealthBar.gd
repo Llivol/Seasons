@@ -7,7 +7,7 @@ func _ready():
 	_parent = get_parent()
 	_init = false
 	
-	if _parent is Enemy and not Cheats.debug:
+	if not _parent is Player and not Cheats.debug:
 		_init = true
 		hide()
 
@@ -15,7 +15,7 @@ func _process(delta):
 	if _init:
 		if Cheats.debug:
 			show()
-		if _parent is Enemy and not Cheats.debug:
+		if not _parent is Player and not Cheats.debug:
 			hide()
 		return
 
