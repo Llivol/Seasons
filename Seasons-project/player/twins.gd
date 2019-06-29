@@ -1,6 +1,6 @@
 extends Node2D
 
-const ROPE_MAX_DISTANCE = Global.UNIT * 6
+const ROPE_MAX_DISTANCE = Global.UNIT * 8
 const ROPE_MIN_DISTANCE = Global.UNIT
 const HUG_DISTANCE = Global.UNIT / 2
 const ERROR_MARGIN = Global.UNIT / 8

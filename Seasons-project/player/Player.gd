@@ -35,7 +35,7 @@ const WALK_MIN_SPEED = 10
 const WALK_MAX_SPEED = 250
 const STOP_FORCE = 5000
 const STOP_HOVER_FORCE = 100
-const JUMP_SPEED = 500
+const JUMP_SPEED = 570
 const JUMP_FORCE = 32000
 const JUMP_MAX_AIRBORNE_TIME = 0.01
 const TANGENT_ACCELERATION = 1.2
@@ -270,7 +270,7 @@ func enter_state() -> void:
 
 		JUMP: 
 			process_jump()
-			consume_stamina(STAMINA_UNIT * 2)
+			consume_stamina(STAMINA_UNIT)
 
 		PULL:
 			return
@@ -549,7 +549,7 @@ func linear_velocity_y(delta):
 
 func process_air(delta):
 	if _state == AIR:
-		_velocity.x *= 0.9
+		_velocity.x *= 0.95
 	_on_air_time += delta
 
 

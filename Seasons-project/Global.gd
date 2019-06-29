@@ -47,7 +47,7 @@ const TIME_AVERAGE = 2.0
 const TIME_HIGH = 4.0
 const TIME_VERY_HIGH = 8.0
 
-const DROP_CHANCE = 1
+const DROP_CHANCE = 0.4
 
 const UNIT = 16
 
