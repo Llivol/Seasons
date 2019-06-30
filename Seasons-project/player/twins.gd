@@ -30,9 +30,15 @@ func _process(delta):
 		
 		if _player_left.is_dead() and _player_right.is_dead():
 			print("emit signal game over")
+			var current_scene = get_tree().get_current_scene().filename
+			get_tree().change_scene(current_scene)
+			print(">> Reloading scene...")
 	else:
 		if _player_left and _player_left.is_dead() or _player_right and _player_right.is_dead():
 			print("emit signal game over")
+			var current_scene = get_tree().get_current_scene().filename
+			get_tree().change_scene(current_scene)
+			print(">> Reloading scene...")
 
 
 func get_distance():

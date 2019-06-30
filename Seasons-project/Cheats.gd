@@ -1,10 +1,10 @@
 extends Node
 
-export var debug = true
+export var debug = false
 export var sprites = true
-export var infinite_stamina = true
-export var infinite_health = true
-export var infinite_rope_lenght = true
+export var infinite_stamina = false
+export var infinite_health = false
+export var infinite_rope_lenght = false
 export var unkillable = false
 
 func _ready():
@@ -36,6 +36,14 @@ func _input(event):
 		var current_scene = get_tree().get_current_scene().filename
 		get_tree().change_scene(current_scene)
 		print(">> Reloading scene...")
+	if event.is_action_pressed("Cheat_next_scene"):
+		var current_scene = get_tree().get_current_scene().filename
+		if current_scene == "res://levels/Playground.tscn":
+			current_scene = "res://levels/SpringDL3.tscn"
+		else:
+			current_scene = "res://levels/Playground.tscn"
+		get_tree().change_scene(current_scene)
+		print(">> Changing scene...")
 		
 		# Remove the current level
 		#var level = root.get_node("Level")
