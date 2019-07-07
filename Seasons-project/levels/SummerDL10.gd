@@ -1,4 +1,4 @@
 extends Level
 
 func _ready():
-	Global.DROP_CHANCE = 0.2
+	Global.DROP_CHANCE = 0.15
