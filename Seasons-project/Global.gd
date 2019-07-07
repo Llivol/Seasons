@@ -47,8 +47,6 @@ const TIME_AVERAGE = 2.0
 const TIME_HIGH = 4.0
 const TIME_VERY_HIGH = 8.0
 
-const DROP_CHANCE = 0.4
-
 const UNIT = 16
 
 enum Layers {
@@ -60,6 +58,8 @@ enum Layers {
 	PROJECTILE, 
 	AREA,
 }
+
+var DROP_CHANCE = 0.4
 
 var window_size_x
 var window_size_y

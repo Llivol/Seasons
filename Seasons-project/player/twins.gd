@@ -46,7 +46,6 @@ func get_distance():
 		return -1
 	return _distance
 
-
 func get_twin(player):
 	return _player_left if (player == _player_right) else _player_right
 
@@ -83,3 +82,39 @@ func _update_distance():
 func _update_rope():
 	_rope.set_point_position(0, _player_left.get_position())
 	_rope.set_point_position(1, _player_right.get_position())
+
+#this has 0 scalability .-.
+func _on_Player_collided_with_tilemap(collision, player):
+	var tile_pos = collision.collider.world_to_map(player.global_position)
+	tile_pos -= collision.normal
+	var tile = collision.collider.get_cellv(tile_pos)
+	var tile_name = collision.collider.get_tileset().tile_get_name(tile)
+	
+	if "cold" in tile_name:
+		player.set_stamina_recover_time(PlayerGlobal.RECOVER_STAMINA_TIME_TEMPERATURE)
+		player.set_stamina_recover_speed(PlayerGlobal.RECOVER_STAMINA_SPEED_TEMPERATURE)
+		player.set_stop_force(PlayerGlobal.STOP_FORCE)
+
+	if "hot" in tile_name:
+		player.set_stamina_recover_time(PlayerGlobal.RECOVER_STAMINA_TIME_TEMPERATURE)
+		player.set_stamina_recover_speed(PlayerGlobal.RECOVER_STAMINA_SPEED_TEMPERATURE)
+		player.set_stop_force(PlayerGlobal.STOP_FORCE)
+
+	if "fragile" in tile_name:
+		var timer = FragileTileTimer.new()
+		timer.set_wait_time(Global.TIME_AVERAGE)
+		timer.set_tilemap(collision.collider)
+		timer.set_tile_pos(tile_pos)
+		timer.connect("timeout", timer, "_on_timeout")
+		add_child(timer)
+		timer.start()
+
+	if "icy" in tile_name:
+		player.set_stamina_recover_time(PlayerGlobal.RECOVER_STAMINA_TIME)
+		player.set_stamina_recover_speed(PlayerGlobal.RECOVER_STAMINA_SPEED)
+		player.set_stop_force(PlayerGlobal.STOP_FORCE_ICE)
+
+	if "standard" in tile_name:
+		player.set_stamina_recover_time(PlayerGlobal.RECOVER_STAMINA_TIME)
+		player.set_stamina_recover_speed(PlayerGlobal.RECOVER_STAMINA_SPEED)
+		player.set_stop_force(PlayerGlobal.STOP_FORCE)

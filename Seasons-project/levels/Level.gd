@@ -41,6 +41,7 @@ func _process(delta):
 	l_altitude.set_text(str("Cur altitude: ", round(current_altitude)))
 	pass
 
+
 func _draw():
 	if start_altitude:
 		draw_line (Vector2(0, current_altitude), Vector2(32*16, current_altitude), Global.COLOR_RED, 2)

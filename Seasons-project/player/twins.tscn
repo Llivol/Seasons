@@ -18,3 +18,5 @@ points = PoolVector2Array( 0, 0, 32, 0 )
 width = 4.0
 default_color = Color( 0.937255, 0.490196, 0.341176, 1 )
 texture_mode = 1330401091
+[connection signal="collided_with_tilemap" from="PlayerLeft" to="." method="_on_Player_collided_with_tilemap"]
+[connection signal="collided_with_tilemap" from="PlayerRight" to="." method="_on_Player_collided_with_tilemap"]

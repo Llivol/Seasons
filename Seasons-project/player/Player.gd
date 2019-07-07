@@ -2,6 +2,7 @@ extends Character
 class_name Player
 
 signal stamina_changed(new_value)
+signal collided_with_tilemap(collider, player)
 
 export var default_color = Global.COLOR_BLUE
 export var default_color_dark = Global.COLOR_DARK_BLUE
@@ -33,7 +34,6 @@ const FLOOR_ANGLE_TOLERANCE = 40
 const WALK_FORCE = 1000
 const WALK_MIN_SPEED = 10
 const WALK_MAX_SPEED = 250
-const STOP_FORCE = 5000
 const STOP_HOVER_FORCE = 100
 const JUMP_SPEED = 570
 const JUMP_FORCE = 32000
@@ -43,10 +43,6 @@ const CLIMB_SPEED  = 100
 const RECOVER_FORCE = 25
 const AIR_FRICCTION = 0.001
 const STAMINA_UNIT = 10
-const IDLE_TIME_TO_RECOVER_STAMINA = 1
-const EXHAUSTED_TIME_TO_RECOVER_STAMINA = 3
-const RECOVER_SPEED_FROM_IDLE = 10.0
-const RECOVER_SPEED_FROM_EXHAUSTED = 2.5
 const CUT_THE_ROPE_TIME = 2
 const BONUS_HEALTH = 1
 const BONUS_STAMINA = STAMINA_UNIT
@@ -79,6 +75,13 @@ var SIZE
 var MAX_STAMINA
 var ATTACK_CD
 var INVULNERABILITY_TIME
+
+#TODO RENAME THIS
+var STOP_FORCE = 5000
+var IDLE_TIME_TO_RECOVER_STAMINA = 1
+var EXHAUSTED_TIME_TO_RECOVER_STAMINA = 3
+var RECOVER_SPEED_FROM_IDLE = 10.0
+var RECOVER_SPEED_FROM_EXHAUSTED = 2.5
 
 var _input_left
 var _input_right
@@ -462,6 +465,20 @@ func set_on_hug_distance(on_hug_distance):
 	_on_hug_distance = on_hug_distance
 
 
+func set_stamina_recover_time(recover_stamina):
+	IDLE_TIME_TO_RECOVER_STAMINA = recover_stamina
+	EXHAUSTED_TIME_TO_RECOVER_STAMINA = recover_stamina * PlayerGlobal.EXHAUSTED_MULTIPLIER
+
+
+func set_stamina_recover_speed(recover_speed):
+	RECOVER_SPEED_FROM_IDLE = recover_speed
+	RECOVER_SPEED_FROM_EXHAUSTED = recover_speed / PlayerGlobal.EXHAUSTED_MULTIPLIER
+
+
+func set_stop_force(stop_force):
+	STOP_FORCE = stop_force
+
+
 """ KINEMATICS """
 
 func process_kinematics(delta):
@@ -512,6 +529,11 @@ func process_kinematics(delta):
 			consume_stamina(STAMINA_UNIT * delta)
 	
 	_velocity = move_and_slide(_velocity, Vector2.UP)
+	
+	for i in get_slide_count():
+		var collision = get_slide_collision(i)
+		if collision and collision.collider is TileMap:
+			emit_signal('collided_with_tilemap', collision, self)
 
 
 func linear_velocity_x(delta):
