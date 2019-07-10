@@ -23,8 +23,8 @@ func _process(delta):
 			hide()
 		if _parent.states_strings[_parent.get_state()] == "exhausted":
 			hide()
-		if !Cheats.debug:
-			hide()
+		#if !Cheats.debug:
+		#	hide()
 		return
 	
 	if _parent.SIZE != null:
@@ -56,7 +56,7 @@ func get_enemy_in_range():
 
 func _draw():
 	if not Cheats.debug:
-		return
+		pass
 	draw_line(_up.position, _up.get_cast_to(), Global.COLOR_RED, 1.0)
 	draw_line(_front.position, _front.get_cast_to(), Global.COLOR_RED, 1.0)
 	draw_line(_down.position, _down.get_cast_to(), Global.COLOR_RED, 1.0)

@@ -31,6 +31,14 @@ func spawn():
 		$SpawnCooldown.start()
 
 
+func die():
+	var power_up_scene = load("res://powerups/HealthUp.tscn")
+	var power_up = power_up_scene.instance()
+	power_up.set_position(position)
+	get_parent().add_child(power_up)
+	.die()
+
+
 func _on_AwarenessArea_body_entered(body):
 	_target = body
 	$SpawnCooldown.start()
