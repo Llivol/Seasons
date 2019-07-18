@@ -28,6 +28,10 @@ func _ready():
 	print("\n------------------------\n")
 
 func _input(event):
+	if Input.is_action_pressed("Cheat_exit"):
+		get_tree().change_scene("res://screens/Title.tscn")
+		print(">> Exiting game...")
+		
 	if Input.is_action_pressed("Cheat_mode"):
 		
 		if Input.is_action_pressed("Cheat_debug"):
