@@ -25,11 +25,11 @@ func _ready():
 	print("\n------------------------\n")
 
 func _input(event):
-	if Input.is_action_pressed("Cheat_exit"):
+	if Input.is_action_just_pressed("Cheat_exit"):
 		get_tree().change_scene("res://screens/Title.tscn")
 		print(">> Exiting game...")
 		
-	if Input.is_action_pressed("Start"):
+	if Input.is_action_just_pressed("Start"):
 		var current_scene = get_tree().get_current_scene().filename
 		match current_scene:
 			"res://screens/Title.tscn":
@@ -45,19 +45,19 @@ func _input(event):
 			"res://levels/FallDL9.tscn":
 				get_tree().change_scene("res://screens/Title.tscn")
 	
-	if Input.is_action_pressed("Level_1"):
+	if Input.is_action_just_pressed("Level_1"):
 		get_tree().change_scene("res://levels/SummerDL10.tscn")
 		print(">> Changing scene...")
 	
-	if Input.is_action_pressed	("Level_2"):
+	if Input.is_action_just_pressed("Level_2"):
 		get_tree().change_scene("res://levels/WinterDL17.tscn")
 		print(">> Changing scene...")
 	
-	if Input.is_action_pressed("Level_3"):
+	if Input.is_action_just_pressed("Level_3"):
 		get_tree().change_scene("res://levels/SpringDL3.tscn")
 		print(">> Changing scene...")
 	
-	if Input.is_action_pressed("Level_4"):
+	if Input.is_action_just_pressed("Level_4"):
 		get_tree().change_scene("res://levels/FallDL9.tscn")
 		print(">> Changing scene...")
 		

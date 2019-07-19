@@ -37,9 +37,9 @@ const DAMAGE_LOW = 1.0
 const DAMAGE_AVERAGE = 2.0
 const DAMAGE_HIGH = 3.0
 
-const AWARENESS_TINY = 16.0
-const AWARENESS_AVERAGE = 24.0
-const AWARENESS_LARGE = 32.0
+const AWARENESS_TINY = 24.0
+const AWARENESS_AVERAGE = 32.0
+const AWARENESS_LARGE = 48.0
 
 const TIME_VERY_LOW = 0.5
 const TIME_LOW = 1.0
@@ -59,7 +59,7 @@ enum Layers {
 	AREA,
 }
 
-var DROP_CHANCE = 0.4
+var DROP_CHANCE = 1
 
 var window_size_x
 var window_size_y
