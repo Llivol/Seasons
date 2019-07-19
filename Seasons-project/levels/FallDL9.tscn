@@ -95,7 +95,7 @@ position = Vector2( 456, -522 )
 position = Vector2( 424, -872 )
 
 [node name="ThornbushPlus8" parent="." instance=ExtResource( 12 )]
-position = Vector2( 56, -522 )
+position = Vector2( 56, -519 )
 
 [node name="ThornbushPlus9" parent="." instance=ExtResource( 12 )]
 position = Vector2( 88, -872 )

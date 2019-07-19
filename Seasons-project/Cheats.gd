@@ -29,6 +29,38 @@ func _input(event):
 		get_tree().change_scene("res://screens/Title.tscn")
 		print(">> Exiting game...")
 		
+	if Input.is_action_pressed("Start"):
+		var current_scene = get_tree().get_current_scene().filename
+		match current_scene:
+			"res://screens/Title.tscn":
+				get_tree().change_scene("res://levels/Playground.tscn")
+			"res://levels/Playground.tscn":
+				get_tree().change_scene("res://levels/SummerDL10.tscn")
+			"res://levels/SummerDL10.tscn":
+				get_tree().change_scene("res://levels/WinterDL17.tscn")
+			"res://levels/WinterDL17.tscn":
+				get_tree().change_scene("res://levels/SpringDL3.tscn")
+			"res://levels/SpringDL3.tscn":
+				get_tree().change_scene("res://levels/FallDL9.tscn")
+			"res://levels/FallDL9.tscn":
+				get_tree().change_scene("res://screens/Title.tscn")
+	
+	if Input.is_action_pressed("Level_1"):
+		get_tree().change_scene("res://levels/SummerDL10.tscn")
+		print(">> Changing scene...")
+	
+	if Input.is_action_pressed	("Level_2"):
+		get_tree().change_scene("res://levels/WinterDL17.tscn")
+		print(">> Changing scene...")
+	
+	if Input.is_action_pressed("Level_3"):
+		get_tree().change_scene("res://levels/SpringDL3.tscn")
+		print(">> Changing scene...")
+	
+	if Input.is_action_pressed("Level_4"):
+		get_tree().change_scene("res://levels/FallDL9.tscn")
+		print(">> Changing scene...")
+		
 	if Input.is_action_pressed("Cheat_mode"):
 		
 		if Input.is_action_pressed("Cheat_debug"):
@@ -55,22 +87,6 @@ func _input(event):
 			var current_scene = get_tree().get_current_scene().filename
 			get_tree().change_scene(current_scene)
 			print(">> Reloading scene...")
-			
-		if Input.is_action_pressed("Level_1"):
-			get_tree().change_scene("res://levels/SummerDL10.tscn")
-			print(">> Changing scene...")
-
-		if Input.is_action_pressed	("Level_2"):
-			get_tree().change_scene("res://levels/WinterDL17.tscn")
-			print(">> Changing scene...")
-
-		if Input.is_action_pressed("Level_3"):
-			get_tree().change_scene("res://levels/SpringDL3.tscn")
-			print(">> Changing scene...")
-
-		if Input.is_action_pressed("Level_4"):
-			get_tree().change_scene("res://levels/FallDL9.tscn")
-			print(">> Changing scene...")
 
 #		if Input.is_action_pressed("Level_5"):
 #			get_tree().change_scene("res://levels/FallDL9.tscn")
@@ -87,13 +103,3 @@ func _input(event):
 #		if Input.is_action_pressed("Level_8"):
 #			get_tree().change_scene("res://levels/WinterDL17.tscn")
 #			print(">> Changing scene...")
-		
-		# Remove the current level
-		#var level = root.get_node("Level")
-		#root.remove_child(level)
-		#level.call_deferred("free")
-		
-		# Add the next level
-		#var next_level_resource = load("res://path/to/scene.tscn)
-		#var next_level = next_level.instance()
-		#root.add_child(next_level)
