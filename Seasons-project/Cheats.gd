@@ -35,30 +35,30 @@ func _input(event):
 			"res://screens/Title.tscn":
 				get_tree().change_scene("res://levels/Playground.tscn")
 			"res://levels/Playground.tscn":
-				get_tree().change_scene("res://levels/SummerDL10.tscn")
-			"res://levels/SummerDL10.tscn":
-				get_tree().change_scene("res://levels/WinterDL17.tscn")
-			"res://levels/WinterDL17.tscn":
 				get_tree().change_scene("res://levels/SpringDL3.tscn")
 			"res://levels/SpringDL3.tscn":
+				get_tree().change_scene("res://levels/SummerDL10.tscn")
+			"res://levels/SummerDL10.tscn":
 				get_tree().change_scene("res://levels/FallDL9.tscn")
 			"res://levels/FallDL9.tscn":
+				get_tree().change_scene("res://levels/WinterDL17.tscn")
+			"res://levels/WinterDL17.tscn":
 				get_tree().change_scene("res://screens/Title.tscn")
 	
 	if Input.is_action_just_pressed("Level_1"):
-		get_tree().change_scene("res://levels/SummerDL10.tscn")
-		print(">> Changing scene...")
-	
-	if Input.is_action_just_pressed("Level_2"):
-		get_tree().change_scene("res://levels/WinterDL17.tscn")
-		print(">> Changing scene...")
-	
-	if Input.is_action_just_pressed("Level_3"):
 		get_tree().change_scene("res://levels/SpringDL3.tscn")
 		print(">> Changing scene...")
 	
-	if Input.is_action_just_pressed("Level_4"):
+	if Input.is_action_just_pressed("Level_2"):
+		get_tree().change_scene("res://levels/SummerDL10.tscn")
+		print(">> Changing scene...")
+	
+	if Input.is_action_just_pressed("Level_3"):
 		get_tree().change_scene("res://levels/FallDL9.tscn")
+		print(">> Changing scene...")
+	
+	if Input.is_action_just_pressed("Level_4"):
+		get_tree().change_scene("res://levels/WinterDL17.tscn")
 		print(">> Changing scene...")
 		
 	if Input.is_action_pressed("Cheat_mode"):
